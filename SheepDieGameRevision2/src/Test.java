@@ -48,7 +48,7 @@ public class Test {
 		
 		while (sheeps.size() > 0) {
 			System.out.println(sheeps.peek());
-			// sheeps.poll();
+			 sheeps.poll();
 
 			System.out.println(sheeps.peek().getDistance() + ","
 					+ sheeps.remove());
