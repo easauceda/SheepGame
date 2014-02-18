@@ -32,15 +32,19 @@ public class Test {
 			
 		}//
 		//this changes everything the wolf is now at (10, 10);
-		sheepArray.clear();
+		/*sheepArray.clear();
 		sheepArray.addAll(sheeps);
 		sheeps.clear();
 		for (Sheep sheep: sheepArray){
 			sheep.setDistance(10, 10);
 			sheeps.add(sheep);
-		}//
+		}//*/
+		for (Sheep sheep: sheeps){
+			sheep.setDistance(10, 10);
+		}
 		System.out.println("This is a new Position for wolf he moved to 10 10 now");
 		//look on top
+		//sheeps.add(sheeps.poll());
 		
 		while (sheeps.size() > 0) {
 			System.out.println(sheeps.peek());
