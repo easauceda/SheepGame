@@ -20,7 +20,7 @@ public class inputTest {
 				fileReader.next();
 				int time = Integer.parseInt(fileReader.next());
 				System.out.println(time);
-				//here it would change the time using
+				//here it would change the time using the time int
 			}
 			//Right now all it does is print out the answer we get from compareForNextStep
 			System.out.println(answer);
