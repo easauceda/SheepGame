@@ -15,6 +15,13 @@ public class inputTest {
 			String data = fileReader.next();
 			//send data to check for keyword
 			int answer = compareForNextStep(data);
+			if (answer == 1){
+				//skipped through one text line by hand but it feels like cheating a bit
+				fileReader.next();
+				int time = Integer.parseInt(fileReader.next());
+				System.out.println(time);
+				//here it would change the time using
+			}
 			//Right now all it does is print out the answer we get from compareForNextStep
 			System.out.println(answer);
 		}
