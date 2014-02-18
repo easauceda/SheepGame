@@ -40,7 +40,7 @@ public class Test {
 			sheeps.add(sheep);
 		}//
 		System.out.println("This is a new Position for wolf he moved to 10 10 now");
-		//look on top;
+		//look on top
 		
 		while (sheeps.size() > 0) {
 			System.out.println(sheeps.peek());
