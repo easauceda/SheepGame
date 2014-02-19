@@ -32,11 +32,13 @@ public class Wolf extends Entity {
 				}
 			} else {
 				huntAsPack = true;
-				try {
+				this.c = Color.green;
+				//wolf turns green when his Queue ran out............
+				//try {
 					createSheepQueue(sheeps);
 
-				} catch (NullPointerException e) {
-				}
+				//} catch (NullPointerException e) {
+				//}
 			}
 
 		}
@@ -71,7 +73,7 @@ public class Wolf extends Entity {
 	private void okayWhosCloser(Wolf wolf, ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
 		if (this.targets.peek().getDistance() > wolf.targets.peek()
 				.getDistance()) {
-			this.targets.poll();
+			this.targets.remove();
 			refreshQueue();
 			anyOneHasThisTarget(wolfs,sheeps);
 		} else {
@@ -97,7 +99,7 @@ public class Wolf extends Entity {
 				targets.remove();
 			}
 		}
-		this.targets.addAll(targets2);
+		this.targets = (targets2);
 	}
 
 	private void anySheepHereKillThem(ArrayList<Sheep> sheeps) {

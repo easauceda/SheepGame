@@ -23,7 +23,8 @@ public class Target implements Comparable<Target>{
 	}
 
 	public double getDistance() {
-		return this.distance;
+		setDistance();
+		return distance;
 	}
 	public Sheep getSheep(){
 		return this.sheep;
