@@ -1,11 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 
 public class Sheep extends Entity {
-	private int distance = 0;
 	private ArrayList<Wolf> wolfs;
 
 	public Sheep(int x, int y, Color c) {
@@ -72,8 +70,8 @@ public class Sheep extends Entity {
 			int nMoveX, nMoveY;
 			nMoveX = choseX(counter);
 			nMoveY = choseY(counter);
-			if ((x + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < 11)
-					&& (y + nMoveY < 11)) {
+			if ((x + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < max_X)
+					&& (y + nMoveY < max_Y)) {
 				this.x = x + nMoveX;
 				this.y = y + nMoveY;
 			}

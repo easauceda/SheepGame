@@ -7,7 +7,7 @@
 
 //allow him to manipulate it on its own
 
-public class Target implements Comparable{
+public class Target implements Comparable<Target>{
 	Sheep sheep;
 	Wolf wolf;
 	double distance;
@@ -20,17 +20,6 @@ public class Target implements Comparable{
 	public void setDistance() {
 		this.distance = Math.pow(sheep.getY()-wolf.getY(),2)+Math.pow(sheep.getX()-wolf.getX(),2);
 		
-	}
-	@Override
-	public int compareTo(Object arg0) {
-		Target target1 = (Target) arg0;
-		if(this.getDistance()<target1.getDistance()){
-			return -1;
-		}else {if(this.getDistance()>target1.getDistance()){
-			return 1;
-			}
-		}
-		return 0;
 	}
 
 	public double getDistance() {
@@ -50,5 +39,16 @@ public class Target implements Comparable{
 	}
 	public void targetKill(){
 		this.sheep.die();
+	}
+
+	@Override
+	public int compareTo(Target arg0) {
+		if(this.getDistance()<arg0.getDistance()){
+			return -1;
+		}else {if(this.getDistance()>arg0.getDistance()){
+			return 1;
+			}
+		}
+		return 0;
 	}
 }

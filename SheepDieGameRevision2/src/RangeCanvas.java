@@ -75,30 +75,17 @@ class RangeCanvas extends JPanel implements GameSettings {
 		final int ystep = B_HEIGHT / 20;
 		final int xstep = B_WIDTH / 20;
 
-		for (int i = 1; i <= 12; i++) {
-			pen.drawLine(X_MARGIN, i * ystep, xstep * 12, i * ystep);
+		for (int i = 1; i <= max_Y+1; i++) {
+			pen.drawLine(X_MARGIN, i * ystep, xstep * (max_X+1), i * ystep);
 		}
 
-		for (int i = 1; i <= 12; i++) {
-			pen.drawLine(i * xstep, Y_MARGIN, i * xstep, ystep * 12);
+		for (int i = 1; i <= max_X+1; i++) {
+			pen.drawLine(i * xstep, Y_MARGIN, i * xstep, ystep * (max_Y+1));
 		}
 		if (grassNeeded) {
 			for (int Q = 0; Q < rows; Q++) {
 				for (int W = 0; W < columns; W++) {
 					grass[Q][W].paint(pen);
-				}
-			}
-		}// Trying to display this
-		for (Entity e : entities) {
-			if (e instanceof Wolf) {
-				for (int Q = 0; Q < rows; Q++) {
-					for (int W = 0; W < columns; W++) {
-						
-						if (((Wolf) e).getWolfPositionIveBeen(Q,W)){
-							pen.setColor(Color.yellow);
-							pen.fillRect(X_MARGIN + xstep * Q + 2, Y_MARGIN + ystep * W + 2, 16, 16);
-						}
-					}
 				}
 			}
 		}

@@ -9,6 +9,15 @@ public interface GameSettings {
 	int X_MARGIN = 20;
 	int Y_MARGIN = 20;
 	
+	int windowSizeY = 500;
+	int windowSizeX = 400;
+	
+	int numberOfWolfs = 2;
+	int numberOfSheeps = 20;
+	
+	int max_X = 20;
+	int max_Y = 20;
+	
 	int INIT_SHEEP_X = 5;
 	int INIT_SHEEP_Y = 5;
 	int INIT_WOLF_X  = 0;
