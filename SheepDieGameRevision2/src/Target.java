@@ -10,7 +10,7 @@
 public class Target implements Comparable{
 	Sheep sheep;
 	Wolf wolf;
-	int distance;
+	double distance;
 	public Target(Sheep sheep, Wolf wolf) {
 		this.sheep = sheep;
 		this.wolf = wolf;
@@ -18,16 +18,22 @@ public class Target implements Comparable{
 	}
 
 	public void setDistance() {
-		this.distance = Math.abs(sheep.getY()-wolf.getY())+Math.abs(sheep.getX()-wolf.getX());
+		this.distance = Math.pow(sheep.getY()-wolf.getY(),2)+Math.pow(sheep.getX()-wolf.getX(),2);
 		
 	}
 	@Override
 	public int compareTo(Object arg0) {
 		Target target1 = (Target) arg0;
-		return this.getDistance() - target1.getDistance();
+		if(this.getDistance()<target1.getDistance()){
+			return -1;
+		}else {if(this.getDistance()>target1.getDistance()){
+			return 1;
+			}
+		}
+		return 0;
 	}
 
-	private int getDistance() {
+	public double getDistance() {
 		return this.distance;
 	}
 	public Sheep getSheep(){

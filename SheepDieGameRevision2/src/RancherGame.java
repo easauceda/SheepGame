@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,7 +25,9 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JTextField WolfX = new JTextField(2);
 	private JTextField WolfY = new JTextField(2);
 	private int numberOfSheep = 5;
+	private int numberOfWolfs = 2;
 	private JButton huntButton = new JButton("hunt");
+	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 	private Sheep sheep = new Sheep(INIT_SHEEP_X, INIT_SHEEP_Y, SHEEP_COLOR);
 	private Wolf wolf = new Wolf(INIT_WOLF_X, INIT_WOLF_Y, WOLF_COLOR);;
@@ -61,13 +64,20 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(SheepY);
 		add(panel, BorderLayout.SOUTH);
 		rangeCanvas.addEntity(sheep);
-		rangeCanvas.addEntity(wolf);
+		wolfs.add(wolf);
+		Random random = new Random();
 		sheeps.add(sheep);
 		for (int q = 0; q < numberOfSheep; q++){
-			sheeps.add(new Sheep(2,5,Color.pink));
+			sheeps.add(new Sheep(2,random.nextInt(9),Color.pink));
 		}
 		for (Sheep sheep: sheeps){
 			rangeCanvas.addEntity(sheep);
+		}
+		for (int q = 0; q < numberOfWolfs; q++){
+			wolfs.add(new Wolf(10,random.nextInt(7),Color.MAGENTA));
+		}
+		for(Wolf wolf:wolfs){
+		rangeCanvas.addEntity(wolf);
 		}
 		rangeCanvas.addGrassFractal();
 
@@ -120,9 +130,12 @@ public class RancherGame extends JFrame implements GameSettings {
 					timer.start();
 					// System.out.println(n+" this is your answer should be zero");
 					for (Sheep sheep:sheeps){
+						sheep.setWolfs(wolfs);
 					sheep.squirm();
 					}
-					wolf.hunt(sheeps, n, rangeCanvas.getGrassArray(), g);
+					for (Wolf wolf: wolfs){
+					wolf.hunt(sheeps, wolfs, n, rangeCanvas.getGrassArray(), g);
+					}
 					wolfIsPushed = true;
 				}
 			}

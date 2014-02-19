@@ -1,10 +1,12 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
 public class Sheep extends Entity {
 	private int distance = 0;
+	private ArrayList<Wolf> wolfs;
 
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
@@ -64,20 +66,30 @@ public class Sheep extends Entity {
 	}
 
 	private void moveAction() {
-		if(alive){
-		Random random = new Random();
-		int counter = random.nextInt(8);
-		int nMoveX, nMoveY;
-		nMoveX = choseX(counter);
-		nMoveY = choseY(counter);
-		if ((x + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < 11)
-				&& (y + nMoveY < 11)) {
-			this.x = x + nMoveX;
-			this.y = y + nMoveY;
+		if (alive) {
+			Random random = new Random();
+			int counter = random.nextInt(8);
+			int nMoveX, nMoveY;
+			nMoveX = choseX(counter);
+			nMoveY = choseY(counter);
+			if ((x + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < 11)
+					&& (y + nMoveY < 11)) {
+				this.x = x + nMoveX;
+				this.y = y + nMoveY;
+			}
+			RancherGame.pause();
+			RancherGame.pause();
+			moveAction();
+			amIDead();
+
 		}
-		RancherGame.pause();
-		RancherGame.pause();
-		moveAction();
+	}
+
+	private void amIDead() {
+		for (Wolf wolf : wolfs) {
+			if (this.sameCell(wolf)) {
+				this.die();
+			}
 		}
 	}
 
@@ -99,6 +111,11 @@ public class Sheep extends Entity {
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
 		pen.setColor(Color.BLACK);
 		pen.drawRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
+	}
+
+	public void setWolfs(ArrayList<Wolf> wolfs) {
+		this.wolfs = wolfs;
+
 	}
 
 }

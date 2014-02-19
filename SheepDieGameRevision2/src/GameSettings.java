@@ -14,7 +14,7 @@ public interface GameSettings {
 	int INIT_WOLF_X  = 0;
 	int INIT_WOLF_Y = 0;
 	
-	int GAME_SPEED = 100;
+	int GAME_SPEED = 500;
 	int BOARD_REFRESH_RATE = 50;
 	
 	Color SHEEP_COLOR = new Color(255,255,255);
