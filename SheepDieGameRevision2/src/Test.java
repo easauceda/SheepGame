@@ -6,9 +6,13 @@ import java.util.PriorityQueue;
 public class Test {
 
 	public static void main(String[] args) {
-		PriorityQueue<Sheep> sheeps = new PriorityQueue<Sheep>();
-		ArrayList<Sheep> sheepArray = new ArrayList<Sheep>();
+		PriorityQueue<Target> targets = new PriorityQueue<Target>();
 
+		PriorityQueue<Target> targets2 = new PriorityQueue<Target>();
+		
+		ArrayList<Sheep> sheepArray = new ArrayList<Sheep>();
+		Wolf wolf = new Wolf(10,10,Color.black);
+		Wolf wolf2 = new Wolf(0,0,Color.black);
 		sheepArray.add(new Sheep(10, 10, Color.black));
 		sheepArray.add(new Sheep(2, 2, Color.black));
 		sheepArray.add(new Sheep(4, 4, Color.black));
@@ -18,42 +22,22 @@ public class Test {
 		sheepArray.add(new Sheep(5, 5, Color.black));
 		sheepArray.add(new Sheep(5, 7, Color.black));
 		
-		for (Sheep sheep : sheepArray) {
-			sheep.setDistance(0, 0);
-			sheeps.add(sheep);
-		}
-
-		while (sheeps.size() > 4) {
-			System.out.println(sheeps.peek());
-			// sheeps.poll();
-
-			System.out.println(sheeps.peek().getDistance() + ","
-					+ sheeps.remove());
-			
-		}//
-		//this changes everything the wolf is now at (10, 10);
-		/*sheepArray.clear();
-		sheepArray.addAll(sheeps);
-		sheeps.clear();
 		for (Sheep sheep: sheepArray){
-			sheep.setDistance(10, 10);
-			sheeps.add(sheep);
-		}//*/
-		for (Sheep sheep: sheeps){
-			sheep.setDistance(10, 10);
+			targets.add(new Target(sheep,wolf));
 		}
-		System.out.println("This is a new Position for wolf he moved to 10 10 now");
-		//look on top
-		//sheeps.add(sheeps.poll());
+		for (Sheep sheep: sheepArray){
+			targets2.add(new Target(sheep,wolf2));
+		}
 		
-		while (sheeps.size() > 0) {
-			System.out.println(sheeps.peek());
-			 sheeps.poll();
-
-			System.out.println(sheeps.peek().getDistance() + ","
-					+ sheeps.remove());
-			
+		while(targets.size()>0){
+			if(targets2.peek().isTargetStillAlive()){
+				targets2.peek().targetKill();
+			System.out.println("("+targets2.peek().targetX()+","+targets2.peek().targetY()+") "+targets2.poll().distance);
+		}else {targets2.remove();}
+			if (targets.peek().isTargetStillAlive()){
+				targets.peek().targetKill();
+			System.out.println("("+targets.peek().targetX()+","+targets.peek().targetY()+") "+targets.poll().distance);
+		}else {targets.remove();}
 		}
+	}	
 	}
-
-}

@@ -1,9 +1,11 @@
 //test
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,8 +23,9 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JTextField SheepY = new JTextField(2);
 	private JTextField WolfX = new JTextField(2);
 	private JTextField WolfY = new JTextField(2);
+	private int numberOfSheep = 5;
 	private JButton huntButton = new JButton("hunt");
-
+	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 	private Sheep sheep = new Sheep(INIT_SHEEP_X, INIT_SHEEP_Y, SHEEP_COLOR);
 	private Wolf wolf = new Wolf(INIT_WOLF_X, INIT_WOLF_Y, WOLF_COLOR);;
 
@@ -57,8 +60,15 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(SheepX);
 		panel.add(SheepY);
 		add(panel, BorderLayout.SOUTH);
-		rangeCanvas.addEntity(wolf);
 		rangeCanvas.addEntity(sheep);
+		rangeCanvas.addEntity(wolf);
+		sheeps.add(sheep);
+		for (int q = 0; q < numberOfSheep; q++){
+			sheeps.add(new Sheep(2,5,Color.pink));
+		}
+		for (Sheep sheep: sheeps){
+			rangeCanvas.addEntity(sheep);
+		}
 		rangeCanvas.addGrassFractal();
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
@@ -66,9 +76,18 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println(wolf + " " + sheep);
 
 				rangeCanvas.repaint();
-				if (sheep.isAlive() == false) {
+				if (areSheepsAlive()) {
 					finish();
 				}
+			}
+
+			private boolean areSheepsAlive() {
+				for (Sheep sheep: sheeps){
+					if (sheep.isAlive()){
+						return false;
+					}
+				}
+				return true;
 			}
 		});
 
@@ -100,8 +119,10 @@ public class RancherGame extends JFrame implements GameSettings {
 					}
 					timer.start();
 					// System.out.println(n+" this is your answer should be zero");
+					for (Sheep sheep:sheeps){
 					sheep.squirm();
-					wolf.hunt(sheep, n, rangeCanvas.getGrassArray(), g);
+					}
+					wolf.hunt(sheeps, n, rangeCanvas.getGrassArray(), g);
 					wolfIsPushed = true;
 				}
 			}

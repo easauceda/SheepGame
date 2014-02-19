@@ -14,7 +14,7 @@ class RangeCanvas extends JPanel implements GameSettings {
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
 	private Grass grass[][] = new Grass[rows][columns];
 	private boolean grassNeeded = false;
-
+	
 	public void addGrassFractal() {
 		for (int Q = 0; Q < rows; Q++) {
 			for (int W = 0; W < columns; W++) {
