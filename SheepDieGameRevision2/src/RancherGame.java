@@ -1,5 +1,4 @@
 
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,10 +18,11 @@ import javax.swing.Timer;
 public class RancherGame extends JFrame implements GameSettings {
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
-	
+
 	private JButton huntButton = new JButton("hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
+	private settings set = new settings();
 
 	private final Timer timer;
 
@@ -47,13 +47,13 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(new JLabel());
 		panel.add(huntButton);
 		panel.add(new JLabel("Number of Sheep"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(set.getSheep())));
 		panel.add(new JLabel("Number of Wolves"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(set.getWolves())));
 		panel.add(new JLabel("Game Speed"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(set.getSpeed())));
 		add(panel, BorderLayout.EAST);
-		
+
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
 
@@ -102,12 +102,12 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
-			sheeps.add(new Sheep(random.nextInt(max_X-1), random.nextInt(max_Y-1),
-					SHEEP_COLOR));
+			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
+					.nextInt(max_Y - 1), SHEEP_COLOR));
 		}
 		for (int q = 0; q < numberOfWolfs; q++) {
-			wolfs.add(new Wolf(random.nextInt(max_X-1), random.nextInt(max_Y-1),
-					WOLF_COLOR));
+			wolfs.add(new Wolf(random.nextInt(max_X - 1), random
+					.nextInt(max_Y - 1), WOLF_COLOR));
 		}
 		giveTheAnimalsToCanvas();
 	}
@@ -120,7 +120,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		for (Sheep sheep : sheeps) {
 			rangeCanvas.addEntity(sheep);
 		}
-		
+
 	}
 
 	public static void pause() {
@@ -133,7 +133,7 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	public static void main(String args[]) {
 		RancherGame c = new RancherGame();
-		c.setLayout(new GridLayout(1,1));
+		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
 		c.setLocationRelativeTo(null);
