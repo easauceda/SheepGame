@@ -40,7 +40,18 @@ public class RancherGame extends JFrame implements GameSettings {
 		// layout etc
 		JPanel panel = new JPanel();
 		add(rangeCanvas);
+		GridLayout layout = new GridLayout(4, 2);
+		layout.setVgap(20);
+		layout.setHgap(20);
+		panel.setLayout(layout);
+		panel.add(new JLabel());
 		panel.add(huntButton);
+		panel.add(new JLabel("Number of Sheep"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Number of Wolves"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Game Speed"));
+		panel.add(new JTextField());
 		add(panel, BorderLayout.EAST);
 		
 		setTheAnimals();
@@ -126,11 +137,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		 * to edit the settings. The default is just to start the game by
 		 * reading the settings already defined. - E
 		 */
-		int editSettings = JOptionPane.showConfirmDialog(null,
-				"Would you like to edit settings?");
-		if (editSettings == 0) {
-			System.out.println("Settings will be edited");
-		}
 		RancherGame c = new RancherGame();
 		c.setLayout(new GridLayout(1,1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
