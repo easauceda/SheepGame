@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-
+//////
 public class Wolf extends Entity {
 	private PriorityQueue<Target> targets = new PriorityQueue<Target>();
 

@@ -5,7 +5,7 @@
 
 //this makes it so that the wolf just created a priority queue that can store its own data and 
 
-//allow him to manipulate it on its own
+//allow him to manipulate it on its ownn
 
 public class Target implements Comparable<Target>{
 	Sheep sheep;
