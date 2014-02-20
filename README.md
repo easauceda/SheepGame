@@ -5,25 +5,23 @@ it works better that way, since you can update your code and commit without any 
 
 SheepDieGameKills
 =================
->>>>>>>>>>>>>>>>>ToDO:<<<<<<<<<<<<<<<
+Game Requirements:
 
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+1. Reading from input file - xavier
 
--Priority Queue algorithm on the wolf - Ignacio
+2. Priority Queue algorithm on the wolf - Ignacio
+ 
+3. GUI enhancements - Andrew
+
+4. reimplement fractal grass
+
+5. sheep that move
+
+6. be able to input location for sheep and wolf
+7. Each sheep/wolf must be in it's own separate thread
+
+What Is Done:
 
 
--we need to change the window size to 20 by 20
-
-
--need to have the ability to read from a file and set up game board with that
-
-
--maybe make it look nicer.
-
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
->>>>>>>>>>>>>>>What Is Done:<<<<<<<<<<
-
--Well wolfs hunt good but maybe work on it so they are a litle more better?
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
