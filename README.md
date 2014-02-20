@@ -5,7 +5,7 @@ SheepDieGameKills
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 -Priority Queue algorithm on the wolf - Ignacio
-
+-Working on adding changeable game settings
 
 -we need to change the window size to 20 by 20
 
