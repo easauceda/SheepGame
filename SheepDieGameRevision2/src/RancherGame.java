@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -36,7 +35,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public RancherGame() {
-
+		new EditSheepLocations(sheeps, wolfs);
 		// layout etc
 		JPanel panel = new JPanel();
 		add(rangeCanvas);
@@ -140,4 +139,5 @@ public class RancherGame extends JFrame implements GameSettings {
 		c.setLocationRelativeTo(null);
 		c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+
 }
