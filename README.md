@@ -23,7 +23,7 @@ Game Requirements:
 
     Ignacio++++ Sheep already move on there own tread just that they dont have the ability to run away from wolfs
 
-6. be able to input location for sheep and wolf++++++++++++++++++++++++++++++
+6. be able to input location for sheep and wolf(I'm working on this now - Erick)++++++++++++++++++++++++++++++
 
 7. Each sheep/wolf must be in it's own separate thread+++++++++++++++++++++++
 
