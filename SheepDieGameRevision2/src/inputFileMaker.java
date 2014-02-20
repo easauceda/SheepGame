@@ -4,9 +4,7 @@ import javax.swing.JLabel;
 //this is where we ask the player to enter the game settings, in order to package them up and send to the reader
 public class inputFileMaker extends JFrame {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String clock;
 	private String wolf;

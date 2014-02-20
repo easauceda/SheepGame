@@ -5,9 +5,9 @@
 
 //this makes it so that the wolf just created a priority queue that can store its own data and 
 
-//allow him to manipulate it on its own
+//allow him to manipulate it on its ownn
 
-public class Target implements Comparable{
+public class Target implements Comparable<Target>{
 	Sheep sheep;
 	Wolf wolf;
 	double distance;
@@ -21,20 +21,10 @@ public class Target implements Comparable{
 		this.distance = Math.pow(sheep.getY()-wolf.getY(),2)+Math.pow(sheep.getX()-wolf.getX(),2);
 		
 	}
-	@Override
-	public int compareTo(Object arg0) {
-		Target target1 = (Target) arg0;
-		if(this.getDistance()<target1.getDistance()){
-			return -1;
-		}else {if(this.getDistance()>target1.getDistance()){
-			return 1;
-			}
-		}
-		return 0;
-	}
 
 	public double getDistance() {
-		return this.distance;
+		setDistance();
+		return distance;
 	}
 	public Sheep getSheep(){
 		return this.sheep;
@@ -50,5 +40,16 @@ public class Target implements Comparable{
 	}
 	public void targetKill(){
 		this.sheep.die();
+	}
+
+	@Override
+	public int compareTo(Target arg0) {
+		if(this.getDistance()<arg0.getDistance()){
+			return -1;
+		}else {if(this.getDistance()>arg0.getDistance()){
+			return 1;
+			}
+		}
+		return 0;
 	}
 }

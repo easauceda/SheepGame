@@ -2,24 +2,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Random;
-
+//////
 public class Wolf extends Entity {
 	private PriorityQueue<Target> targets = new PriorityQueue<Target>();
-	private ArrayList<Wolf> wolfs;
-	private ArrayList<Sheep> sheeps;
-	private ArrayList<String> positions = new ArrayList<String>();
-	private boolean wolfPositionIveBeen[][] = new boolean[11][11];
-	private boolean tracking = true;
-	private boolean grassEffect = false;
 
 	public Wolf(int x, int y, Color c) {
 		super(x, y, c);
-		for (int i = 0; i < 11; i++) {
-			for (int j = 0; j < 11; j++) {
-				wolfPositionIveBeen[i][j] = false;
-			}
-		}
 	}
 
 	public String toString() {
@@ -31,99 +19,48 @@ public class Wolf extends Entity {
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
 	}
 
-	private void huntAction() {
+	private void huntAction(ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
 		// new Wolf starts here
 		boolean huntAsPack = false;
 		while (sheepStillAlive(sheeps)) {
 
-			// targets.add(targets.poll());
 			if (targets.size() != 0) {
-			try{
-				huntTheTarget(huntAsPack);
-				refreshQueue();
-			}catch(NullPointerException e){}
+				try {
+					huntTheTarget(huntAsPack,sheeps,wolfs);
+					refreshQueue();
+				} catch (NullPointerException e) {
+				}
 			} else {
 				huntAsPack = true;
-				try{
-				refreshWithSheeps();
-				
-				}catch(NullPointerException e){}
+				this.c = Color.green;
+				//wolf turns green when his Queue ran out............
+				//try {
+					createSheepQueue(sheeps);
+
+				//} catch (NullPointerException e) {
+				//}
 			}
 
 		}
 
-		// new type of Wolf ends here
-		/*
-		 * if (tracking) { try { wolfPositionIveBeen[x][y] = true; } catch
-		 * (ArrayIndexOutOfBoundsException e) { } } x = x + moveX; y = y +
-		 * moveY; RancherGame.pause(); if (this.sameCell(sheep)) { //
-		 * huntThread.stop(); sheep.die(); return; }
-		 * 
-		 * positions.add(x + "," + y); ArrayList<String> positionsInside = new
-		 * ArrayList<String>(); String Q[]; int bigX, bigY; for (String p :
-		 * positions) { Q = p.split(","); bigX = Integer.parseInt(Q[0]); bigY =
-		 * Integer.parseInt(Q[1]); positionsInside.add(bigX + "," + bigY); }
-		 * 
-		 * boolean moves8[] = new boolean[8]; for (int R = 0; R < 8; R++) {
-		 * moves8[R] = false; }// dont forget this braket it causes alot of
-		 * trouble
-		 * 
-		 * int counter; Random ran = new Random(); while (!moves8[0] ||
-		 * !moves8[1] || !moves8[2] || !moves8[3] || !moves8[4] || !moves8[5] ||
-		 * !moves8[6] || !moves8[7]) {
-		 * 
-		 * // System.out.println("+++++hitting the random"); counter =
-		 * ran.nextInt(8); int nMoveX, nMoveY, checkX, checkY; nMoveX =
-		 * choseX(counter); nMoveY = choseY(counter); for (String p :
-		 * positionsInside) { Q = p.split(","); checkX = Integer.parseInt(Q[0]);
-		 * checkY = Integer.parseInt(Q[1]); System.out.println(checkX + "'" +
-		 * checkY + "move       " + counter); if (x + nMoveX == checkX && y +
-		 * nMoveY == checkY) { moves8[counter] = true; //
-		 * System.out.println("okay this one was done a while back"); } } if ((x
-		 * + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < 11) && (y +
-		 * nMoveY < 11)) { if (!moves8[counter]) { //
-		 * System.out.println("I guess this one hasnt been made");
-		 * 
-		 * RancherGame.pause(); if(grassEffect){ gamePauseByGrass(grass); }
-		 * huntAction(nMoveX, nMoveY, sheep, positionsInside,grass); if
-		 * (this.sameCell(sheep)) { // huntThread.stop(); sheep.die(); return; }
-		 * x = x - nMoveX; y = y - nMoveY; RancherGame.pause(); } } else {
-		 * moves8[counter] = true; }
-		 * 
-		 * } if (tracking) { try { wolfPositionIveBeen[x][y] = false; } catch
-		 * (ArrayIndexOutOfBoundsException e) { } } //
-		 * System.out.println("BackTrackTime"); return;
-		 */
 	}
 
-	private void refreshWithSheeps() {
-		for (Sheep sheep : sheeps) {
-			if(sheep.isAlive()){
-			targets.add(new Target(sheep,this));
-		}
-		}
-	}
-
-	private void huntTheTarget(boolean together) {
-		// if(!this.sameCell(targets.peek().getSheep())){
-		
+	private void huntTheTarget(boolean together, ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
 		refreshQueue();
 		if (!together) {
-			anyOneHasThisTarget();
+			anyOneHasThisTarget(wolfs,sheeps);
 		}
 		makeYourMove();
-		anySheepHereKillThem();
-		// }else{targets.poll().targetKill();
-		// return;}
+		anySheepHereKillThem(sheeps);
 	}
 
-	private void anyOneHasThisTarget() {
+	private void anyOneHasThisTarget(ArrayList<Wolf> wolfs, ArrayList<Sheep> sheeps) {
 		for (Wolf wolf : wolfs) {
 			try {
 				if (!this.equals(wolf)) {
 					if (this.targets.peek().getSheep()
 							.equals(wolf.targets.peek().getSheep())) {
-						okayWhosCloser(wolf);
+						okayWhosCloser(wolf,sheeps,wolfs);
 
 					}
 				}
@@ -133,12 +70,12 @@ public class Wolf extends Entity {
 
 	}
 
-	private void okayWhosCloser(Wolf wolf) {
+	private void okayWhosCloser(Wolf wolf, ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
 		if (this.targets.peek().getDistance() > wolf.targets.peek()
 				.getDistance()) {
-			this.targets.poll();
+			this.targets.remove();
 			refreshQueue();
-			anyOneHasThisTarget();
+			anyOneHasThisTarget(wolfs,sheeps);
 		} else {
 			wolf.notMySheep();
 		}
@@ -162,10 +99,10 @@ public class Wolf extends Entity {
 				targets.remove();
 			}
 		}
-		this.targets.addAll(targets2);
+		this.targets = (targets2);
 	}
 
-	private void anySheepHereKillThem() {
+	private void anySheepHereKillThem(ArrayList<Sheep> sheeps) {
 		for (Sheep sheep : sheeps) {
 			if (this.sameCell(sheep)) {
 				sheep.die();
@@ -205,14 +142,6 @@ public class Wolf extends Entity {
 			}
 		}
 		return false;
-	}
-
-	private void gamePauseByGrass(Grass[][] grass) {
-		for (int U = 0; U <= 5 * grass[x][y].getHeightNumber(); U++) {
-			// System.out.println("pausing");
-			RancherGame.pause();
-		}
-
 	}
 
 	private int choseY(int counter) {
@@ -259,25 +188,15 @@ public class Wolf extends Entity {
 		return 0;
 	}
 
-	void hunt(ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs2, int n,
-			Grass[][] grass, int g) {
-		for (Sheep sheep : sheeps) {
-			this.targets.add(new Target(sheep, this));
-		}
-		this.sheeps = sheeps;
-
-		this.wolfs = wolfs2;
+	void hunt(final ArrayList<Sheep> sheeps, final ArrayList<Wolf> wolfs) {
+		
+		createSheepQueue(sheeps);
 
 		System.out.println(targets.peek().isTargetStillAlive());
-		if (n <= 0) {
-			this.tracking = false;
-		}
-		if (g == 2) {
-			this.grassEffect = true;
-		}
+
 		class MyThread extends Thread {
 			public void run() {
-				huntAction();
+				huntAction(sheeps,wolfs);
 			}
 		}
 
@@ -285,8 +204,10 @@ public class Wolf extends Entity {
 		huntThread.start();
 	}
 
-	public boolean getWolfPositionIveBeen(int W, int Q) {
-		return wolfPositionIveBeen[W][Q];
+	private void createSheepQueue(ArrayList<Sheep> sheeps) {
+		for (Sheep sheep : sheeps) {
+			this.targets.add(new Target(sheep, this));
+		}
+		
 	}
-
 }
