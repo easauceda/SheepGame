@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+
 //////
 public class Wolf extends Entity {
 	private PriorityQueue<Target> targets = new PriorityQueue<Target>();
@@ -17,6 +18,12 @@ public class Wolf extends Entity {
 	void paint(Graphics pen) {
 		pen.setColor(c);
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
+		// draw a line to my target.........
+		if (targets.size() != 0 && debugMode) {
+			pen.drawLine(X_MARGIN + xstep * x + 4, Y_MARGIN + ystep * y + 4,
+					Y_MARGIN + ystep * (targets.peek().getSheep().getX()) + 4,
+					Y_MARGIN + ystep * (targets.peek().getSheep().getY()) + 4);
+		}
 	}
 
 	private void huntAction(ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
@@ -26,41 +33,41 @@ public class Wolf extends Entity {
 
 			if (targets.size() != 0) {
 				try {
-					huntTheTarget(huntAsPack,sheeps,wolfs);
-					refreshQueue();
+					huntTheTarget(huntAsPack, sheeps, wolfs);
+
 				} catch (NullPointerException e) {
 				}
 			} else {
 				huntAsPack = true;
-				this.c = Color.green;
-				//wolf turns green when his Queue ran out............
-				//try {
-					createSheepQueue(sheeps);
-
-				//} catch (NullPointerException e) {
-				//}
+				if (debugMode) {
+					this.c = Color.green;
+				}
+				// wolf turns green when his Queue ran out............
+				createSheepQueue(sheeps);
 			}
 
 		}
 
 	}
 
-	private void huntTheTarget(boolean together, ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
-		refreshQueue();
+	private void huntTheTarget(boolean together, ArrayList<Sheep> sheeps,
+			ArrayList<Wolf> wolfs) {
+		createSheepQueue(sheeps);
 		if (!together) {
-			anyOneHasThisTarget(wolfs,sheeps);
+			anyOneHasThisTarget(wolfs, sheeps);
 		}
 		makeYourMove();
 		anySheepHereKillThem(sheeps);
 	}
 
-	private void anyOneHasThisTarget(ArrayList<Wolf> wolfs, ArrayList<Sheep> sheeps) {
+	private void anyOneHasThisTarget(ArrayList<Wolf> wolfs,
+			ArrayList<Sheep> sheeps) {
 		for (Wolf wolf : wolfs) {
 			try {
 				if (!this.equals(wolf)) {
 					if (this.targets.peek().getSheep()
 							.equals(wolf.targets.peek().getSheep())) {
-						okayWhosCloser(wolf,sheeps,wolfs);
+						okayWhosCloser(wolf, sheeps, wolfs);
 
 					}
 				}
@@ -70,36 +77,28 @@ public class Wolf extends Entity {
 
 	}
 
-	private void okayWhosCloser(Wolf wolf, ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
+	private void okayWhosCloser(Wolf wolf, ArrayList<Sheep> sheeps,
+			ArrayList<Wolf> wolfs) {
+		// try{
 		if (this.targets.peek().getDistance() > wolf.targets.peek()
 				.getDistance()) {
-			this.targets.remove();
-			refreshQueue();
-			anyOneHasThisTarget(wolfs,sheeps);
+
+
+			if (targets.size() != 0) {
+				targets.remove();
+				anyOneHasThisTarget(wolfs, sheeps);
+			}
 		} else {
-			wolf.notMySheep();
+			wolf.notMySheep(sheeps);
 		}
+		// }catch(NoSuchElementException e){}
 	}
 
-	public void notMySheep() {
+	public void notMySheep(ArrayList<Sheep> sheeps) {
 		this.targets.poll();
-		refreshQueue();
+		// createSheepQueue(sheeps);
 		System.out.println("mine");
 
-	}
-
-	private void refreshQueue() {
-		PriorityQueue<Target> targets2 = new PriorityQueue<Target>();
-
-		while (targets.size() > 0) {
-			if (targets.peek().isTargetStillAlive()) {
-				targets2.add(targets.poll());
-
-			} else {
-				targets.remove();
-			}
-		}
-		this.targets = (targets2);
 	}
 
 	private void anySheepHereKillThem(ArrayList<Sheep> sheeps) {
@@ -189,14 +188,14 @@ public class Wolf extends Entity {
 	}
 
 	void hunt(final ArrayList<Sheep> sheeps, final ArrayList<Wolf> wolfs) {
-		
+
 		createSheepQueue(sheeps);
 
 		System.out.println(targets.peek().isTargetStillAlive());
 
 		class MyThread extends Thread {
 			public void run() {
-				huntAction(sheeps,wolfs);
+				huntAction(sheeps, wolfs);
 			}
 		}
 
@@ -205,9 +204,11 @@ public class Wolf extends Entity {
 	}
 
 	private void createSheepQueue(ArrayList<Sheep> sheeps) {
+		this.targets.clear();
 		for (Sheep sheep : sheeps) {
-			this.targets.add(new Target(sheep, this));
+			if (sheep.isAlive()) {
+				this.targets.add(new Target(sheep, this));
+			}
 		}
-		
 	}
 }

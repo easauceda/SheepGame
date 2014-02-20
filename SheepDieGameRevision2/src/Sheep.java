@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
+	private int deathCount = deathCountValue;
 
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
@@ -105,10 +106,14 @@ public class Sheep extends Entity {
 	}
 
 	void paint(Graphics pen) {
-		pen.setColor(c);
-		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
-		pen.setColor(Color.BLACK);
-		pen.drawRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
+		if (deadCounter() > 0) {
+			pen.setColor(c);
+			pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2,
+					16, 16);
+			pen.setColor(Color.BLACK);
+			pen.drawRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2,
+					16, 16);
+		}
 	}
 
 	public void setWolfs(ArrayList<Wolf> wolfs) {
@@ -116,4 +121,11 @@ public class Sheep extends Entity {
 
 	}
 
+	public int deadCounter() {
+		if (!isAlive()) {
+			this.deathCount--;
+
+		}
+		return deathCount;
+	}
 }
