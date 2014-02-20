@@ -132,11 +132,6 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public static void main(String args[]) {
-		/*
-		 * What I did here was add in a dialog to ask the user if he would like
-		 * to edit the settings. The default is just to start the game by
-		 * reading the settings already defined. - E
-		 */
 		RancherGame c = new RancherGame();
 		c.setLayout(new GridLayout(1,1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
