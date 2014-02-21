@@ -27,13 +27,16 @@ public class Wolf extends Entity {
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
 		// draw a line to my target.........
 		if (targets.size() > 0 && debugMode && sheepStillAlive(sheeps)) {
-			pen.drawLine(X_MARGIN + xstep * x + 4, Y_MARGIN + ystep * y + 4,
-					Y_MARGIN + ystep * (targets.peek().getSheep().getX()) + 4,
-					Y_MARGIN + ystep * (targets.peek().getSheep().getY()) + 4);
+			pen.setColor(Color.red);
+			pen.drawLine(X_MARGIN + xstep * x + 8, Y_MARGIN + ystep * y + 8,
+					Y_MARGIN + ystep * (targets.peek().getSheep().getX()) + 8,
+					Y_MARGIN + ystep * (targets.peek().getSheep().getY()) + 8);
 
-			pen.setColor(Color.green);
-			pen.fillRect(X_MARGIN + xstep * iWantX + 8, Y_MARGIN + ystep
-					* iWantY + 8, 8, 8);
+			/*pen.setColor(Color.green);
+			pen.drawLine(X_MARGIN + xstep * x + 8, Y_MARGIN + ystep * y + 8,
+					Y_MARGIN + ystep * (iWantX) + 8,
+					Y_MARGIN + ystep * (iWantY) + 8);
+			*/
 		}
 	}
 
@@ -81,7 +84,7 @@ public class Wolf extends Entity {
 			yourItSucker(wolfs);
 			}else{this.countToTen--;}
 		} else {
-			this.c = Color.black;
+			this.c = Color.DARK_GRAY;
 			RancherGame.pause(100);
 			moveMeThere(whereToDecisionMaker(runAwayFromWho(wolfs)));
 		}
@@ -120,9 +123,9 @@ public class Wolf extends Entity {
 						- thingy.getY()) > getDistance(
 							x + choseX(q) - thingy.getX(), y + choseY(q)
 									- thingy.getY())
-						&& x + choseX(q) > 0
+						&& x + choseX(q) >= 0
 						&& x + choseX(q) < max_X
-						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+						&& y + choseY(q) >= 0 && y + choseY(q) < max_Y) {
 
 					j = q;
 				}
@@ -136,8 +139,8 @@ public class Wolf extends Entity {
 						&& getDistance(x + choseX(j) - thingy.getX(), y
 								+ choseY(j) - thingy.getY()) == getDistance(x
 								+ choseX(q) - thingy.getX(), y + choseY(q)
-								- thingy.getY()) && x + choseX(q) > 0
-						&& x + choseX(q) < max_X && y + choseY(q) > 0
+								- thingy.getY()) && x + choseX(q) >= 0
+						&& x + choseX(q) < max_X && y + choseY(q) >= 0
 						&& y + choseY(q) < max_Y) {
 					k[d++] = q;
 
@@ -235,7 +238,7 @@ public class Wolf extends Entity {
 			return true;
 		}
 		if (debugMode) {
-			this.c = Color.red;
+			this.c = Color.green;
 		}
 		return false;
 
@@ -244,25 +247,25 @@ public class Wolf extends Entity {
 	private boolean areWeTargetingAll(ArrayList<Sheep> sheeps,
 			ArrayList<Wolf> wolfs) {
 		for (Sheep sheep : sheeps) {
-			if (!areyoubeingChased(wolfs, sheep) && sheep.isAlive()) {
+			if (areYouNotBeingChased(wolfs, sheep) && sheep.isAlive()) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean areyoubeingChased(ArrayList<Wolf> wolfs, Sheep sheep) {
+	private boolean areYouNotBeingChased(ArrayList<Wolf> wolfs, Sheep sheep) {
 
 		for (Wolf wolf : wolfs) {
 			try {
 				if (sheep.equals(wolf.getTarget())) {
-					return true;
+					return false;
 				}
 			} catch (NullPointerException e) {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	private void reorderQueue() {
@@ -311,7 +314,7 @@ public class Wolf extends Entity {
 
 	public boolean isThisYourTarget(Sheep target) {
 		try {
-			return target.equals(targets.peek().getSheep());
+			return target.equals((targets.peek().getSheep()));
 		} catch (NullPointerException e) {
 			return false;
 		}

@@ -68,21 +68,21 @@ public class Sheep extends Entity {
 		this.iWantX = x + choseX(move);
 		this.iWantY = y + choseY(move);
 		RancherGame.pause();
-
+		RancherGame.pause(50);
 		this.x = iWantX;
 		this.y = iWantY;
 	}
 
 	private void moveAction() {
 
-		if (alive) {				
+		if (alive) {
 			try {
 				RancherGame.pause(60);
 				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
 			} catch (NullPointerException e) {
 			}
-			
+
 			moveAction();
 		}
 
@@ -96,7 +96,7 @@ public class Sheep extends Entity {
 		int j = 8;
 		int k[] = new int[j];
 		Random ran = new Random();
-		if (getDistance(x - wolf.getX(), y - wolf.getY()) < 5) {
+		if (getDistance(x - wolf.getX(), y - wolf.getY()) < 8) {
 			for (int q = 7; q >= 0; q--) {
 				if (getDistance(x + choseX(j) - wolf.getX(), y + choseY(j)
 						- wolf.getY()) < getDistance(
@@ -145,9 +145,15 @@ public class Sheep extends Entity {
 		Wolf wolfIt = null;
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
-			if (distanceRun(wolf) < closest || wolf.getTarget().equals(this)) {
-				closest = distanceRun(wolf);
-				wolfIt = wolf;
+			if (wolf.getTarget().equals(this)) {
+					closest = distanceRun(wolf);
+					return  wolf;
+					
+				} else {if (distanceRun(wolf) < closest) {
+
+					closest = distanceRun(wolf);
+					wolfIt = wolf;
+				}
 			}
 		}
 

@@ -9,8 +9,8 @@ public interface GameSettings {
 	int X_MARGIN = 20;
 	int Y_MARGIN = 20;
 	
-	boolean debugMode = false;
-	int deathCountValue = 50;
+	boolean debugMode = true;
+	int deathCountValue = 10;
 	
 	int windowSizeY = 500;
 	int windowSizeX = 400;
@@ -22,7 +22,7 @@ public interface GameSettings {
 	int max_Y = 20;
 	
 	
-	int GAME_SPEED = 200;
+	int GAME_SPEED = 400;
 	int BOARD_REFRESH_RATE = 50;
 	
 	Color SHEEP_COLOR = new Color(255,255,255);
