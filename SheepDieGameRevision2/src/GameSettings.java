@@ -9,7 +9,7 @@ public interface GameSettings {
 	int X_MARGIN = 20;
 	int Y_MARGIN = 20;
 	
-	boolean debugMode = true;
+	boolean debugMode = false;
 	int deathCountValue = 50;
 	
 	int windowSizeY = 500;

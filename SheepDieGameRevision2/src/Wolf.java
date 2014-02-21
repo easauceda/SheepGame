@@ -55,9 +55,10 @@ public class Wolf extends Entity {
 						} else {
 							if (debugMode) {
 								this.c = Color.CYAN;
-								RancherGame.pause(500);
-								this.c = Color.black;
+								RancherGame.pause(100);
+								
 							}
+							this.c = Color.black;
 							this.targets.remove();
 							reorderQueue();
 						}
@@ -92,7 +93,7 @@ public class Wolf extends Entity {
 			if (this.sameCell(wolf)&& !wolf.equals(this) ) {
 				wolf.yourIt();
 				wolf.setNoTagBacks(this);
-				System.out.println("Tag your It.");
+				System.out.println("Tag your It " + wolf);
 				this.countToTen = 1000;
 				this.imIt = false;
 				this.c = Color.black;

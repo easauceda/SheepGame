@@ -77,11 +77,12 @@ public class Sheep extends Entity {
 
 		if (alive) {				
 			try {
-				RancherGame.pause(190);
+				RancherGame.pause(60);
 				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
 			} catch (NullPointerException e) {
 			}
+			
 			moveAction();
 		}
 
@@ -144,7 +145,7 @@ public class Sheep extends Entity {
 		Wolf wolfIt = null;
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
-			if (!wolf.equals(this) && distanceRun(wolf) < closest) {
+			if (distanceRun(wolf) < closest || wolf.getTarget().equals(this)) {
 				closest = distanceRun(wolf);
 				wolfIt = wolf;
 			}
