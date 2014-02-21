@@ -65,8 +65,9 @@ public class Sheep extends Entity {
 	}
 
 	private void moveAction() {
+		Random random = new Random();
 		if (alive) {
-			Random random = new Random();
+
 			int counter = random.nextInt(8);
 			int nMoveX, nMoveY;
 			nMoveX = choseX(counter);
@@ -75,11 +76,12 @@ public class Sheep extends Entity {
 					&& (y + nMoveY < max_Y)) {
 				this.x = x + nMoveX;
 				this.y = y + nMoveY;
-			}
 			RancherGame.pause();
 			RancherGame.pause();
-			moveAction();
 			amIDead();
+			}
+			moveAction();
+
 
 		}
 	}
@@ -127,5 +129,14 @@ public class Sheep extends Entity {
 
 		}
 		return deathCount;
+	}
+
+	public void reviveMe() {
+		this.alive = true;
+		this.deathCount = 50;
+		if(debugMode){
+		this.c = Color.cyan;
+		}else{this.c = Color.white;}
+		squirm();
 	}
 }

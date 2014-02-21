@@ -100,4 +100,5 @@ class RangeCanvas extends JPanel implements GameSettings {
 	public Grass[][] getGrassArray(){
 		return grass;
 	}
+
 }
