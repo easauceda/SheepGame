@@ -5,9 +5,11 @@ import java.util.PriorityQueue;
 
 //////
 public class Wolf extends Entity {
+
 	private PriorityQueue<Target> targets = new PriorityQueue<Target>();
 
 	public Wolf(int x, int y, Color c) {
+
 		super(x, y, c);
 	}
 
@@ -19,85 +21,137 @@ public class Wolf extends Entity {
 		pen.setColor(c);
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
 		// draw a line to my target.........
-		if (targets.size() != 0 && debugMode) {
-			pen.drawLine(X_MARGIN + xstep * x + 4, Y_MARGIN + ystep * y + 4,
+		if (targets.size() > 0 && debugMode) {
+			pen.drawLine(X_MARGIN + xstep * iWantX + 4, Y_MARGIN + ystep * iWantY + 4,
 					Y_MARGIN + ystep * (targets.peek().getSheep().getX()) + 4,
 					Y_MARGIN + ystep * (targets.peek().getSheep().getY()) + 4);
+			pen.setColor(Color.green);
+			pen.fillRect(X_MARGIN + xstep * iWantX + 2, Y_MARGIN + ystep
+					* iWantY + 2, 16, 16);
 		}
 	}
 
 	private void huntAction(ArrayList<Sheep> sheeps, ArrayList<Wolf> wolfs) {
 		// new Wolf starts here
-		boolean huntAsPack = false;
+		boolean huntAsPack = true;
 		while (sheepStillAlive(sheeps)) {
+				huntAsPack = areWeStillAPack(wolfs,sheeps);
+			if (targets.size() > 0) {
+				if (targets.peek().isTargetStillAlive()
+						&& nobodyClose(huntAsPack, wolfs)) {
 
-			if (targets.size() != 0) {
-				try {
-					huntTheTarget(huntAsPack, sheeps, wolfs);
+					huntTheTarget();
 
-				} catch (NullPointerException e) {
-				}
-			} else {
-				huntAsPack = true;
-				if (debugMode) {
-					this.c = Color.green;
-				}
-				// wolf turns green when his Queue ran out............
-				createSheepQueue(sheeps);
-			}
-
-		}
-
-	}
-
-	private void huntTheTarget(boolean together, ArrayList<Sheep> sheeps,
-			ArrayList<Wolf> wolfs) {
-		createSheepQueue(sheeps);
-		if (!together) {
-			anyOneHasThisTarget(wolfs, sheeps);
-		}
-		makeYourMove();
-		anySheepHereKillThem(sheeps);
-	}
-
-	private void anyOneHasThisTarget(ArrayList<Wolf> wolfs,
-			ArrayList<Sheep> sheeps) {
-		for (Wolf wolf : wolfs) {
-			try {
-				if (!this.equals(wolf)) {
-					if (this.targets.peek().getSheep()
-							.equals(wolf.targets.peek().getSheep())) {
-						okayWhosCloser(wolf, sheeps, wolfs);
-
+				} else {
+					if (debugMode) {
+						this.c = Color.CYAN;
+						RancherGame.pause(500);
+						this.c = Color.black;
 					}
+					this.targets.remove();
+					reorderQueue();
 				}
-			} catch (NullPointerException e) {
+			} else {createSheepQueue(sheeps);
 			}
+			anySheepHereKillThem(sheeps);
 		}
 
 	}
 
-	private void okayWhosCloser(Wolf wolf, ArrayList<Sheep> sheeps,
+	private boolean areWeStillAPack(ArrayList<Wolf> wolfs,
+			ArrayList<Sheep> sheeps) {
+		
+		if(!areWeTargetingAll(sheeps,wolfs)){
+			return true;
+		}
+		if (debugMode) {
+			this.c = Color.red;
+		}
+		return false;
+		
+	}
+
+	private boolean areWeTargetingAll(ArrayList<Sheep> sheeps,
 			ArrayList<Wolf> wolfs) {
-		// try{
-		if (this.targets.peek().getDistance() > wolf.targets.peek()
-				.getDistance()) {
-
-
-			if (targets.size() != 0) {
-				targets.remove();
-				anyOneHasThisTarget(wolfs, sheeps);
+		for(Sheep sheep:sheeps){
+			if(!areyoubeingChased(wolfs,sheep)&&sheep.isAlive()){
+				return false;
 			}
-		} else {
-			wolf.notMySheep(sheeps);
 		}
-		// }catch(NoSuchElementException e){}
+		return true;
 	}
 
-	public void notMySheep(ArrayList<Sheep> sheeps) {
-		this.targets.poll();
-		// createSheepQueue(sheeps);
-		System.out.println("mine");
+	private boolean areyoubeingChased(ArrayList<Wolf> wolfs, Sheep sheep) {
+		
+		for(Wolf wolf: wolfs){
+			try{
+			if (sheep.equals(wolf.getTarget())){
+				return true;
+			}
+			}catch(NullPointerException e){}
+		}
+		
+		return false;
+	}
+
+	private void reorderQueue() {
+		PriorityQueue<Target> redoTargets = new PriorityQueue<Target>();
+
+		while (targets.size() > 0) {
+			if (targets.peek().isTargetStillAlive()) {
+				redoTargets
+						.add(new Target(this.targets.peek().getSheep(), this));
+
+			}
+			this.targets.remove();
+		}
+		this.targets.clear();
+		this.targets = redoTargets;
+	}
+
+	private boolean nobodyClose(boolean huntAsPack, ArrayList<Wolf> wolfs) {
+		if (huntAsPack) {
+			for (Wolf wolf : wolfs) {
+				
+					if (wolf.isThisYourTarget(targets.peek().getSheep()) && whoIsCloser(wolf)) {
+						return false;
+					}
+			}
+
+		}
+		return true;
+	}
+
+	private boolean whoIsCloser(Wolf wolf) {
+
+			if (targets.peek().getDistance() <= wolf.getTargetDistance()) {
+				// Me
+				return false;
+
+			} 
+		return true;
+	}
+
+	public double getTargetDistance() {
+
+		return targets.peek().getDistance();
+	}
+
+	public boolean isThisYourTarget(Sheep target) {
+		try{
+		return target.equals(targets.peek().getSheep());
+		}catch(NullPointerException e){return false;}
+	}
+
+	public Sheep getTarget() {
+		if(targets.peek().equals(null)){
+			return null;
+		}
+		return this.targets.peek().getSheep();
+	}
+
+	private void huntTheTarget() {
+		makeYourMove();
 
 	}
 
@@ -111,10 +165,20 @@ public class Wolf extends Entity {
 	}
 
 	private void makeYourMove() {
-		int move = decisionMaker();
+		moveMeThere(decisionMaker());
+	}
+
+	private void moveMeThere(int move) {
+		if(!debugMode){
 		RancherGame.pause();
-		this.x = x + choseX(move);
-		this.y = y + choseY(move);
+		}
+		this.iWantX = x + choseX(move);
+		this.iWantY = y + choseY(move);
+		if (debugMode) {
+			RancherGame.pause();
+		}
+		this.x = iWantX;
+		this.y = iWantY;
 	}
 
 	private int decisionMaker() {

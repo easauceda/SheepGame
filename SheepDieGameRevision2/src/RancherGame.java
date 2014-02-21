@@ -130,6 +130,13 @@ public class RancherGame extends JFrame implements GameSettings {
 			// uh oh!
 		}
 	}
+	public static void pause(int q) {
+		try {
+			Thread.sleep(q);
+		} catch (Exception e) {
+			// uh oh!
+		}
+	}
 
 	public static void main(String args[]) {
 		/*
