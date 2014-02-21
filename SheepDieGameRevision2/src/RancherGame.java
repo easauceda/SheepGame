@@ -18,11 +18,16 @@ import javax.swing.Timer;
 public class RancherGame extends JFrame implements GameSettings {
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
+	private MiniMap miniMap = new MiniMap();
 
 	private JButton huntButton = new JButton("hunt");
+	private JTextField numberOfSheep = new JTextField();
+	private JTextField numberOfWolves = new JTextField();
+	private JTextField gameSpeed = new JTextField();
+	
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
-	private settings set = new settings();
+	private static Settings set = new Settings();
 
 	private final Timer timer;
 
@@ -36,25 +41,45 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public RancherGame() {
-
+		
+		
+		// read text from input file
+		
+		
+		
+		
+		
+		
+		
+		
+		// enter text into textfield
+		numberOfSheep.setText(Integer.toString(set.getSheep()));
+		numberOfWolves.setText(Integer.toString(set.getWolves()));
+		gameSpeed.setText(Integer.toString(set.getSpeed()));
+		
+		
+		
 		// layout etc
 		JPanel panel = new JPanel();
 		add(rangeCanvas);
-		GridLayout layout = new GridLayout(4, 2);
-		layout.setVgap(20);
+		GridLayout layout = new GridLayout(10, 4);
+		layout.setVgap(0);
 		layout.setHgap(20);
 		panel.setLayout(layout);
 		panel.add(new JLabel());
 		panel.add(huntButton);
 		panel.add(new JLabel("Number of Sheep"));
-		panel.add(new JTextField(String.valueOf(set.getSheep())));
+		panel.add(numberOfSheep);
 		panel.add(new JLabel("Number of Wolves"));
-		panel.add(new JTextField(String.valueOf(set.getWolves())));
+		panel.add(numberOfWolves);
 		panel.add(new JLabel("Game Speed"));
-		panel.add(new JTextField(String.valueOf(set.getSpeed())));
+		panel.add(gameSpeed);
+		panel.add(miniMap);
 		add(panel, BorderLayout.EAST);
+		
 
-		setTheAnimals();
+		fillSheepAndPassToCanvas();
+		fillWolvesAndPassToCanvas();
 		rangeCanvas.addGrassFractal();
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
@@ -96,36 +121,66 @@ public class RancherGame extends JFrame implements GameSettings {
 				}
 			}
 		});
+		
+		numberOfSheep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				set.setSheep(Integer.parseInt(numberOfSheep.getText()) );
+				fillSheepAndPassToCanvas();
+				updatePositions();
+				System.out.println(set.getSheep());
+				
+			}
+			
+		});
+		
+		numberOfWolves.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				set.setWolves(Integer.parseInt(numberOfWolves.getText()) );
+				fillWolvesAndPassToCanvas();
+				updatePositions();
+				System.out.println(set.getWolves());
+			}
+		});
+		
+		gameSpeed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				set.setGameSpeed(Integer.parseInt(gameSpeed.getText()) );
+				
+				updatePositions();
+				System.out.println(set.getSpeed());
+			}
+		});
+		
 
 	}
-
-	private void setTheAnimals() {
+	
+	private void fillSheepAndPassToCanvas() {
 		Random random = new Random();
-		for (int q = 0; q < numberOfSheeps; q++) {
+		sheeps.clear();
+		for (int q = 0; q < set.getSheep(); q++) {
 			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), SHEEP_COLOR));
 		}
-		for (int q = 0; q < numberOfWolfs; q++) {
+		for (Sheep sheep : sheeps) {
+			rangeCanvas.addEntity(sheep);
+		}	
+	}
+	
+	private void fillWolvesAndPassToCanvas() {
+		Random random = new Random();
+		wolfs.clear();
+		for (int q = 0; q < set.getWolves(); q++) {
 			wolfs.add(new Wolf(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), WOLF_COLOR));
 		}
-		giveTheAnimalsToCanvas();
-	}
-
-	private void giveTheAnimalsToCanvas() {
-
 		for (Wolf wolf : wolfs) {
 			rangeCanvas.addEntity(wolf);
 		}
-		for (Sheep sheep : sheeps) {
-			rangeCanvas.addEntity(sheep);
-		}
-
 	}
 
 	public static void pause() {
 		try {
-			Thread.sleep(GAME_SPEED);
+			Thread.sleep(set.getSpeed());
 		} catch (Exception e) {
 			// uh oh!
 		}

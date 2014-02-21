@@ -17,6 +17,5 @@ public class inputFileMaker extends JFrame {
 		test.pack();
 		test.setVisible(true);
 		test.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		System.out.println("I Like pie");
 	}
 }

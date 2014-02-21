@@ -14,15 +14,9 @@ public interface GameSettings {
 	
 	int windowSizeY = 500;
 	int windowSizeX = 400;
-	
-	int numberOfWolfs = 5;
-	int numberOfSheeps = 20;
-	
+
 	int max_X = 20;
 	int max_Y = 20;
-	
-	
-	int GAME_SPEED = 700;
 	int BOARD_REFRESH_RATE = 50;
 	
 	Color SHEEP_COLOR = new Color(255,255,255);
