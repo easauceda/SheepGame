@@ -16,11 +16,12 @@ Game Requirements:
 
     Ignacio++++ Talked to tran after class and he said we dont have to implement fractal grass if we didnt want to.
 
-5. sheep that move+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    Ignacio++++ Sheep already move on there own tread just that they dont have the ability to run away from wolfs
 
 6. be able to input location for sheep and wolf(I'm working on this now - Erick)++++++++++++++++++++++++++++++
+
+
+99.  When are we going to link Merge everything in order to ensure that everything is working smoothly?????? 
+
 
 
 
@@ -37,6 +38,10 @@ What Is Done: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
                     this will help if we add more sheep then the wolfs will go and hunt without
                     having to make them hunt again.                    
                     
+5. sheep that move+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    Ignacio++++ Sheep move when wolf are in their range.....
+
 7. Each sheep/wolf must be in it's own separate thread+++++++++++++++++++++++
 
     Ignacio++++ They are already running on their own thread so we dont have to worry about this.
@@ -48,6 +53,8 @@ COMMENTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     Ignacio+++++ We should try to have all these branches merge as one by tomorrow just to make sure everything 
                 is running good. last thing we need is having great program and when we merge it all crashes.
+                
+                
                 
 STUPID COMMENTS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
