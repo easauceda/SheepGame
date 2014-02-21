@@ -26,14 +26,13 @@ public class Wolf extends Entity {
 		pen.fillRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2, 16, 16);
 		// draw a line to my target.........
 		if (targets.size() > 0 && debugMode && sheepStillAlive(sheeps)) {
-			pen.drawLine(X_MARGIN + xstep * iWantX + 4, Y_MARGIN + ystep
-					* iWantY + 4,
+			pen.drawLine(X_MARGIN + xstep * x + 4, Y_MARGIN + ystep * y + 4,
 					Y_MARGIN + ystep * (targets.peek().getSheep().getX()) + 4,
 					Y_MARGIN + ystep * (targets.peek().getSheep().getY()) + 4);
 
 			pen.setColor(Color.green);
-			pen.fillRect(X_MARGIN + xstep * iWantX + 2, Y_MARGIN + ystep
-					* iWantY + 2, 16, 16);
+			pen.fillRect(X_MARGIN + xstep * iWantX + 8, Y_MARGIN + ystep
+					* iWantY + 8, 8, 8);
 		}
 	}
 
@@ -41,85 +40,152 @@ public class Wolf extends Entity {
 		// new Wolf starts here
 		boolean huntAsPack = true;
 		while (true) {
-			if(!sheepStillAlive(sheeps)){
-			playTag(wolfs);
-			}else{
-			while (sheepStillAlive(sheeps)) {
-				huntAsPack = areWeStillAPack(wolfs, sheeps);
-				if (targets.size() > 0) {
-					if (targets.peek().isTargetStillAlive()
-							&& nobodyClose(huntAsPack, wolfs)) {
+			if (!sheepStillAlive(sheeps)) {
+				playTag(wolfs);
+			} else {
+				while (sheepStillAlive(sheeps)) {
+					huntAsPack = areWeStillAPack(wolfs, sheeps);
+					if (targets.size() > 0) {
+						if (targets.peek().isTargetStillAlive()
+								&& nobodyClose(huntAsPack, wolfs)) {
 
-						huntTheTarget();
+							huntTheTarget();
 
-					} else {
-						if (debugMode) {
-							this.c = Color.CYAN;
-							RancherGame.pause(500);
-							this.c = Color.black;
+						} else {
+							if (debugMode) {
+								this.c = Color.CYAN;
+								RancherGame.pause(500);
+								this.c = Color.black;
+							}
+							this.targets.remove();
+							reorderQueue();
 						}
-						this.targets.remove();
-						reorderQueue();
+					} else {
+						createSheepQueue(sheeps);
 					}
-				} else {
-					createSheepQueue(sheeps);
+					anySheepHereKillThem(sheeps);
 				}
-				anySheepHereKillThem(sheeps);
 			}
 		}
 	}
-	}
+
 	private void playTag(ArrayList<Wolf> wolfs) {
-		RancherGame.pause();
-		
+
 		if (imIt) {
 			this.c = Color.pink;
 			moveMeThere(chaseTagDecisionMaker(whoIsClosest(wolfs)));
 			yourItSucker(wolfs);
 		} else {
-			this.c = Color.black;
 
-			moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
+			this.c = Color.black;
+			RancherGame.pause(100);
+			moveMeThere(whereToDecisionMaker(runAwayFromWho(wolfs)));
 		}
 
 	}
 
 	private void yourItSucker(ArrayList<Wolf> wolfs) {
-		for(Wolf wolf:wolfs){
-			if(this.sameCell(wolf) && !wolf.equals(noTagBacks)){
+
+		for (Wolf wolf : wolfs) {
+			if (this.sameCell(wolf) && !wolf.equals(noTagBacks)) {
 				wolf.yourIt();
 				this.alive = false;
 				this.c = Color.black;
 				return;
 			}
 		}
-		
+
 	}
 
-	private int runTagDecisionMaker(Wolf wolf) {
-		int j = 8;
-		for (int q = 7; q >= 0; q--) {
-			if (getDistance(x + choseX(j) - wolf.getX(),
-					y + choseY(j) - wolf.getY()) < getDistance(x + choseX(q)
-					- wolf.getX(), y + choseY(q) - wolf.getY())
-					&& x + choseX(q) > 0
-					&& x + choseX(q) < max_X
-					&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
-				j = q;
+	private int whereToDecisionMaker(Entity thingy) {
+		if (sheepStillAlive(sheeps)) {
+			int j = 8;
+			int k[] = new int[j];
+			Random ran = new Random();
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x + choseX(j) - thingy.getX(), y + choseY(j)
+						- thingy.getY()) > getDistance(
+							x + choseX(q) - thingy.getX(), y + choseY(q)
+									- thingy.getY())
+						&& x + choseX(q) > 0
+						&& x + choseX(q) < max_X
+						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+
+					j = q;
+				}
 			}
+			// this is to try and have the wolf be able to move in multiple
+			// movements besides just the one first or last
+			k[0] = j;
+			int d = 1;
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x - thingy.getX(), y - thingy.getY()) < 2.3
+						&& getDistance(x + choseX(j) - thingy.getX(), y
+								+ choseY(j) - thingy.getY()) == getDistance(x
+								+ choseX(q) - thingy.getX(), y + choseY(q)
+								- thingy.getY()) && x + choseX(q) > 0
+						&& x + choseX(q) < max_X && y + choseY(q) > 0
+						&& y + choseY(q) < max_Y) {
+					k[d++] = q;
+
+				}
+			}
+			// this is where he makes his choice for if there are more than
+			// one;;;
+			if (d > 1) {
+				j = k[ran.nextInt(d)];
+			}
+			return j;
+		} else {
+			int j = 8;
+			int k[] = new int[j];
+			Random ran = new Random();
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x - thingy.getX(), y - thingy.getY()) < 4
+						&& getDistance(x + choseX(j) - thingy.getX(), y
+								+ choseY(j) - thingy.getY()) < getDistance(x
+								+ choseX(q) - thingy.getX(), y + choseY(q)
+								- thingy.getY()) && x + choseX(q) > 0
+						&& x + choseX(q) < max_X && y + choseY(q) > 0
+						&& y + choseY(q) < max_Y) {
+
+					j = q;
+				}
+			}
+			// this is to try and have the wolf be able to move in multiple
+			// movements besides just the one first or last
+			k[0] = j;
+			int d = 1;
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x + choseX(j) - thingy.getX(), y + choseY(j)
+						- thingy.getY()) == getDistance(
+						x + choseX(q) - thingy.getX(),
+						y + choseY(q) - thingy.getY())
+						&& x + choseX(q) > 0
+						&& x + choseX(q) < max_X
+						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+					k[d++] = q;
+
+				}
+			}
+			// this is where he makes his choice for if there are more than
+			// one;;;
+			if (d > 1) {
+				j = k[ran.nextInt(d)];
+			}
+
+			return j;
 		}
-
-		return j;
-
 	}
 
 	private Wolf whoIsClosest(ArrayList<Wolf> wolfs) {
 		Wolf wolfIt = null;
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
-				if (!wolf.equals(this)&&distanceTag(wolf) < closest && !wolf.equals(noTagBacks)) {
-					closest = distanceTag(wolf);
-					wolfIt = wolf;
+			if (!wolf.equals(this) && distanceTag(wolf) < closest
+					&& !wolf.equals(noTagBacks)) {
+				closest = distanceTag(wolf);
+				wolfIt = wolf;
 			}
 		}
 
@@ -133,11 +199,11 @@ public class Wolf extends Entity {
 
 	private Wolf runAwayFromWho(ArrayList<Wolf> wolfs) {
 		Wolf wolfIt = null;
-		
+
 		for (Wolf wolf : wolfs) {
 			if (wolf.imIt()) {
 				wolfIt = wolf;
-				System.out.println(wolf);
+				// System.out.println(wolf);
 			}
 		}
 
@@ -255,18 +321,14 @@ public class Wolf extends Entity {
 	}
 
 	private void makeYourMove() {
-		moveMeThere(decisionMaker());
+		moveMeThere(whereToDecisionMaker(this.targets.peek().getSheep()));
 	}
 
 	private void moveMeThere(int move) {
-		if (!debugMode) {
-			RancherGame.pause();
-		}
+
 		this.iWantX = x + choseX(move);
 		this.iWantY = y + choseY(move);
-		if (debugMode) {
-			RancherGame.pause();
-		}
+		RancherGame.pause();
 		this.x = iWantX;
 		this.y = iWantY;
 	}
@@ -284,19 +346,6 @@ public class Wolf extends Entity {
 		System.out.println("move" + j);
 		return j;
 
-	}
-
-	private int decisionMaker() {
-		int j = 0;
-		for (int q = 1; q < 8; q++) {
-			if (getDistance(x + choseX(j) - targets.peek().targetX(), y
-					+ choseY(j) - targets.peek().targetY()) > getDistance(x
-					+ choseX(q) - targets.peek().targetX(), y + choseY(q)
-					- targets.peek().targetY())) {
-				j = q;
-			}
-		}
-		return j;
 	}
 
 	private double getDistance(int x, int y) {

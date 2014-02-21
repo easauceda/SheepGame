@@ -22,7 +22,7 @@ public interface GameSettings {
 	int max_Y = 20;
 	
 	
-	int GAME_SPEED = 700;
+	int GAME_SPEED = 200;
 	int BOARD_REFRESH_RATE = 50;
 	
 	Color SHEEP_COLOR = new Color(255,255,255);

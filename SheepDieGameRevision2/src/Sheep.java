@@ -64,34 +64,93 @@ public class Sheep extends Entity {
 		return 0;
 	}
 
-	private void moveAction() {
-		Random random = new Random();
-		if (alive) {
+	private void moveMeThere(int move) {
+		this.iWantX = x + choseX(move);
+		this.iWantY = y + choseY(move);
+		RancherGame.pause();
 
-			int counter = random.nextInt(8);
-			int nMoveX, nMoveY;
-			nMoveX = choseX(counter);
-			nMoveY = choseY(counter);
-			if ((x + nMoveX >= 0) && (y + nMoveY >= 0) && (x + nMoveX < max_X)
-					&& (y + nMoveY < max_Y)) {
-				this.x = x + nMoveX;
-				this.y = y + nMoveY;
-			RancherGame.pause();
-			RancherGame.pause();
-			amIDead();
-			}
-			moveAction();
-
-
-		}
+		this.x = iWantX;
+		this.y = iWantY;
 	}
 
-	private void amIDead() {
+	private void moveAction() {
+
+		if (alive) {				
+			try {
+				RancherGame.pause(190);
+				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
+
+			} catch (NullPointerException e) {
+			}
+			moveAction();
+		}
+
+	}
+
+	private double getDistance(int x, int y) {
+		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+	}
+
+	private int runTagDecisionMaker(Wolf wolf) {
+		int j = 8;
+		int k[] = new int[j];
+		Random ran = new Random();
+		if (getDistance(x - wolf.getX(), y - wolf.getY()) < 5) {
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x + choseX(j) - wolf.getX(), y + choseY(j)
+						- wolf.getY()) < getDistance(
+							x + choseX(q) - wolf.getX(),
+							y + choseY(q) - wolf.getY())
+						&& x + choseX(q) > 0
+						&& x + choseX(q) < max_X
+						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+
+					j = q;
+				}
+			}
+			// this is to try and have the wolf be able to move in multiple
+			// movements besides just the one first or last
+			k[0] = j;
+			int d = 1;
+			for (int q = 7; q >= 0; q--) {
+				if (getDistance(x + choseX(j) - wolf.getX(), y + choseY(j)
+						- wolf.getY()) == getDistance(
+						x + choseX(q) - wolf.getX(),
+						y + choseY(q) - wolf.getY())
+						&& x + choseX(q) > 0
+						&& x + choseX(q) < max_X
+						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+					k[d++] = q;
+
+				}
+			}
+			// this is where he makes his choice for if there are more than
+			// one;;;
+			if (d > 1) {
+				j = k[ran.nextInt(d)];
+			}
+
+			return j;
+		}
+		return j;
+	}
+
+	private double distanceRun(Wolf wolf) {
+		return Math.sqrt(Math.pow(this.getY() - wolf.getY(), 2)
+				+ Math.pow(this.getX() - wolf.getX(), 2));
+	}
+
+	private Wolf runAwayFromWho(ArrayList<Wolf> wolfs) {
+		Wolf wolfIt = null;
+		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
-			if (this.sameCell(wolf)) {
-				this.die();
+			if (!wolf.equals(this) && distanceRun(wolf) < closest) {
+				closest = distanceRun(wolf);
+				wolfIt = wolf;
 			}
 		}
+
+		return wolfIt;
 	}
 
 	void squirm() {
@@ -134,9 +193,11 @@ public class Sheep extends Entity {
 	public void reviveMe() {
 		this.alive = true;
 		this.deathCount = 50;
-		if(debugMode){
-		this.c = Color.cyan;
-		}else{this.c = Color.white;}
+		if (debugMode) {
+			this.c = Color.cyan;
+		} else {
+			this.c = Color.white;
+		}
 		squirm();
 	}
 }
