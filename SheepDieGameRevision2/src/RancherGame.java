@@ -169,21 +169,10 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void wolfsPlayTag() {
-		if (wolfNotIt()) {
 			for (Wolf wolf : wolfs) {
 				wolf.yourIt();
 				return;
-			}
 		}
-	}
-
-	private boolean wolfNotIt() {
-		for (Wolf wolf : wolfs) {
-			if (wolf.imIt()) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public static void main(String args[]) {

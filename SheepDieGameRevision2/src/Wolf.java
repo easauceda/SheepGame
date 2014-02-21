@@ -11,6 +11,7 @@ public class Wolf extends Entity {
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 	private boolean imIt = false;
 	private Wolf noTagBacks = null;
+	private int countToTen = 10000;
 
 	public Wolf(int x, int y, Color c) {
 
@@ -72,11 +73,13 @@ public class Wolf extends Entity {
 	private void playTag(ArrayList<Wolf> wolfs) {
 
 		if (imIt) {
+			if(countToTen==0){
 			this.c = Color.pink;
 			moveMeThere(chaseTagDecisionMaker(whoIsClosest(wolfs)));
+			
 			yourItSucker(wolfs);
+			}else{this.countToTen--;}
 		} else {
-
 			this.c = Color.black;
 			RancherGame.pause(100);
 			moveMeThere(whereToDecisionMaker(runAwayFromWho(wolfs)));
@@ -85,19 +88,28 @@ public class Wolf extends Entity {
 	}
 
 	private void yourItSucker(ArrayList<Wolf> wolfs) {
-
 		for (Wolf wolf : wolfs) {
-			if (this.sameCell(wolf) && !wolf.equals(noTagBacks)) {
+			if (this.sameCell(wolf)&& !wolf.equals(this) ) {
 				wolf.yourIt();
-				this.alive = false;
+				wolf.setNoTagBacks(this);
+				System.out.println("Tag your It.");
+				this.countToTen = 1000;
+				this.imIt = false;
 				this.c = Color.black;
+				this.noTagBacks = null;
+
 				return;
 			}
 		}
 
 	}
 
+	public void setNoTagBacks(Wolf wolf) {
+		this.noTagBacks = wolf;
+	}
+
 	private int whereToDecisionMaker(Entity thingy) {
+		//try{
 		if (sheepStillAlive(sheeps)) {
 			int j = 8;
 			int k[] = new int[j];
@@ -176,12 +188,14 @@ public class Wolf extends Entity {
 
 			return j;
 		}
+	//}catch(NullPointerException e){return 8;}
 	}
 
 	private Wolf whoIsClosest(ArrayList<Wolf> wolfs) {
 		Wolf wolfIt = null;
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
+			
 			if (!wolf.equals(this) && distanceTag(wolf) < closest
 					&& !wolf.equals(noTagBacks)) {
 				closest = distanceTag(wolf);
@@ -207,6 +221,9 @@ public class Wolf extends Entity {
 			}
 		}
 
+		if(wolfIt.equals(null)){
+			return runAwayFromWho(wolfs);
+		}
 		return wolfIt;
 	}
 
@@ -343,7 +360,6 @@ public class Wolf extends Entity {
 				j = q;
 			}
 		}
-		System.out.println("move" + j);
 		return j;
 
 	}
