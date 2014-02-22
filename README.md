@@ -2,6 +2,9 @@ DO NOT COMMIT TO MASTER BRANCH
 Create a branch in your name and commit there, I'll merge branches later.
 it works better that way, since you can update your code and commit without any issues
 
+---------------------------------------------------------------------------------------------------
+
+UPDATE: 
 
 Alright guys first merge is done! Ignacio's wolves are now integrated into the master game.
 
@@ -10,6 +13,8 @@ Andrew, I'm missing the minimap class from you so I can't merge you in just yet.
 I'm still working on figuring out how to get input for sheep and wolf locations 
 
 -Erick
+
+---------------------------------------------------------------------------------------------------------
 
 SheepDieGameKills
 =================
