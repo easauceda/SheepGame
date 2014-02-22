@@ -1,7 +1,4 @@
-
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +17,7 @@ import javax.swing.Timer;
 public class RancherGame extends JFrame implements GameSettings {
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
-	
+
 	private JButton huntButton = new JButton("hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
@@ -41,9 +38,20 @@ public class RancherGame extends JFrame implements GameSettings {
 		// layout etc
 		JPanel panel = new JPanel();
 		add(rangeCanvas);
+		GridLayout layout = new GridLayout(4, 2);
+		layout.setVgap(20);
+		layout.setHgap(20);
+		panel.setLayout(layout);
+		panel.add(new JLabel());
 		panel.add(huntButton);
+		panel.add(new JLabel("Number of Sheep"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Number of Wolves"));
+		panel.add(new JTextField());
+		panel.add(new JLabel("Game Speed"));
+		panel.add(new JTextField());
 		add(panel, BorderLayout.EAST);
-		
+
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
 
@@ -52,9 +60,11 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println(wolf + " " + sheep);
 
 				rangeCanvas.repaint();
-				if (areSheepsAlive()) {
-					finish();
-				}
+				// wolfsPlayTag();
+
+				// if (areSheepsAlive() && false) {
+				// finish();
+				// }
 			}
 
 			private boolean areSheepsAlive() {
@@ -73,17 +83,46 @@ public class RancherGame extends JFrame implements GameSettings {
 				if (!wolfIsPushed) {
 
 					timer.start();
+					startMovingSheep();
+					wolfsPlayTag();
+					giveWolfHisSheep();
+					startMovingWolfs();
 
-					for (Sheep sheep : sheeps) {
-						sheep.setWolfs(wolfs);
-						sheep.squirm();
-					}
-
-					for (Wolf wolf : wolfs) {
-						wolf.hunt(sheeps, wolfs);
-					}
 					wolfIsPushed = true;
 				}
+				makeOneSheepAlive();
+			}
+
+			private void makeOneSheepAlive() {
+				int e = 0;
+				for (Sheep sheep : sheeps) {
+					if (e == 0 && !sheep.isAlive()) {
+						sheep.reviveMe();
+						e++;
+					}
+				}
+			}
+
+			private void startMovingWolfs() {
+				for (Wolf wolf : wolfs) {
+					wolf.hunt(wolfs);
+				}
+			}
+
+			private void startMovingSheep() {
+				for (Sheep sheep : sheeps) {
+					sheep.setWolfs(wolfs);
+					sheep.squirm();
+				}
+			}
+
+			private void giveWolfHisSheep() {
+				for (Sheep sheep : sheeps) {
+					for (Wolf wolf : wolfs) {
+						wolf.addSheep(sheep);
+					}
+				}
+
 			}
 		});
 
@@ -92,12 +131,12 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
-			sheeps.add(new Sheep(random.nextInt(max_X-1), random.nextInt(max_Y-1),
-					SHEEP_COLOR));
+			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
+					.nextInt(max_Y - 1), SHEEP_COLOR));
 		}
 		for (int q = 0; q < numberOfWolfs; q++) {
-			wolfs.add(new Wolf(random.nextInt(max_X-1), random.nextInt(max_Y-1),
-					WOLF_COLOR));
+			wolfs.add(new Wolf(random.nextInt(max_X - 1), random
+					.nextInt(max_Y - 1), WOLF_COLOR));
 		}
 		giveTheAnimalsToCanvas();
 	}
@@ -110,7 +149,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		for (Sheep sheep : sheeps) {
 			rangeCanvas.addEntity(sheep);
 		}
-		
+
 	}
 
 	public static void pause() {
@@ -121,19 +160,29 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 	}
 
+	public static void pause(int q) {
+		try {
+			Thread.sleep(q);
+		} catch (Exception e) {
+			// uh oh!
+		}
+	}
+
+	private void wolfsPlayTag() {
+			for (Wolf wolf : wolfs) {
+				wolf.yourIt();
+				return;
+		}
+	}
+
 	public static void main(String args[]) {
 		/*
 		 * What I did here was add in a dialog to ask the user if he would like
 		 * to edit the settings. The default is just to start the game by
 		 * reading the settings already defined. - E
 		 */
-		int editSettings = JOptionPane.showConfirmDialog(null,
-				"Would you like to edit settings?");
-		if (editSettings == 0) {
-			System.out.println("Settings will be edited");
-		}
 		RancherGame c = new RancherGame();
-		c.setLayout(new GridLayout(1,1));
+		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
 		c.setLocationRelativeTo(null);

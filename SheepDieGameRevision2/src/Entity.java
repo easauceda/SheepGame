@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public abstract class Entity implements GameSettings {
+	protected int iWantX;
+	protected int iWantY;
 	protected int x;
 	protected int y;
 	protected Color c;
