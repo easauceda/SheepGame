@@ -240,64 +240,89 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
-	private void listen() {
+private void listen() {
 		String buffer;
-
 		// while ((buffer = in.readLine()) != null) {
 		// enteredText.insert(buffer + "\n", enteredText.getText().length());
 		// enteredText.setCaretPosition(enteredText.getText().length());
 		// }
 		// should never gets here unless the server dies...
+
 		while ((buffer = in.readLine()) != null) {
 
 			String[] pos = buffer.split(":");
-			System.out.println(pos[1]);
+			for (String p : pos) {
+				System.out.println("[" + p + "]");
+			}
+			// pos[1].toLowerCase();
 
-			if (foundDaddy) {
-				// for anything in here to actually execute you must first run
-				// the command "I am your father" which makes
-				// you the root user.....................................
+			if (pos[1].equals("add sheep")) {
 				String player = pos[0];
-				System.out.println("[" + dadsName + "]");
-				if (player.equalsIgnoreCase(dadsName)) {
-					// /////////////////////////////root commands
-					// here//////////////////////////////////////
-					System.out.println("[" + pos[1] + "]");
-					commandEntered(pos[1]);
-
-					// ////////////////////////////////////////////////////////////////////////////////////
-				}
-
-				// /////////////////////////////player commands
-				// here//////////////////////////////////
 				Random random = new Random();
 				try {
-					setUpASheep(player, random.nextInt(12), random.nextInt(12));
-
+					setUpASheep(player, Integer.parseInt(pos[2]),
+							Integer.parseInt(pos[3]));
+					// setUpASheep(player,
+					// Integer.parseInt(pos[2]),Integer.parseInt(pos[3]));
+					// Gameboard.repaint();
 				} catch (Exception ex) {
-					System.out.println("Dude they just told you whats up?");
+					System.out.println("Error.");
+					System.out.println("Commands:");
+					System.out.println("To add a sheep - add sheep:x:y");
+					System.out.println("To move - a, s, d, w");
 				}
 
-				// ////////////////////////////////////////////////////////////////////////////////////
-			} else {
-				if (pos[1].equalsIgnoreCase(" i am your father")) {
-					this.foundDaddy = true;
-					this.dadsName = pos[0];
-					System.out.println("my Fathers Name Is " + dadsName);
-				} else {
-					System.out.println("im waiting for my father.");
+			}
+			if (pos[1].equals("a")) {
+				String target = pos[0];
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					if (compare == target) {
+						i.setX(i.getX() + 1);
+						repaint();
+					}
 				}
 			}
-		}
+			if (pos[1].equals("s")) {
+				String target = pos[0];
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					if (compare == target) {
+						i.setX(i.getX() - 1);
+						repaint();
+					}
+				}
+			}
+			if (pos[1].equals("d")) {
+				String target = pos[0];
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					if (compare == target) {
+						i.setY(i.getY() - 1);
+						repaint();
+					}
+				}
+			}
+			if (pos[1].equals("w")) {
+				String target = pos[0];
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					if (compare == target) {
+						i.setY(i.getY() + 1);
+						repaint();
+					}
+				}
+			}
 
-		out.close();
-		in.close();
-		try {
-			socket.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+			out.close();
+			in.close();
+			try {
+				socket.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//System.out.println("closed client socket");
 		}
-		System.out.println("closed client socket");
 	}
 
 	private void commandEntered(String string) {
