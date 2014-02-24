@@ -18,8 +18,6 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
-	private String dadsName = null;
-	private boolean foundDaddy = false;
 	private JTextField typedText = new JTextField(32);
 	private static final long serialVersionUID = 1L;
 	private String userName;
@@ -63,8 +61,8 @@ public class RancherGame extends JFrame implements GameSettings {
 		// layout etc
 		JPanel panel = new JPanel();
 		add(rangeCanvas);
-		GridLayout layout = new GridLayout(4, 2);
-		layout.setVgap(20);
+		GridLayout layout = new GridLayout(10, 4);
+		layout.setVgap(0);
 		layout.setHgap(20);
 		panel.setLayout(layout);
 		panel.add(new JLabel());
@@ -123,18 +121,15 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void makeOneSheepAlive() {
-	for (Sheep sheep : sheeps) {
-			if (!sheep.isAlive()) {
+		int e = 0;
+		for (Sheep sheep : sheeps) {
+			if (e == 0 && !sheep.isAlive()) {
 				sheep.reviveMe();
-				return;
+				e++;
 			}
 		}
 	}
-	private void makeAllSheepsAlive(){
-		for (Sheep sheep: sheeps){
-			sheep.reviveMe();
-		}
-	}
+
 	private void startMovingWolfs() {
 		for (Wolf wolf : wolfs) {
 			wolf.hunt(wolfs);
@@ -240,7 +235,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
-private void listen() {
+	private void listen() {
 		String buffer;
 		// while ((buffer = in.readLine()) != null) {
 		// enteredText.insert(buffer + "\n", enteredText.getText().length());
@@ -325,128 +320,6 @@ private void listen() {
 		}
 	}
 
-	private void commandEntered(String string) {
-		try {
-			String[] breakUp = string.split("\\.");
-
-			System.out.println("[" + breakUp[0] + "]");
-			if (breakUp[0].equalsIgnoreCase(" move")) {
-				moveSomething(breakUp[1]);
-			} else {
-				if (breakUp[0].equalsIgnoreCase(" add")) {
-					addSomething(breakUp[1]);
-				} else {
-					if (breakUp[0].equalsIgnoreCase(" start")) {
-						letTheGamesBegin();
-					}else{
-						if(breakUp[0].equalsIgnoreCase(" zombie")){
-							bringTolife(breakUp[1]);
-						}else{if(breakUp[0].equalsIgnoreCase(" clear")){
-							clearBoard(breakUp[1]);
-							}
-						}
-					}
-				}
-			}
-
-		} catch (Exception e) {
-			System.out.println("I don't understand");
-			return;
-		}
-	}
-
-	private void clearBoard(String string) {
-		System.out.println("function still not Implemented");
-	}
-
-	private void bringTolife(String breakUp) {
-		System.out.println(breakUp);
-		if(breakUp.equalsIgnoreCase("one")){
-			makeOneSheepAlive();
-			return;
-		}else{if(breakUp.equalsIgnoreCase("all")){
-			makeAllSheepsAlive();
-			System.out.println("zombiesssssss");
-			return;
-		}	
-		}
-		System.out.println("command not understood");
-	}
-
-	private void addSomething(String string) {
-		System.out.println(string);
-		try {
-			String[] breakUp = string.split("=");
-			String[] addTo = breakUp[1].split(",");
-			System.out.println(breakUp[0]+" "+addTo[0]+","+addTo[1]);
-			
-			if (breakUp[0].equalsIgnoreCase("sheep")) {
-				
-				createSheep((Integer.parseInt(addTo[0])),
-						(Integer.parseInt(addTo[1])));
-						
-				return;
-			} else {
-				if (breakUp[0].equalsIgnoreCase("wolf")) {
-					Wolf creature = new Wolf((Integer.parseInt(addTo[0])),
-							(Integer.parseInt(addTo[1])), WOLF_COLOR);
-						wolfs.add(creature);
-						
-						rangeCanvas.addEntity(creature);
-						rangeCanvas.repaint();
-						
-					return;
-
-				}
-			}
-			System.out.println("What kind of creature is that?");
-
-		} catch (Exception e) {
-			System.out.println("I don't understand");
-			return;
-		}
-
-	}
-
-	private void letTheGamesBegin() {
-		if (!wolfIsPushed) {
-
-			timer.start();
-			startMovingSheep();
-			wolfsPlayTag();
-			giveWolfHisSheep();
-			startMovingWolfs();
-
-			wolfIsPushed = true;
-		}
-
-	}
-
-	private void moveSomething(String string) {
-		try {
-			String[] breakUp = string.split("=");
-			String[] from = breakUp[0].split(",");
-			String[] mTo = breakUp[1].split(",");
-
-			for (Entity e : rangeCanvas.giveMeEntities()) {
-				if (e.getX() == Integer.parseInt(from[0])
-						&& e.getY() == Integer.parseInt(from[1])) {
-					e.setX(Integer.parseInt(mTo[0]));
-					e.setY(Integer.parseInt(mTo[1]));
-					System.out.println("okay he was moved");
-					rangeCanvas.repaint();
-					return;
-				}
-			}
-			System.out.println("Entity does not exist in location.");
-
-		} catch (Exception e) {
-			System.out.println("I don't understand");
-			return;
-		}
-
-	}
-
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void setUpASheep(String player, int initX, int initY) {
@@ -456,27 +329,19 @@ private void listen() {
 		// return;
 		// }
 		// }
-
-		// sorry had to comment this out to be able to not keep on adding sheep.
-		 //createSheepForPlayer(player, initX, initY);
+		createSheepForPlayer(player, initX, initY);
 
 	}
 
-	private void createSheepForPlayer(String player, int initX, int initY) {
-		Sheep playerSheep = new Sheep(initX, initY, SHEEP_COLOR);
-		playerSheep.setMyOwner(player);
+	void createSheepForPlayer(String player, int initX, int initY) {
+		this.playerSheep = new Sheep(initX, initY, SHEEP_COLOR);
+		this.playerSheep.setMyOwner(player);
 		this.sheeps.add(playerSheep);
 		rangeCanvas.addEntity(playerSheep);
 		giveWolfOneSheep(playerSheep);
 		rangeCanvas.repaint();
 	}
-	private void createSheep(int initX, int initY) {
-		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
-		this.sheeps.add(newSheep);
-		rangeCanvas.addEntity(newSheep);
-		giveWolfOneSheep(newSheep);
-		rangeCanvas.repaint();
-	}
+
 	/*
 	 * @Override public void actionPerformed(ActionEvent e) { String message =
 	 * typedText.getText(); System.out.println(message); String outMessage =
