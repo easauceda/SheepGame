@@ -18,6 +18,8 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
+	private String dadsName = null;
+	private boolean foundDaddy = false;
 	private JTextField typedText = new JTextField(32);
 	private static final long serialVersionUID = 1L;
 	private String userName;
@@ -119,6 +121,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 	}
+
 	private void makeOneSheepAlive() {
 		int e = 0;
 		for (Sheep sheep : sheeps) {
@@ -150,11 +153,13 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 
 	}
-	private void giveWolfOneSheep(Sheep sheep){
-	for (Wolf wolf : wolfs) {
-				wolf.addSheep(sheep);
-			}
+
+	private void giveWolfOneSheep(Sheep sheep) {
+		for (Wolf wolf : wolfs) {
+			wolf.addSheep(sheep);
 		}
+	}
+
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
@@ -240,26 +245,46 @@ public class RancherGame extends JFrame implements GameSettings {
 		// enteredText.setCaretPosition(enteredText.getText().length());
 		// }
 		// should never gets here unless the server dies...
-
 		while ((buffer = in.readLine()) != null) {
-			String[] pos = buffer.split(":");
-			for (String p : pos) {
-				System.out.println("[" + p + "]");
-			}
-			// pos[1].toLowerCase();
 
-			// if(pos.length == 4 && pos[1].equals("sheep")){
-			String player = pos[0];
-			Random random = new Random();
-			try {
-				setUpASheep(player, random.nextInt(12), random.nextInt(12));
-				// setUpASheep(player,
-				// Integer.parseInt(pos[2]),Integer.parseInt(pos[3]));
-				// board.repaint();
-			} catch (Exception ex) {
-				System.out.println("Dude they just told you whats up?");
+			String[] pos = buffer.split(":");
+			System.out.println(pos[1]);
+
+			if (foundDaddy) {
+				//for anything in here to actually execute you must first run the command "I am your father" which makes
+				// you the root user.....................................
+				String player = pos[0];
+				if(player.equals(dadsName)){
+				///////////////////////////////root commands here//////////////////////////////////////	
+					
+					
+					
+					
+					
+				//////////////////////////////////////////////////////////////////////////////////////	
+				}
+				
+				///////////////////////////////player commands here//////////////////////////////////
+				Random random = new Random();
+				try {
+					setUpASheep(player, random.nextInt(12), random.nextInt(12));
+
+				} catch (Exception ex) {
+					System.out.println("Dude they just told you whats up?");
+				}
+				
+				
+				
+				//////////////////////////////////////////////////////////////////////////////////////
+			} else {
+				if (pos[1].equalsIgnoreCase(" i am your father")) {
+					this.foundDaddy = true;
+					this.dadsName = pos[0];
+					System.out.println("my Fathers Name Is " + dadsName);
+				} else {
+					System.out.println("im waiting for my father.");
+				}
 			}
-			// }
 		}
 
 		out.close();
