@@ -116,41 +116,45 @@ public class RancherGame extends JFrame implements GameSettings {
 				makeOneSheepAlive();
 			}
 
-			private void makeOneSheepAlive() {
-				int e = 0;
-				for (Sheep sheep : sheeps) {
-					if (e == 0 && !sheep.isAlive()) {
-						sheep.reviveMe();
-						e++;
-					}
-				}
-			}
-
-			private void startMovingWolfs() {
-				for (Wolf wolf : wolfs) {
-					wolf.hunt(wolfs);
-				}
-			}
-
-			private void startMovingSheep() {
-				for (Sheep sheep : sheeps) {
-					sheep.setWolfs(wolfs);
-					sheep.squirm();
-				}
-			}
-
-			private void giveWolfHisSheep() {
-				for (Sheep sheep : sheeps) {
-					for (Wolf wolf : wolfs) {
-						wolf.addSheep(sheep);
-					}
-				}
-
-			}
 		});
 
 	}
+	private void makeOneSheepAlive() {
+		int e = 0;
+		for (Sheep sheep : sheeps) {
+			if (e == 0 && !sheep.isAlive()) {
+				sheep.reviveMe();
+				e++;
+			}
+		}
+	}
 
+	private void startMovingWolfs() {
+		for (Wolf wolf : wolfs) {
+			wolf.hunt(wolfs);
+		}
+	}
+
+	private void startMovingSheep() {
+		for (Sheep sheep : sheeps) {
+			sheep.setWolfs(wolfs);
+			sheep.squirm();
+		}
+	}
+
+	private void giveWolfHisSheep() {
+		for (Sheep sheep : sheeps) {
+			for (Wolf wolf : wolfs) {
+				wolf.addSheep(sheep);
+			}
+		}
+
+	}
+	private void giveWolfOneSheep(Sheep sheep){
+	for (Wolf wolf : wolfs) {
+				wolf.addSheep(sheep);
+			}
+		}
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
@@ -286,6 +290,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		this.playerSheep.setMyOwner(player);
 		this.sheeps.add(playerSheep);
 		rangeCanvas.addEntity(playerSheep);
+		giveWolfOneSheep(playerSheep);
 		rangeCanvas.repaint();
 	}
 
