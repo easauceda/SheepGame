@@ -251,20 +251,22 @@ public class RancherGame extends JFrame implements GameSettings {
 			System.out.println(pos[1]);
 
 			if (foundDaddy) {
-				//for anything in here to actually execute you must first run the command "I am your father" which makes
+				// for anything in here to actually execute you must first run
+				// the command "I am your father" which makes
 				// you the root user.....................................
 				String player = pos[0];
-				if(player.equals(dadsName)){
-				///////////////////////////////root commands here//////////////////////////////////////	
-					
-					
-					
-					
-					
-				//////////////////////////////////////////////////////////////////////////////////////	
+				System.out.println("[" + dadsName + "]");
+				if (player.equalsIgnoreCase(dadsName)) {
+					// /////////////////////////////root commands
+					// here//////////////////////////////////////
+					System.out.println("[" + pos[1] + "]");
+					commandEntered(pos[1]);
+
+					// ////////////////////////////////////////////////////////////////////////////////////
 				}
-				
-				///////////////////////////////player commands here//////////////////////////////////
+
+				// /////////////////////////////player commands
+				// here//////////////////////////////////
 				Random random = new Random();
 				try {
 					setUpASheep(player, random.nextInt(12), random.nextInt(12));
@@ -272,10 +274,8 @@ public class RancherGame extends JFrame implements GameSettings {
 				} catch (Exception ex) {
 					System.out.println("Dude they just told you whats up?");
 				}
-				
-				
-				
-				//////////////////////////////////////////////////////////////////////////////////////
+
+				// ////////////////////////////////////////////////////////////////////////////////////
 			} else {
 				if (pos[1].equalsIgnoreCase(" i am your father")) {
 					this.foundDaddy = true;
@@ -297,6 +297,97 @@ public class RancherGame extends JFrame implements GameSettings {
 		System.out.println("closed client socket");
 	}
 
+	private void commandEntered(String string) {
+		try {
+			String[] breakUp = string.split("\\.");
+
+			System.out.println("[" + breakUp[0] + "]");
+			if (breakUp[0].equalsIgnoreCase(" move")) {
+				moveSomething(breakUp[1]);
+			} else {
+				if (breakUp[0].equalsIgnoreCase(" add")) {
+					addSomething(breakUp[1]);
+				} else {
+					if (breakUp[0].equalsIgnoreCase(" start")) {
+						letTheGamesBegin();
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println("I don't understand");
+			return;
+		}
+	}
+
+	private void addSomething(String string) {
+		System.out.println(string);
+		try {
+			String[] breakUp = string.split("=");
+			String[] addTo = breakUp[1].split(",");
+			System.out.println(breakUp[0]+" "+addTo[0]+","+addTo[1]);
+			
+			if (breakUp[0].equalsIgnoreCase("sheep")) {
+				
+				createSheep((Integer.parseInt(addTo[0])),
+						(Integer.parseInt(addTo[1])));
+						
+				return;
+			} else {
+				if (breakUp[0].equalsIgnoreCase("wolf")) {
+					Wolf creature = new Wolf((Integer.parseInt(addTo[0])),
+							(Integer.parseInt(addTo[1])), WOLF_COLOR);
+						
+					return;
+
+				}
+			}
+			System.out.println("What kind of creature is that?");
+
+		} catch (Exception e) {
+			System.out.println("I don't understand");
+			return;
+		}
+
+	}
+
+	private void letTheGamesBegin() {
+		if (!wolfIsPushed) {
+
+			timer.start();
+			startMovingSheep();
+			wolfsPlayTag();
+			giveWolfHisSheep();
+			startMovingWolfs();
+
+			wolfIsPushed = true;
+		}
+
+	}
+
+	private void moveSomething(String string) {
+		try {
+			String[] breakUp = string.split("=");
+			String[] from = breakUp[0].split(",");
+			String[] mTo = breakUp[1].split(",");
+
+			for (Entity e : rangeCanvas.giveMeEntities()) {
+				if (e.getX() == Integer.parseInt(from[0])
+						&& e.getY() == Integer.parseInt(from[1])) {
+					e.setX(Integer.parseInt(mTo[0]));
+					e.setY(Integer.parseInt(mTo[1]));
+					return;
+				}
+			}
+			System.out.println("Entity does not exist in location.");
+
+		} catch (Exception e) {
+			System.out.println("I don't understand");
+			return;
+		}
+
+	}
+
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void setUpASheep(String player, int initX, int initY) {
@@ -306,19 +397,27 @@ public class RancherGame extends JFrame implements GameSettings {
 		// return;
 		// }
 		// }
-		createSheepForPlayer(player, initX, initY);
+
+		// sorry had to comment this out to be able to not keep on adding sheep.
+		 //createSheepForPlayer(player, initX, initY);
 
 	}
 
 	private void createSheepForPlayer(String player, int initX, int initY) {
-		this.playerSheep = new Sheep(initX, initY, SHEEP_COLOR);
-		this.playerSheep.setMyOwner(player);
+		Sheep playerSheep = new Sheep(initX, initY, SHEEP_COLOR);
+		playerSheep.setMyOwner(player);
 		this.sheeps.add(playerSheep);
 		rangeCanvas.addEntity(playerSheep);
 		giveWolfOneSheep(playerSheep);
 		rangeCanvas.repaint();
 	}
-
+	private void createSheep(int initX, int initY) {
+		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
+		this.sheeps.add(newSheep);
+		rangeCanvas.addEntity(newSheep);
+		giveWolfOneSheep(newSheep);
+		rangeCanvas.repaint();
+	}
 	/*
 	 * @Override public void actionPerformed(ActionEvent e) { String message =
 	 * typedText.getText(); System.out.println(message); String outMessage =

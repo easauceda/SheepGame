@@ -68,6 +68,9 @@ class RangeCanvas extends JPanel implements GameSettings {
 	public void addEntity(Entity e) {
 		entities.add(e);
 	}
+	public ArrayList<Entity> giveMeEntities(){
+		return entities;
+	}
 
 	protected void paintComponent(Graphics pen) {
 		super.paintComponent(pen);
