@@ -68,11 +68,11 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(new JLabel());
 		panel.add(huntButton);
 		panel.add(new JLabel("Number of Sheep"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(input.getNumberOfSheep())));
 		panel.add(new JLabel("Number of Wolves"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(input.getNumberOfWolfs())));
 		panel.add(new JLabel("Game Speed"));
-		panel.add(new JTextField());
+		panel.add(new JTextField(String.valueOf(input.getSpeed())));
 		add(panel, BorderLayout.EAST);
 
 		setTheAnimals();
