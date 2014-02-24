@@ -6,7 +6,7 @@ import java.util.Random;
 public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
-
+	private String myOwner = null;
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
 	}
@@ -206,5 +206,13 @@ public class Sheep extends Entity {
 			this.c = Color.white;
 		}
 		squirm();
+	}
+
+	public String getMyOwner() {
+		return myOwner;
+	}
+
+	public void setMyOwner(String myOwner) {
+		this.myOwner = myOwner;
 	}
 }
