@@ -185,7 +185,9 @@ public class RancherGame extends JFrame implements GameSettings {
 			// uh oh!
 		}
 	}
-
+	
+	
+	
 	public static void main(String args[]) {
 		RancherGame c = new RancherGame();
 		c.setLayout(new GridLayout(1, 1));
