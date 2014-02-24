@@ -123,15 +123,18 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void makeOneSheepAlive() {
-		int e = 0;
-		for (Sheep sheep : sheeps) {
-			if (e == 0 && !sheep.isAlive()) {
+	for (Sheep sheep : sheeps) {
+			if (!sheep.isAlive()) {
 				sheep.reviveMe();
-				e++;
+				return;
 			}
 		}
 	}
-
+	private void makeAllSheepsAlive(){
+		for (Sheep sheep: sheeps){
+			sheep.reviveMe();
+		}
+	}
 	private void startMovingWolfs() {
 		for (Wolf wolf : wolfs) {
 			wolf.hunt(wolfs);
@@ -310,6 +313,13 @@ public class RancherGame extends JFrame implements GameSettings {
 				} else {
 					if (breakUp[0].equalsIgnoreCase(" start")) {
 						letTheGamesBegin();
+					}else{
+						if(breakUp[0].equalsIgnoreCase(" zombie")){
+							bringTolife(breakUp[1]);
+						}else{if(breakUp[0].equalsIgnoreCase(" clear")){
+							clearBoard(breakUp[1]);
+							}
+						}
 					}
 				}
 			}
@@ -318,6 +328,24 @@ public class RancherGame extends JFrame implements GameSettings {
 			System.out.println("I don't understand");
 			return;
 		}
+	}
+
+	private void clearBoard(String string) {
+		System.out.println("function still not Implemented");
+	}
+
+	private void bringTolife(String breakUp) {
+		System.out.println(breakUp);
+		if(breakUp.equalsIgnoreCase("one")){
+			makeOneSheepAlive();
+			return;
+		}else{if(breakUp.equalsIgnoreCase("all")){
+			makeAllSheepsAlive();
+			System.out.println("zombiesssssss");
+			return;
+		}	
+		}
+		System.out.println("command not understood");
 	}
 
 	private void addSomething(String string) {
@@ -337,6 +365,10 @@ public class RancherGame extends JFrame implements GameSettings {
 				if (breakUp[0].equalsIgnoreCase("wolf")) {
 					Wolf creature = new Wolf((Integer.parseInt(addTo[0])),
 							(Integer.parseInt(addTo[1])), WOLF_COLOR);
+						wolfs.add(creature);
+						
+						rangeCanvas.addEntity(creature);
+						rangeCanvas.repaint();
 						
 					return;
 
@@ -376,6 +408,8 @@ public class RancherGame extends JFrame implements GameSettings {
 						&& e.getY() == Integer.parseInt(from[1])) {
 					e.setX(Integer.parseInt(mTo[0]));
 					e.setY(Integer.parseInt(mTo[1]));
+					System.out.println("okay he was moved");
+					rangeCanvas.repaint();
 					return;
 				}
 			}
