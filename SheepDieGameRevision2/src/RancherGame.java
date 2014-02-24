@@ -22,7 +22,6 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JButton huntButton = new JButton("hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
-	private settings set = new settings();
 
 	private final Timer timer;
 
