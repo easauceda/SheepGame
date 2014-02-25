@@ -1,7 +1,8 @@
-clock = 500
-  sheep count = 10
+clock = 1500
+  sheep count = 20
   wolf count = 4
-  wolf 2 3
-  wolf 3 4
-  wolf 10 19
-  wolf 1 3
+  wolf 10 9
+  wolf 9 9
+  wolf 10 10
+  wolf 9 10
+  wolf 9 11

@@ -68,7 +68,7 @@ public class Sheep extends Entity {
 		this.iWantX = x + choseX(move);
 		this.iWantY = y + choseY(move);
 		RancherGame.pause();
-		RancherGame.pause(50);
+		//RancherGame.pause(50);
 		this.x = iWantX;
 		this.y = iWantY;
 	}
@@ -77,7 +77,7 @@ public class Sheep extends Entity {
 
 		if (alive) {
 			try {
-				RancherGame.pause(60);
+				//RancherGame.pause(60);
 				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
 			} catch (NullPointerException e) {

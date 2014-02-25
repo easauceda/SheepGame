@@ -126,30 +126,11 @@ public class Wolf extends Entity {
 						&& x + choseX(q) >= 0
 						&& x + choseX(q) < max_X
 						&& y + choseY(q) >= 0 && y + choseY(q) < max_Y) {
-
+						if(sheepIsHereKillIt(x + choseX(q), y + choseY(q))){
+							return q;
+						}
 					j = q;
 				}
-			}
-			// this is to try and have the wolf be able to move in multiple
-			// movements besides just the one first or last
-			k[0] = j;
-			int d = 1;
-			for (int q = 7; q >= 0; q--) {
-				if (getDistance(x - thingy.getX(), y - thingy.getY()) < 2.3
-						&& getDistance(x + choseX(j) - thingy.getX(), y
-								+ choseY(j) - thingy.getY()) == getDistance(x
-								+ choseX(q) - thingy.getX(), y + choseY(q)
-								- thingy.getY()) && x + choseX(q) >= 0
-						&& x + choseX(q) < max_X && y + choseY(q) >= 0
-						&& y + choseY(q) < max_Y) {
-					k[d++] = q;
-
-				}
-			}
-			// this is where he makes his choice for if there are more than
-			// one;;;
-			if (d > 1) {
-				j = k[ran.nextInt(d)];
 			}
 			return j;
 		} else {
@@ -193,6 +174,15 @@ public class Wolf extends Entity {
 			return j;
 		}
 	//}catch(NullPointerException e){return 8;}
+	}
+
+	private boolean sheepIsHereKillIt(int i, int j) {
+		for (Sheep sheep: sheeps){
+			if(sheep.getX()==i&&sheep.getY()==j){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private Wolf whoIsClosest(ArrayList<Wolf> wolfs) {
