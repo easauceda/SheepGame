@@ -37,6 +37,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 
 	private final Timer timer;
+	private boolean gameOver = false;
 
 	private void finish() {
 		timer.stop();
@@ -48,6 +49,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public RancherGame(String userName, String server, int port) {
+		final StopWatch timeToLunch = new StopWatch();
 		// ///////////////////////////////////////////////////////////////////
 		this.userName = userName;
 		try {
@@ -88,9 +90,11 @@ public class RancherGame extends JFrame implements GameSettings {
 				rangeCanvas.repaint();
 				// wolfsPlayTag();
 
-				// if (areSheepsAlive() && false) {
-				// finish();
-				// }
+				if (areSheepsAlive() == true && gameOver == false) {
+					System.out.println(timeToLunch.stopTiming());
+					gameOver = true;
+
+				}
 			}
 
 			private boolean areSheepsAlive() {
@@ -99,6 +103,7 @@ public class RancherGame extends JFrame implements GameSettings {
 						return false;
 					}
 				}
+
 				return true;
 			}
 		});
@@ -109,6 +114,7 @@ public class RancherGame extends JFrame implements GameSettings {
 				if (!wolfIsPushed) {
 
 					timer.start();
+					timeToLunch.startTiming();
 					startMovingSheep();
 					wolfsPlayTag();
 					giveWolfHisSheep();
@@ -541,7 +547,7 @@ public class RancherGame extends JFrame implements GameSettings {
 			playerColor = new Color(0, 255, 255);
 		}
 		if (random == 7) {
-			playerColor = new Color(255, 0, 125 );
+			playerColor = new Color(255, 0, 125);
 		}
 		if (random == 8) {
 			playerColor = new Color(0, 100, 255);
