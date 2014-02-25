@@ -123,18 +123,20 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void makeOneSheepAlive() {
-	for (Sheep sheep : sheeps) {
+		for (Sheep sheep : sheeps) {
 			if (!sheep.isAlive()) {
 				sheep.reviveMe();
 				return;
 			}
 		}
 	}
-	private void makeAllSheepsAlive(){
-		for (Sheep sheep: sheeps){
+
+	private void makeAllSheepsAlive() {
+		for (Sheep sheep : sheeps) {
 			sheep.reviveMe();
 		}
 	}
+
 	private void startMovingWolfs() {
 		for (Wolf wolf : wolfs) {
 			wolf.hunt(wolfs);
@@ -251,9 +253,11 @@ public class RancherGame extends JFrame implements GameSettings {
 		while ((buffer = in.readLine()) != null) {
 
 			String[] pos = buffer.split(":");
-			System.out.println(pos[1]);
-
-			if (foundDaddy) {
+			//System.out.println(pos[1]);
+			if (pos[1].equalsIgnoreCase(" add sheep")){
+				createSheepForPlayer(pos[0], Integer.parseInt(pos[2]), Integer.parseInt(pos[3]));
+			}
+			else if (foundDaddy) {
 				// for anything in here to actually execute you must first run
 				// the command "I am your father" which makes
 				// you the root user.....................................
@@ -313,11 +317,12 @@ public class RancherGame extends JFrame implements GameSettings {
 				} else {
 					if (breakUp[0].equalsIgnoreCase(" start")) {
 						letTheGamesBegin();
-					}else{
-						if(breakUp[0].equalsIgnoreCase(" zombie")){
+					} else {
+						if (breakUp[0].equalsIgnoreCase(" zombie")) {
 							bringTolife(breakUp[1]);
-						}else{if(breakUp[0].equalsIgnoreCase(" clear")){
-							clearBoard(breakUp[1]);
+						} else {
+							if (breakUp[0].equalsIgnoreCase(" clear")) {
+								clearBoard(breakUp[1]);
 							}
 						}
 					}
@@ -336,14 +341,15 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	private void bringTolife(String breakUp) {
 		System.out.println(breakUp);
-		if(breakUp.equalsIgnoreCase("one")){
+		if (breakUp.equalsIgnoreCase("one")) {
 			makeOneSheepAlive();
 			return;
-		}else{if(breakUp.equalsIgnoreCase("all")){
-			makeAllSheepsAlive();
-			System.out.println("zombiesssssss");
-			return;
-		}	
+		} else {
+			if (breakUp.equalsIgnoreCase("all")) {
+				makeAllSheepsAlive();
+				System.out.println("zombiesssssss");
+				return;
+			}
 		}
 		System.out.println("command not understood");
 	}
@@ -353,7 +359,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		try {
 			String[] breakUp = string.split("=");
 			String[] addTo = breakUp[1].split(",");
-			System.out.println(breakUp[0]+" "+addTo[0]+","+addTo[1]);
+			System.out.println(breakUp[0] + " " + addTo[0] + "," + addTo[1]);
 
 			if (breakUp[0].equalsIgnoreCase("sheep")) {
 
@@ -365,10 +371,10 @@ public class RancherGame extends JFrame implements GameSettings {
 				if (breakUp[0].equalsIgnoreCase("wolf")) {
 					Wolf creature = new Wolf((Integer.parseInt(addTo[0])),
 							(Integer.parseInt(addTo[1])), WOLF_COLOR);
-						wolfs.add(creature);
+					wolfs.add(creature);
 
-						rangeCanvas.addEntity(creature);
-						rangeCanvas.repaint();
+					rangeCanvas.addEntity(creature);
+					rangeCanvas.repaint();
 
 					return;
 
@@ -433,7 +439,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		// }
 
 		// sorry had to comment this out to be able to not keep on adding sheep.
-		 //createSheepForPlayer(player, initX, initY);
+		// createSheepForPlayer(player, initX, initY);
 
 	}
 
@@ -445,6 +451,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		giveWolfOneSheep(playerSheep);
 		rangeCanvas.repaint();
 	}
+
 	private void createSheep(int initX, int initY) {
 		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
 		this.sheeps.add(newSheep);
