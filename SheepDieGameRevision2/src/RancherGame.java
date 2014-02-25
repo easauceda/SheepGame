@@ -252,7 +252,9 @@ public class RancherGame extends JFrame implements GameSettings {
 
 			String[] pos = buffer.split(":");
 			System.out.println(pos[1]);
-
+if (pos[2].equals("add sheep")){
+	System.out.println("TEST");
+}
 			if (foundDaddy) {
 				// for anything in here to actually execute you must first run
 				// the command "I am your father" which makes
