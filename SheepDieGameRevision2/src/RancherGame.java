@@ -253,11 +253,27 @@ public class RancherGame extends JFrame implements GameSettings {
 		while ((buffer = in.readLine()) != null) {
 
 			String[] pos = buffer.split(":");
-			//System.out.println(pos[1]);
-			if (pos[1].equalsIgnoreCase(" add sheep")){
-				createSheepForPlayer(pos[0], Integer.parseInt(pos[2]), Integer.parseInt(pos[3]));
+			System.out.println(pos[1]);
+			if (pos[1].equalsIgnoreCase(" add sheep")) {
+				createSheepForPlayer(pos[0], Integer.parseInt(pos[2]),
+						Integer.parseInt(pos[3]));
 			}
-			else if (foundDaddy) {
+			if (pos[1].equalsIgnoreCase(" a")) {
+				// System.out.println("HELLO");
+				String tester = pos[0];
+				System.out.println(tester);
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					//System.out.println(compare);
+					if (compare != null) {
+						//System.out.println("made it");
+						if (compare.equalsIgnoreCase(tester)) {
+							i.setX(i.getX() - 1);
+							repaint();
+						}
+					}
+				}
+			} else if (foundDaddy) {
 				// for anything in here to actually execute you must first run
 				// the command "I am your father" which makes
 				// you the root user.....................................
