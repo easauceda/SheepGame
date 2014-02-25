@@ -273,6 +273,54 @@ public class RancherGame extends JFrame implements GameSettings {
 						}
 					}
 				}
+			}
+				if (pos[1].equalsIgnoreCase(" d")) {
+					// System.out.println("HELLO");
+					String tester = pos[0];
+					System.out.println(tester);
+					for (Sheep i : sheeps) {
+						String compare = i.getMyOwner();
+						//System.out.println(compare);
+						if (compare != null) {
+							//System.out.println("made it");
+							if (compare.equalsIgnoreCase(tester)) {
+								i.setX(i.getX() + 1);
+								repaint();
+							}
+						}
+					}
+				}
+					if (pos[1].equalsIgnoreCase(" s")) {
+						// System.out.println("HELLO");
+						String tester = pos[0];
+						System.out.println(tester);
+						for (Sheep i : sheeps) {
+							String compare = i.getMyOwner();
+							//System.out.println(compare);
+							if (compare != null) {
+								//System.out.println("made it");
+								if (compare.equalsIgnoreCase(tester)) {
+									i.setY(i.getY() + 1);
+									repaint();
+								}
+							}
+						}
+					}
+						if (pos[1].equalsIgnoreCase(" w")) {
+							// System.out.println("HELLO");
+							String tester = pos[0];
+							System.out.println(tester);
+							for (Sheep i : sheeps) {
+								String compare = i.getMyOwner();
+								//System.out.println(compare);
+								if (compare != null) {
+									//System.out.println("made it");
+									if (compare.equalsIgnoreCase(tester)) {
+										i.setY(i.getY() - 1);
+										repaint();
+									}
+								}
+							}
 			} else if (foundDaddy) {
 				// for anything in here to actually execute you must first run
 				// the command "I am your father" which makes
