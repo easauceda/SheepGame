@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //Idea of this test file is to implement a file reader for the homework
@@ -12,6 +13,8 @@ public class input {
 	private static int sheepMax;
 	private static int wolfMax;
 	private static int gameSpeed;
+	private static int count = 0;
+	private static ArrayList<String> wolfPositions = new ArrayList<String>();
 
 	public input() throws FileNotFoundException {
 		Scanner fileReader = new Scanner(new File("input.txt"));
@@ -32,10 +35,16 @@ public class input {
 				sheepMax = Integer.parseInt(fileReader.next());
 			}
 			if (answer == 3) {
+				String x = fileReader.next();
+				if (x.equals("count")) {
 
-				fileReader.next();
-				fileReader.next();
-				wolfMax = Integer.parseInt(fileReader.next());
+					fileReader.next();
+					wolfMax = Integer.parseInt(fileReader.next());
+				} else {
+					String y = fileReader.next();
+					wolfPositions.add(x + "," + y);
+				}
+
 			}
 
 		}
@@ -68,12 +77,21 @@ public class input {
 	}
 
 	public static int getNumberOfWolfs() {
-		// TODO Auto-generated method stub
-		return wolfMax;
+		if (count == 0) {
+			return wolfMax;
+
+		}
+		return getPositions().size();
 	}
 
 	public static int getSpeed() {
-		// TODO Auto-generated method stub
 		return gameSpeed;
+	}
+
+	public static ArrayList<String> getPositions() {
+		for (String s : wolfPositions) {
+			System.out.println(s);
+		}
+		return wolfPositions;
 	}
 }
