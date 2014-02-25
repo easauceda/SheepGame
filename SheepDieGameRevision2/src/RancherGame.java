@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -76,7 +77,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(new JLabel("Game Speed"));
 		panel.add(new JTextField(String.valueOf(input.getSpeed())));
 		add(panel, BorderLayout.EAST);
-		
 
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
@@ -172,17 +172,18 @@ public class RancherGame extends JFrame implements GameSettings {
 			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), SHEEP_COLOR));
 		}
-		if(input.getPositions().size()==0){
-			
-		for (int q = 0; q < numberOfWolfs; q++) {
-			wolfs.add(new Wolf(random.nextInt(max_X - 1), random
-					.nextInt(max_Y - 1), WOLF_COLOR));
-		}
-		}else{
-			for(String s : input.getPositions()){
+		if (input.getPositions().size() == 0) {
+
+			for (int q = 0; q < numberOfWolfs; q++) {
+				wolfs.add(new Wolf(random.nextInt(max_X - 1), random
+						.nextInt(max_Y - 1), WOLF_COLOR));
+			}
+		} else {
+			for (String s : input.getPositions()) {
 				String xy[] = s.split(",");
-				wolfs.add(new Wolf(Integer.parseInt(xy[0]),Integer.parseInt(xy[1]), WOLF_COLOR));
-				
+				wolfs.add(new Wolf(Integer.parseInt(xy[0]), Integer
+						.parseInt(xy[1]), WOLF_COLOR));
+
 			}
 		}
 		giveTheAnimalsToCanvas();
@@ -274,9 +275,9 @@ public class RancherGame extends JFrame implements GameSettings {
 				System.out.println(tester);
 				for (Sheep i : sheeps) {
 					String compare = i.getMyOwner();
-					//System.out.println(compare);
+					// System.out.println(compare);
 					if (compare != null) {
-						//System.out.println("made it");
+						// System.out.println("made it");
 						if (compare.equalsIgnoreCase(tester)) {
 							i.setX(i.getX() - 1);
 							repaint();
@@ -284,53 +285,53 @@ public class RancherGame extends JFrame implements GameSettings {
 					}
 				}
 			}
-				if (pos[1].equalsIgnoreCase(" d")) {
-					// System.out.println("HELLO");
-					String tester = pos[0];
-					System.out.println(tester);
-					for (Sheep i : sheeps) {
-						String compare = i.getMyOwner();
-						//System.out.println(compare);
-						if (compare != null) {
-							//System.out.println("made it");
-							if (compare.equalsIgnoreCase(tester)) {
-								i.setX(i.getX() + 1);
-								repaint();
-							}
+			if (pos[1].equalsIgnoreCase(" d")) {
+				// System.out.println("HELLO");
+				String tester = pos[0];
+				System.out.println(tester);
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					// System.out.println(compare);
+					if (compare != null) {
+						// System.out.println("made it");
+						if (compare.equalsIgnoreCase(tester)) {
+							i.setX(i.getX() + 1);
+							repaint();
 						}
 					}
 				}
-					if (pos[1].equalsIgnoreCase(" s")) {
-						// System.out.println("HELLO");
-						String tester = pos[0];
-						System.out.println(tester);
-						for (Sheep i : sheeps) {
-							String compare = i.getMyOwner();
-							//System.out.println(compare);
-							if (compare != null) {
-								//System.out.println("made it");
-								if (compare.equalsIgnoreCase(tester)) {
-									i.setY(i.getY() + 1);
-									repaint();
-								}
-							}
+			}
+			if (pos[1].equalsIgnoreCase(" s")) {
+				// System.out.println("HELLO");
+				String tester = pos[0];
+				System.out.println(tester);
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					// System.out.println(compare);
+					if (compare != null) {
+						// System.out.println("made it");
+						if (compare.equalsIgnoreCase(tester)) {
+							i.setY(i.getY() + 1);
+							repaint();
 						}
 					}
-						if (pos[1].equalsIgnoreCase(" w")) {
-							// System.out.println("HELLO");
-							String tester = pos[0];
-							System.out.println(tester);
-							for (Sheep i : sheeps) {
-								String compare = i.getMyOwner();
-								//System.out.println(compare);
-								if (compare != null) {
-									//System.out.println("made it");
-									if (compare.equalsIgnoreCase(tester)) {
-										i.setY(i.getY() - 1);
-										repaint();
-									}
-								}
-							}
+				}
+			}
+			if (pos[1].equalsIgnoreCase(" w")) {
+				// System.out.println("HELLO");
+				String tester = pos[0];
+				System.out.println(tester);
+				for (Sheep i : sheeps) {
+					String compare = i.getMyOwner();
+					// System.out.println(compare);
+					if (compare != null) {
+						// System.out.println("made it");
+						if (compare.equalsIgnoreCase(tester)) {
+							i.setY(i.getY() - 1);
+							repaint();
+						}
+					}
+				}
 			} else if (foundDaddy) {
 				// for anything in here to actually execute you must first run
 				// the command "I am your father" which makes
@@ -518,7 +519,40 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void createSheepForPlayer(String player, int initX, int initY) {
-		Sheep playerSheep = new Sheep(initX, initY, SHEEP_COLOR);
+
+		int random = (int) (Math.random() * ((10 - 0) + 1));
+		Color playerColor = null;
+		if (random == 1) {
+			playerColor = new Color(255, 0, 0);
+		}
+		if (random == 2) {
+			playerColor = new Color(0, 255, 0);
+		}
+		if (random == 3) {
+			playerColor = new Color(0, 0, 255);
+		}
+		if (random == 4) {
+			playerColor = new Color(255, 255, 0);
+		}
+		if (random == 5) {
+			playerColor = new Color(255, 0, 255);
+		}
+		if (random == 6) {
+			playerColor = new Color(0, 255, 255);
+		}
+		if (random == 7) {
+			playerColor = new Color(255, 0, 125 );
+		}
+		if (random == 8) {
+			playerColor = new Color(0, 100, 255);
+		}
+		if (random == 9) {
+			playerColor = new Color(0, 155, 255);
+		}
+		if (random == 10) {
+			playerColor = new Color(155, 255, 255);
+		}
+		Sheep playerSheep = new Sheep(initX, initY, playerColor);
 		playerSheep.setMyOwner(player);
 		this.sheeps.add(playerSheep);
 		rangeCanvas.addEntity(playerSheep);

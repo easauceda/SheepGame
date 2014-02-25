@@ -1,6 +1,15 @@
 SheepDieGame
 ============
 
-Making the Ai for Wolf to kill Sheep
+1. Add the timer
+	in main somewhere:
+		startClock();
+	when all sheep are killed
+		stopClock();
+	print time result
+	
+Goals of Demo
+=============
 
-as efficiently as posible.
+1. show hunting prowess
+

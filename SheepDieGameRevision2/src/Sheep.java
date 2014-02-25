@@ -7,6 +7,7 @@ public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
 	private String myOwner = null;
+
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
 	}
@@ -146,10 +147,11 @@ public class Sheep extends Entity {
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
 			if (wolf.getTarget().equals(this)) {
-					closest = distanceRun(wolf);
-					return  wolf;
-					
-				} else {if (distanceRun(wolf) < closest) {
+				closest = distanceRun(wolf);
+				return wolf;
+
+			} else {
+				if (distanceRun(wolf) < closest) {
 
 					closest = distanceRun(wolf);
 					wolfIt = wolf;
@@ -164,7 +166,10 @@ public class Sheep extends Entity {
 
 		class SheepThread extends Thread {
 			public void run() {
-				moveAction();
+				if(myOwner == null){
+					moveAction();
+				}
+				
 			}
 
 		}
