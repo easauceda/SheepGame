@@ -4,8 +4,8 @@ import java.awt.Color;
 public interface GameSettings {
 	int B_WIDTH = 400;
 	int B_HEIGHT = 400;
-	int X_MARGIN = 20;
-	int Y_MARGIN = 20;
+	int X_MARGIN = input.getXBoardSize();
+	int Y_MARGIN = input.getYBoardSize();
 
 	boolean debugMode = true;
 	int deathCountValue = 10;

@@ -10,10 +10,12 @@ import java.util.Scanner;
  * for keywords such as wolf or sheep in the compareForNextStep method.
  */
 public class input {
-	private static int sheepMax;
-	private static int wolfMax;
-	private static int gameSpeed;
+	private static int sheepMax = 10;
+	private static int wolfMax = 4;
+	private static int gameSpeed = 500;
 	private static int count = 0;
+	private static int xBoardSize = 20;
+	private static int yBoardSize = 20;
 	private static ArrayList<String> wolfPositions = new ArrayList<String>();
 
 	public input() throws FileNotFoundException {
@@ -46,6 +48,18 @@ public class input {
 				}
 
 			}
+			if (answer == 4) {
+				String heightOrWidth = fileReader.next();
+				if (heightOrWidth.equalsIgnoreCase("height")) {
+					fileReader.next();
+					yBoardSize = Integer.parseInt(fileReader.next());
+				}
+				if (heightOrWidth.equalsIgnoreCase("width")) {
+					fileReader.next();
+					xBoardSize = Integer.parseInt(fileReader.next());
+				}
+
+			}
 
 		}
 		fileReader.close();
@@ -61,6 +75,9 @@ public class input {
 		}
 		if (data.equalsIgnoreCase("wolf")) {
 			return 3;
+		}
+		if (data.equalsIgnoreCase("board")) {
+			return 4;
 		} else {
 			return 0;
 		}
@@ -86,6 +103,14 @@ public class input {
 
 	public static int getSpeed() {
 		return gameSpeed;
+	}
+
+	public static int getXBoardSize() {
+		return xBoardSize;
+	}
+
+	public static int getYBoardSize() {
+		return yBoardSize;
 	}
 
 	public static ArrayList<String> getPositions() {
