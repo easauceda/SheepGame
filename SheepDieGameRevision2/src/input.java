@@ -12,7 +12,10 @@ public class input {
 	private static int sheepMax;
 	private static int wolfMax;
 	private static int gameSpeed;
-
+	private int count=0;
+	private static String[] wolfPositions = new String[100];
+	
+	
 	public input() throws FileNotFoundException {
 		Scanner fileReader = new Scanner(new File("input.txt"));
 		while (fileReader.hasNext()) {
@@ -32,10 +35,16 @@ public class input {
 				sheepMax = Integer.parseInt(fileReader.next());
 			}
 			if (answer == 3) {
+				String x = fileReader.next();
+				if(x.equals("count")){
 
 				fileReader.next();
-				fileReader.next();
 				wolfMax = Integer.parseInt(fileReader.next());
+				}else{
+					String y = fileReader.next();
+					wolfPositions[count++] = x+","+y;
+				}
+				
 			}
 
 		}
@@ -75,5 +84,11 @@ public class input {
 	public static int getSpeed() {
 		// TODO Auto-generated method stub
 		return gameSpeed;
+	}
+	public static String[] getPositions(){
+		for(String s:wolfPositions){
+			System.out.println(s);
+		}
+		return wolfPositions;
 	}
 }

@@ -76,6 +76,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(new JLabel("Game Speed"));
 		panel.add(new JTextField(String.valueOf(input.getSpeed())));
 		add(panel, BorderLayout.EAST);
+		
 
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
