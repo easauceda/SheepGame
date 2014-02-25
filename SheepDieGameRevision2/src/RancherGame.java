@@ -170,9 +170,18 @@ public class RancherGame extends JFrame implements GameSettings {
 			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), SHEEP_COLOR));
 		}
+		if(input.getPositions().size()==0){
+			
 		for (int q = 0; q < numberOfWolfs; q++) {
 			wolfs.add(new Wolf(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), WOLF_COLOR));
+		}
+		}else{
+			for(String s : input.getPositions()){
+				String xy[] = s.split(",");
+				wolfs.add(new Wolf(Integer.parseInt(xy[0]),Integer.parseInt(xy[1]), WOLF_COLOR));
+				
+			}
 		}
 		giveTheAnimalsToCanvas();
 	}

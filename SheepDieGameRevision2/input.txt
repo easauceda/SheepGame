@@ -3,5 +3,5 @@ clock = 500
   wolf count = 4
   wolf 2 3
   wolf 3 4
-  wolf 10 20
+  wolf 10 19
   wolf 1 3
