@@ -166,9 +166,10 @@ public class Sheep extends Entity {
 
 		class SheepThread extends Thread {
 			public void run() {
-				if (myOwner.equals(null)) {
+				if(myOwner == null){
 					moveAction();
 				}
+				
 			}
 
 		}
