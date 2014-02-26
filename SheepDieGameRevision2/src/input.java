@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -114,9 +113,6 @@ public class input {
 	}
 
 	public static ArrayList<String> getPositions() {
-		for (String s : wolfPositions) {
-			System.out.println(s);
-		}
 		return wolfPositions;
 	}
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,13 +21,11 @@ public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
 	private String dadsName = null;
 	private boolean foundDaddy = false;
-	private JTextField typedText = new JTextField(32);
 	private static final long serialVersionUID = 1L;
 	private String userName;
 	private Socket socket;
 	private In in;
 	private Out out;
-	private Sheep playerSheep;
 	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
@@ -40,15 +37,6 @@ public class RancherGame extends JFrame implements GameSettings {
 	private boolean gameOver = false;
 	private JTextField currentTime = new JTextField(String.valueOf(timeToLunch
 			.getCurrentTime()));
-
-	private void finish() {
-		timer.stop();
-	}
-
-	private void updatePositions() {
-
-		rangeCanvas.repaint();
-	}
 
 	public RancherGame(String userName, String server, int port) {
 
@@ -240,11 +228,6 @@ public class RancherGame extends JFrame implements GameSettings {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (args.length < 3) {
-			System.out
-					.println("Usage: java ChatClient <username> <server> <port>");
-			System.exit(-1);
-		}
 
 		/*
 		 * What I did here was add in a dialog to ask the user if he would like
@@ -257,8 +240,8 @@ public class RancherGame extends JFrame implements GameSettings {
 		chatClientThread();
 		// starts a thread for chat client so it loads it up on its own without you having to open it.
 		RancherGame.pause(100);
-		RancherGame c = new RancherGame(args[0], args[1],
-				Integer.parseInt(args[2]));
+		RancherGame c = new RancherGame("Game", "localhost",
+				Integer.parseInt("4444"));
 
 		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);

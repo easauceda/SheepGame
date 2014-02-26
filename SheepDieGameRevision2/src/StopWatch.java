@@ -7,9 +7,11 @@ public class StopWatch {
 		startTime = new Date();
 	}
 
-	public long stopTiming() {
+	public double stopTiming() {
 		Date stopTime = new Date();
-		long timediff = (stopTime.getTime() - startTime.getTime());
+		double timediff = (stopTime.getTime() - startTime.getTime());
+		//long remainder = timediff%1000;
+		timediff = timediff*(.001);
 		return timediff;
 	}
 	
@@ -46,7 +48,7 @@ public class StopWatch {
 			}
 		}
 
-		long interval = stopwatch.stopTiming();
+		double interval = stopwatch.stopTiming();
 
 		System.out.println("time: " + interval);
 		System.out.println("total: " + total);
