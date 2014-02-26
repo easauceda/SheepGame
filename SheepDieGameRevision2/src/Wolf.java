@@ -49,6 +49,7 @@ public class Wolf extends Entity {
 			} else {
 				while (sheepStillAlive(sheeps)) {
 					huntAsPack = areWeStillAPack(wolfs, sheeps);
+					reorderQueue();
 					if (targets.size() > 0) {
 						if (targets.peek().isTargetStillAlive()
 								&& nobodyClose(huntAsPack, wolfs)) {
@@ -58,7 +59,7 @@ public class Wolf extends Entity {
 						} else {
 							if (debugMode) {
 								this.c = Color.CYAN;
-								RancherGame.pause(100);
+								//RancherGame.pause(100);
 								
 							}
 							this.c = Color.black;
@@ -68,7 +69,7 @@ public class Wolf extends Entity {
 					} else {
 						createSheepQueue(sheeps);
 					}
-					anySheepHereKillThem(sheeps);
+					//anySheepHereKillThem(sheeps);
 				}
 			}
 		}
@@ -116,8 +117,6 @@ public class Wolf extends Entity {
 		//try{
 		if (sheepStillAlive(sheeps)) {
 			int j = 8;
-			int k[] = new int[j];
-			Random ran = new Random();
 			for (int q = 7; q >= 0; q--) {
 				if (getDistance(x + choseX(j) - thingy.getX(), y + choseY(j)
 						- thingy.getY()) > getDistance(
@@ -178,7 +177,7 @@ public class Wolf extends Entity {
 
 	private boolean sheepIsHereKillIt(int i, int j) {
 		for (Sheep sheep: sheeps){
-			if(sheep.getX()==i&&sheep.getY()==j){
+			if(sheep.getX()==i&&sheep.getY()==j&&sheep.isAlive()){
 				return true;
 			}
 		}
@@ -318,7 +317,7 @@ public class Wolf extends Entity {
 	}
 
 	private void huntTheTarget() {
-		makeYourMove();
+		moveMeThere(whereToDecisionMaker(this.targets.peek().getSheep()));
 
 	}
 
@@ -331,17 +330,17 @@ public class Wolf extends Entity {
 
 	}
 
-	private void makeYourMove() {
-		moveMeThere(whereToDecisionMaker(this.targets.peek().getSheep()));
-	}
-
 	private void moveMeThere(int move) {
-
-		this.iWantX = x + choseX(move);
-		this.iWantY = y + choseY(move);
+		if(sheepStillAlive(sheeps)){
+		this.x = x + choseX(move);
+		this.y = y + choseY(move);
+		anySheepHereKillThem(sheeps);
 		RancherGame.pause();
-		this.x = iWantX;
-		this.y = iWantY;
+		}else{
+			this.x = x + choseX(move);
+			this.y = y + choseY(move);
+			RancherGame.pause(300);
+		}
 	}
 
 	private int chaseTagDecisionMaker(Wolf wolf) {

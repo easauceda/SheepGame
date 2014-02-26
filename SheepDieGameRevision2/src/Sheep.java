@@ -7,6 +7,8 @@ public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
 	private String myOwner = null;
+	private boolean sheepStupid = true;
+
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
 	}
@@ -65,27 +67,34 @@ public class Sheep extends Entity {
 	}
 
 	private void moveMeThere(int move) {
-		this.iWantX = x + choseX(move);
-		this.iWantY = y + choseY(move);
 		RancherGame.pause();
-		//RancherGame.pause(50);
-		this.x = iWantX;
-		this.y = iWantY;
+		// RancherGame.pause(50);
+		this.x = x + choseX(move);
+		this.y = y + choseY(move);
 	}
 
 	private void moveAction() {
+		int q = 0;
+		Random ran = new Random();
+		while (true) {
 
-		if (alive) {
-			try {
-				//RancherGame.pause(60);
-				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
+				if (alive) {
+					if (!sheepStupid) {
+					try {
+						// RancherGame.pause(60);
+						moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
-			} catch (NullPointerException e) {
+					} catch (NullPointerException e) {
+					}
+				} else {
+					q = ran.nextInt(8);
+					if (x + choseX(q) > 0 && x + choseX(q) < max_X
+							&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+						moveMeThere(q);
+					}
+				}
 			}
-
-			moveAction();
 		}
-
 	}
 
 	private double getDistance(int x, int y) {
@@ -146,10 +155,11 @@ public class Sheep extends Entity {
 		double closest = 1000000000;
 		for (Wolf wolf : wolfs) {
 			if (wolf.getTarget().equals(this)) {
-					closest = distanceRun(wolf);
-					return  wolf;
-					
-				} else {if (distanceRun(wolf) < closest) {
+				closest = distanceRun(wolf);
+				return wolf;
+
+			} else {
+				if (distanceRun(wolf) < closest) {
 
 					closest = distanceRun(wolf);
 					wolfIt = wolf;
