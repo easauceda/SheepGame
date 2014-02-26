@@ -7,6 +7,7 @@ public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
 	private String myOwner = null;
+	private boolean sheepStupid= true;
 
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
@@ -66,28 +67,36 @@ public class Sheep extends Entity {
 	}
 
 	private void moveMeThere(int move) {
-		this.iWantX = x + choseX(move);
-		this.iWantY = y + choseY(move);
+		this.x = x + choseX(move);
+		this.y = y + choseY(move);
 		RancherGame.pause();
-		RancherGame.pause(50);
-		this.x = iWantX;
-		this.y = iWantY;
 	}
 
 	private void moveAction() {
-
+Random ran = new Random();
+int q = 0;
+		while(true){
 		if (alive) {
+			if(sheepStupid){
+				q = ran.nextInt(9);
+				if(x + choseX(q) > 0
+						&& x + choseX(q) < max_X
+						&& y + choseY(q) > 0 && y + choseY(q) < max_Y){
+				moveMeThere(q);
+				}
+			}else{
+			}
 			try {
-				RancherGame.pause(60);
+				
 				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
 			} catch (NullPointerException e) {
 			}
 
-			moveAction();
 		}
-
+		}
 	}
+
 
 	private double getDistance(int x, int y) {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));

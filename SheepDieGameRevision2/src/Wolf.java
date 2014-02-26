@@ -328,8 +328,7 @@ public class Wolf extends Entity {
 	}
 
 	private void huntTheTarget() {
-		makeYourMove();
-
+		moveMeThere(whereToDecisionMaker(this.targets.peek().getSheep()));
 	}
 
 	private void anySheepHereKillThem(ArrayList<Sheep> sheeps) {
@@ -341,17 +340,13 @@ public class Wolf extends Entity {
 
 	}
 
-	private void makeYourMove() {
-		moveMeThere(whereToDecisionMaker(this.targets.peek().getSheep()));
-	}
 
 	private void moveMeThere(int move) {
 
-		this.iWantX = x + choseX(move);
-		this.iWantY = y + choseY(move);
+		this.x = x + choseX(move);
+		this.y = y + choseY(move);
+		anySheepHereKillThem(sheeps);
 		RancherGame.pause();
-		this.x = iWantX;
-		this.y = iWantY;
 	}
 
 	private int chaseTagDecisionMaker(Wolf wolf) {

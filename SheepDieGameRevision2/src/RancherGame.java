@@ -94,7 +94,8 @@ public class RancherGame extends JFrame implements GameSettings {
 				// wolfsPlayTag();
 
 				if (areSheepsAlive() == true && gameOver == false) {
-					JOptionPane.showMessageDialog(null, ("Time: " + timeToLunch.stopTiming()) + " Seconds!");
+					JOptionPane.showMessageDialog(null,
+							("Time: " + timeToLunch.stopTiming()) + " Seconds!");
 					gameOver = true;
 					panel.repaint();
 				}
@@ -232,7 +233,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		try {
 			new input();
 		} catch (FileNotFoundException e) {
@@ -250,8 +251,15 @@ public class RancherGame extends JFrame implements GameSettings {
 		 * to edit the settings. The default is just to start the game by
 		 * reading the settings already defined. - E
 		 */
+		serverThread();
+		// starts a thread for chat server you dont have to make it work on its own anymore
+		
+		chatClientThread();
+		// starts a thread for chat client so it loads it up on its own without you having to open it.
+		RancherGame.pause(100);
 		RancherGame c = new RancherGame(args[0], args[1],
 				Integer.parseInt(args[2]));
+
 		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
@@ -261,6 +269,37 @@ public class RancherGame extends JFrame implements GameSettings {
 		c.listen();
 	}
 
+	private static void serverThread() {
+		class MyThread extends Thread {
+			public void run() {
+				try {
+					ChatServer.main(null);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		MyThread serverThread = new MyThread();
+		serverThread.start();
+	}
+	private static void chatClientThread() {
+		class MyThread extends Thread {
+			public void run() {
+				try {
+					String args[] = {"Narf","localhost", "4444"};
+					ChatClient.main(args);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		MyThread serverThread = new MyThread();
+		serverThread.start();
+	}
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	private void listen() {
 		String buffer;
