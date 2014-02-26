@@ -48,8 +48,10 @@ public class Wolf extends Entity {
 				playTag(wolfs);
 			} else {
 				while (sheepStillAlive(sheeps)) {
+					reorderQueue();
 					huntAsPack = areWeStillAPack(wolfs, sheeps);
 					if (targets.size() > 0) {
+
 						if (targets.peek().isTargetStillAlive()
 								&& nobodyClose(huntAsPack, wolfs)) {
 
@@ -62,8 +64,8 @@ public class Wolf extends Entity {
 
 							}
 							this.c = Color.black;
-							this.targets.remove();
-							reorderQueue();
+						this.targets.remove();
+						reorderQueue();
 						}
 					} else {
 						createSheepQueue(sheeps);
@@ -271,7 +273,6 @@ public class Wolf extends Entity {
 			}
 			this.targets.remove();
 		}
-		this.targets.clear();
 		this.targets = redoTargets;
 	}
 
