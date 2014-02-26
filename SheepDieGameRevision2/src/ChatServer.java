@@ -8,6 +8,7 @@ public class ChatServer {
 
 	public static void main(String[] args) throws Exception {
 		Vector<Connection> connections = new Vector<Connection>();
+		@SuppressWarnings("resource")
 		ServerSocket serverSocket = new ServerSocket(4444);
 		
 		// create a new connectionlistener thread

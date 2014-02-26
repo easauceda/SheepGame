@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -17,18 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-@SuppressWarnings("serial")
 public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
 	private String dadsName = null;
 	private boolean foundDaddy = false;
-	private JTextField typedText = new JTextField(32);
 	private static final long serialVersionUID = 1L;
-	private String userName;
 	private Socket socket;
 	private In in;
 	private Out out;
-	private Sheep playerSheep;
 	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
@@ -41,19 +36,8 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JTextField currentTime = new JTextField(String.valueOf(timeToLunch
 			.getCurrentTime()));
 
-	private void finish() {
-		timer.stop();
-	}
-
-	private void updatePositions() {
-
-		rangeCanvas.repaint();
-	}
-
 	public RancherGame(String userName, String server, int port) {
 
-		// ///////////////////////////////////////////////////////////////////
-		this.userName = userName;
 		try {
 			socket = new Socket(server, port);
 			out = new Out(socket);
