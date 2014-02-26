@@ -10,8 +10,20 @@ public class StopWatch {
 	public long stopTiming() {
 		Date stopTime = new Date();
 		long timediff = (stopTime.getTime() - startTime.getTime());
-
 		return timediff;
+	}
+	
+	public long getCurrentTime()
+	{
+		if (startTime != null){
+		Date currentTime = new Date();
+		long timediff = (currentTime.getTime() - startTime.getTime());
+		
+		return timediff;
+		}
+		else{
+			return 0;
+		}
 	}
 
 	public static void main(String args[]) {

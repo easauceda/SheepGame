@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,13 +32,14 @@ public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
-
 	private JButton huntButton = new JButton("hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
-
 	private final Timer timer;
+	private final StopWatch timeToLunch = new StopWatch();
 	private boolean gameOver = false;
+	private JTextField currentTime = new JTextField(String.valueOf(timeToLunch
+			.getCurrentTime()));
 
 	private void finish() {
 		timer.stop();
@@ -49,7 +51,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public RancherGame(String userName, String server, int port) {
-		final StopWatch timeToLunch = new StopWatch();
+
 		// ///////////////////////////////////////////////////////////////////
 		this.userName = userName;
 		try {
@@ -64,9 +66,9 @@ public class RancherGame extends JFrame implements GameSettings {
 		// ///////////////////////this is
 		// new////////////////////////////////////
 		// layout etc
-		JPanel panel = new JPanel();
+		final JPanel panel = new JPanel();
 		add(rangeCanvas);
-		GridLayout layout = new GridLayout(4, 2);
+		GridLayout layout = new GridLayout(5, 2);
 		layout.setVgap(20);
 		layout.setHgap(20);
 		panel.setLayout(layout);
@@ -78,6 +80,8 @@ public class RancherGame extends JFrame implements GameSettings {
 		panel.add(new JTextField(String.valueOf(input.getNumberOfWolfs())));
 		panel.add(new JLabel("Game Speed"));
 		panel.add(new JTextField(String.valueOf(input.getSpeed())));
+		panel.add(new JLabel("Current Time"));
+		panel.add(currentTime);
 		add(panel, BorderLayout.EAST);
 
 		setTheAnimals();
@@ -86,14 +90,13 @@ public class RancherGame extends JFrame implements GameSettings {
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(wolf + " " + sheep);
-
 				rangeCanvas.repaint();
 				// wolfsPlayTag();
 
 				if (areSheepsAlive() == true && gameOver == false) {
-					System.out.println(timeToLunch.stopTiming());
+					JOptionPane.showMessageDialog(null, ("Time: " + timeToLunch.stopTiming()) + " Seconds!");
 					gameOver = true;
-
+					panel.repaint();
 				}
 			}
 
