@@ -1,10 +1,23 @@
-DO NOT COMMIT TO MASTER BRANCH
+<Html>
+<header>
+<h1>SheepDieGameKills: The Game</h1>
+<img src="http://mythfolklore.net/aesopica/images_winter/i036_th.jpg" alt="Game Art">
+<h4>DO NOT COMMIT TO MASTER BRANCH</h4>
+
+</header>
+<body>
+<h3>Features : </h3>
+<ul>
+<li>NOW WITH AI!</li>
+<li>SHEEP THAT MOVE!</li>
+<li>WOLVES THAT HUNT!</li>
+<li>HIGHSCORES! (TIME TO FINAL KILL)</li>
+
+
 Create a branch in your name and commit there, I'll merge branches later.
 it works better that way, since you can update your code and commit without any issues
 
----------------------------------------------------------------------------------------------------
-
-UPDATE: 
+<h3>Updates:</h3>
 
 Alright guys first merge is done! Ignacio's wolves are now integrated into the master game.
 
@@ -18,68 +31,33 @@ hey if you merge something to master will that make everything from the last one
 just wondering 
 -Ignacio
 
----------------------------------------------------------------------------------------------------------
 
-SheepDieGameKills
-=================
-Game Requirements:
+<h3>Game Requirements:</h3>
 
-1. Reading from input file - xavier++++++++++++++++++++++++++++++++++++++++++
-
-     
-3. GUI enhancements - Andrew+++++++++++++++++++++++++++++++++++++++++++++++++
-
-4. reimplement fractal grass+++++++++++++++++++++++++++++++++++++++++++++++++
-
-    Ignacio++++ Talked to tran after class and he said we dont have to implement fractal grass if we didnt want to.
-
-
-6. be able to input location for sheep and wolf(I'm working on this now - Erick)++++++++++++++++++++++++++++++
-
-
-99.  When are we going to link Merge everything in order to ensure that everything is working smoothly?????? 
+<ol>
+<li>Reading from input file - Erick</li>
+<li>GUI enhancements - Andrew </li>
+<li> Sheep and wolf AI - Ignacio</li>
+<li> Timer - Erick </li>
+</ol>
 
 
 
 
-What Is Done: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<h3>What Is Done: </h3>
 
-2. Priority Queue algorithm on the wolf - Ignacio++++++++++++++++++++++++++++
+Pretty much everything....
 
-    Ignacio+++++ almost done with the wolf just have a small problem where they are not hunting seperately
-                        
-                    thinking of making it so that you can add sheep to the board at anyMoment but still have to think
-                    about how to make that happen. 
-                    
-                    also made the wolfs thread not end they continue moving even after the game is over...
-                    this will help if we add more sheep then the wolfs will go and hunt without
-                    having to make them hunt again.                    
-                    
-5. sheep that move+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    Ignacio++++ Sheep move when wolf are in their range.....
+<h3> Comments </h3>
 
-7. Each sheep/wolf must be in it's own separate thread+++++++++++++++++++++++
-
-    Ignacio++++ They are already running on their own thread so we dont have to worry about this.
-                 as they are created once you throw the run or hunt button they they are all thrown into their own thred
-                
-                 Sheeps thread is called "squirm" & wolfs is called "hunt"
-
-COMMENTS +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    Ignacio+++++ We should try to have all these branches merge as one by tomorrow just to make sure everything 
-                is running good. last thing we need is having great program and when we merge it all crashes.
+We should try to have all these branches merge as one by tomorrow just to make sure everything 
+is running good. last thing we need is having great program and when we merge it all crashes. - Ignacio
                 
                 
                 
-STUPID COMMENTS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+<h3> STUPID COMMENTS </h3>
 
-    Ignacio+++++ Hey can we change the "HUNT" button to "RELEASE THE HOUNDS" or "I LET THE DOGS OUT"
-                just to have a laugh lol.
-                
-                made it so that the wolfs still move at the end
-                the game is not over when sheep die. wolfs just move around 
-                playing tag with each other. the pink one is it if you cant tell............ 
-                
-                also if you hit the HUNT button one of the Sheep running in the background gets revived.
+ Hey can we change the "HUNT" button to "RELEASE THE HOUNDS" or "I LET THE DOGS OUT" just to have a laugh lol. made it so that the wolfs still move at the end the game is not over when sheep die. wolfs just move around playing tag with each other. the pink one is it if you cant tell............ also if you hit the HUNT button one of the Sheep running in the background gets revived. - Ignacio
+</body>
+</html>
