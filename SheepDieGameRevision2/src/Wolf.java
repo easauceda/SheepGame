@@ -64,8 +64,8 @@ public class Wolf extends Entity {
 
 							}
 							this.c = Color.black;
-						this.targets.remove();
-						reorderQueue();
+							this.targets.remove();
+							reorderQueue();
 						}
 					} else {
 						createSheepQueue(sheeps);
@@ -180,8 +180,14 @@ public class Wolf extends Entity {
 	}
 
 	private boolean sheepInSquare(int q) {
+		if (x + choseX(q) == targets.peek().getSheep().getX()
+				&& y + choseY(q) == targets.peek().getSheep().getY()
+				&& targets.peek().getSheep().isAlive()) {
+			return true;
+		}
 		for (Sheep sheep : sheeps) {
-			if (x + choseX(q) == sheep.getX() && y + choseY(q) == sheep.getY()&& sheep.isAlive()) {
+			if (x + choseX(q) == sheep.getX() && y + choseY(q) == sheep.getY()
+					&& sheep.isAlive()) {
 
 				return true;
 			}
@@ -334,17 +340,17 @@ public class Wolf extends Entity {
 	}
 
 	private void moveMeThere(int move) {
-		if(sheepStillAlive(sheeps)){
+		if (sheepStillAlive(sheeps)) {
 			this.x = x + choseX(move);
 			this.y = y + choseY(move);
-		anySheepHereKillThem(sheeps);
-		RancherGame.pause();
-		return;
+			anySheepHereKillThem(sheeps);
+			RancherGame.pause();
+			return;
 		}
 		this.x = x + choseX(move);
 		this.y = y + choseY(move);
 		RancherGame.pause(200);
-		
+
 	}
 
 	private int chaseTagDecisionMaker(Wolf wolf) {

@@ -1,7 +1,7 @@
 # input file -- comments are ignored
 board width = 20
 board height = 20
-clock = 1500
+clock = 300
 sheep count = 20
 wolf count = 5
 wolf 10 10
