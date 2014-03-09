@@ -1,47 +1,48 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-@SuppressWarnings("serial")
 public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
 	private String dadsName = null;
 	private boolean foundDaddy = false;
 	private static final long serialVersionUID = 1L;
-	private String userName;
 	private Socket socket;
 	private In in;
 	private Out out;
 	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
-	private JButton huntButton = new JButton("hunt");
+	private JButton huntButton = new JButton("Hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 	private final Timer timer;
 	private final StopWatch timeToLunch = new StopWatch();
 	private boolean gameOver = false;
-	private JTextField currentTime = new JTextField(String.valueOf(timeToLunch
-			.getCurrentTime()));
+	private JButton enterGame = new JButton("Enter the Game!");
+	private String owner;
 
 	public RancherGame(String userName, String server, int port) {
 
-		// ///////////////////////////////////////////////////////////////////
-		this.userName = userName;
+		setLayout(new GridLayout(1, 2));
 		try {
 			socket = new Socket(server, port);
 			out = new Out(socket);
@@ -55,22 +56,114 @@ public class RancherGame extends JFrame implements GameSettings {
 		// new////////////////////////////////////
 		// layout etc
 		final JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		add(rangeCanvas);
-		GridLayout layout = new GridLayout(5, 2);
-		layout.setVgap(20);
-		layout.setHgap(20);
-		panel.setLayout(layout);
-		panel.add(new JLabel());
-		panel.add(huntButton);
-		panel.add(new JLabel("Number of Sheep"));
-		panel.add(new JTextField(String.valueOf(input.getNumberOfSheep())));
-		panel.add(new JLabel("Number of Wolves"));
-		panel.add(new JTextField(String.valueOf(input.getNumberOfWolfs())));
-		panel.add(new JLabel("Game Speed"));
-		panel.add(new JTextField(String.valueOf(input.getSpeed())));
-		panel.add(new JLabel("Current Time"));
-		panel.add(currentTime);
-		add(panel, BorderLayout.EAST);
+		panel.setFocusable(true);
+		panel.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == 119) {
+					// System.out.println("CHECK");
+					for (Sheep i : sheeps) {
+						String compare = i.getMyOwner();
+						// System.out.println(compare);
+						if (compare != null) {
+							// System.out.println("made it");
+							if (compare.equalsIgnoreCase(owner)) {
+								i.setY(i.getY() - 1);
+								repaint();
+							}
+						}
+					}
+				}
+				if (e.getKeyChar() == 115) {
+					for (Sheep i : sheeps) {
+						String compare = i.getMyOwner();
+						// System.out.println(compare);
+						if (compare != null) {
+							// System.out.println("made it");
+							if (compare.equalsIgnoreCase(owner)) {
+								i.setY(i.getY() + 1);
+								repaint();
+							}
+						}
+					}
+				}
+				if (e.getKeyChar() == 97) {
+					for (Sheep i : sheeps) {
+						String compare = i.getMyOwner();
+						// System.out.println(compare);
+						if (compare != null) {
+							// System.out.println("made it");
+							if (compare.equalsIgnoreCase(owner)) {
+								i.setX(i.getX() - 1);
+								repaint();
+							}
+						}
+					}
+				}
+				if (e.getKeyChar() == 100) {
+					for (Sheep i : sheeps) {
+						String compare = i.getMyOwner();
+						// System.out.println(compare);
+						if (compare != null) {
+							// System.out.println("made it");
+							if (compare.equalsIgnoreCase(owner)) {
+								i.setX(i.getX() + 1);
+								repaint();
+							}
+						}
+					}
+				}
+
+			}
+
+		});
+		final JTextField feed = new JTextField();
+		feed.setPreferredSize(new Dimension(200, 417));
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		panel.add(feed, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		huntButton.setPreferredSize(new Dimension(200, 26));
+		panel.add(huntButton, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		panel.add(enterGame, c);
+		enterGame.setPreferredSize(new Dimension(200, 26));
+		enterGame.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String name = (String) JOptionPane.showInputDialog(null,
+						"Enter your UserName", "New Sheep", 1, null, null,
+						"Bob");
+				createSheepForPlayer(name, 10, 10);
+				owner = name;
+				feed.setText(owner + " Added a Sheep!");
+				panel.requestFocus();
+			}
+
+		});
+
+		add(panel);
 
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
@@ -113,6 +206,7 @@ public class RancherGame extends JFrame implements GameSettings {
 					startMovingWolfs();
 
 					wolfIsPushed = true;
+					panel.requestFocus();
 				}
 				makeOneSheepAlive();
 			}
@@ -235,14 +329,16 @@ public class RancherGame extends JFrame implements GameSettings {
 		 * reading the settings already defined. - E
 		 */
 		serverThread();
-		// starts a thread for chat server you dont have to make it work on its own anymore
-		
-		chatClientThread();
-		// starts a thread for chat client so it loads it up on its own without you having to open it.
+		// starts a thread for chat server you don't have to make it work on its
+		// own anymore
+
+		// chatClientThread();
+		// starts a thread for chat client so it loads it up on its own without
+		// you having to open it.
 		RancherGame.pause(100);
+
 		RancherGame c = new RancherGame("Game", "localhost",
 				Integer.parseInt("4444"));
-
 		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
@@ -267,11 +363,12 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+
 	private static void chatClientThread() {
 		class MyThread extends Thread {
 			public void run() {
 				try {
-					String args[] = {"Narf","localhost", "4444"};
+					String args[] = { "Narf", "localhost", "4444" };
 					ChatClient.main(args);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -283,6 +380,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	private void listen() {
 		String buffer;
@@ -534,8 +632,6 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	}
 
-	// ////////////////////////////////////////////////////////////////////////////////////////////////
-
 	private void setUpASheep(String player, int initX, int initY) {
 
 		// for(Sheep sheep: sheeps){
@@ -598,14 +694,5 @@ public class RancherGame extends JFrame implements GameSettings {
 		giveWolfOneSheep(newSheep);
 		rangeCanvas.repaint();
 	}
-	/*
-	 * @Override public void actionPerformed(ActionEvent e) { String message =
-	 * typedText.getText(); System.out.println(message); String outMessage =
-	 * userName + ": " + message;
-	 * 
-	 * if (message.startsWith("/")) outMessage = message;
-	 * 
-	 * out.println(outMessage); typedText.setText("");
-	 * typedText.requestFocusInWindow(); }
-	 */
+
 }
