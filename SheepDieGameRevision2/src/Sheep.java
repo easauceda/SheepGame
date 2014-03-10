@@ -284,7 +284,6 @@ public class Sheep extends Entity {
 		System.out.println("Node Location Y: " + nodeY);
 		if (nodeX < x) {
 			x--;
-
 		}
 		if (nodeX > x) {
 			x++;
