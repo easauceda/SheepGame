@@ -23,14 +23,12 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class RancherGame extends JFrame implements GameSettings {
-	// ///////////////////////////////////////////////////////////////////
 	private String dadsName = null;
 	private boolean foundDaddy = false;
 	private static final long serialVersionUID = 1L;
 	private Socket socket;
 	private In in;
 	private Out out;
-	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
 	private JButton huntButton = new JButton("Hunt");
@@ -42,6 +40,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JButton enterGame = new JButton("Enter the Game!");
 	private String owner;
 	private JCheckBox nodeCheck = new JCheckBox();
+	private ArrayList<Node> nodes = new ArrayList<Node>();
 
 	public RancherGame(String userName, String server, int port) {
 
@@ -170,7 +169,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 		add(panel);
-
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
 
@@ -210,7 +208,7 @@ public class RancherGame extends JFrame implements GameSettings {
 					wolfsPlayTag();
 					giveWolfHisSheep();
 					startMovingWolfs();
-
+					
 					wolfIsPushed = true;
 					panel.requestFocus();
 				}
@@ -220,7 +218,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 	}
-
+	
 	private void makeOneSheepAlive() {
 		for (Sheep sheep : sheeps) {
 			if (!sheep.isAlive()) {
@@ -244,12 +242,12 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	private void startMovingSheep() {
 		for (Sheep sheep : sheeps) {
+			sheep.NodeTraversal(nodes);
 			sheep.setWolfs(wolfs);
 			if (nodeCheck.isSelected() == true){
 				System.out.println("SUCESS");
 			}
 			sheep.squirm();	
-			//sheep.travelNodes(PriorityQueue NodeQueue);
 		}
 	}
 
@@ -298,6 +296,10 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 		for (Sheep sheep : sheeps) {
 			rangeCanvas.addEntity(sheep);
+		}
+		for (Node node : nodes){
+			rangeCanvas.addEntity(node);
+			
 		}
 
 	}

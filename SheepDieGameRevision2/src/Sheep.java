@@ -1,18 +1,27 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Random;
-
 public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
 	private String myOwner = null;
 	private boolean sheepStupid= true;
-
+	private Comparator<Node> comparator = new NodeComparator();
+	
+	
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
 	}
 
+	public void NodeTraversal(ArrayList<Node> nodes){
+		for (Node i : nodes){
+			System.out.println(i);
+		}
+		
+	}
 	public void die() {
 		alive = false;
 		c = Color.red;
