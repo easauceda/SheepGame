@@ -264,6 +264,9 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	
 	private void createNodesSetEdgesPassToCanvas() {
+		//Node x:  25 through 406
+		//Node y:  35 through 415
+		
 		Node topLeft = new Node(25, 35, Color.black);
 		Node topRight = new Node(406, 35, Color.black);
 		Node bottomLeft = new Node(25, 415, Color.black);
@@ -273,6 +276,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		nodes.add(topRight);
 		nodes.add(bottomLeft);
 		nodes.add(bottomRight);
+		
 	}
 	
 	
@@ -298,6 +302,12 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 		passEntitiesToCanvas();
 	}
+	
+	private void sendSheepToClosestNode() {
+		
+		
+	}
+	
 
 	private void passEntitiesToCanvas() {
 
