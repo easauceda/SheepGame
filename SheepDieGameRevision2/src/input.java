@@ -15,6 +15,8 @@ public class input {
 	private static int count = 0;
 	private static int xBoardSize = 20;
 	private static int yBoardSize = 20;
+	private static int numberOfNodes = 0;
+	private static ArrayList<String> nodePositions = new ArrayList<String>();
 	private static ArrayList<String> wolfPositions = new ArrayList<String>();
 
 	public input() throws FileNotFoundException {
@@ -114,5 +116,13 @@ public class input {
 
 	public static ArrayList<String> getPositions() {
 		return wolfPositions;
+	}
+
+	public static int getNumberOfNodes() {
+		return numberOfNodes;
+	}
+
+	public static ArrayList<String> getNodePosition() {
+		return nodePositions;
 	}
 }

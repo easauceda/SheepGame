@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -167,7 +166,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 		add(panel);
-		createNodesSetEdgesPassToCanvas();
+		createNodesSetEdgesPassToCanvasFourCorners();
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
 		
@@ -263,7 +262,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	
-	private void createNodesSetEdgesPassToCanvas() {
+	private void createNodesSetEdgesPassToCanvasFourCorners() {
 		//Node x:  25 through 406
 		//Node y:  35 through 415
 		
@@ -272,12 +271,36 @@ public class RancherGame extends JFrame implements GameSettings {
 		Node bottomLeft = new Node(25, 415, Color.black);
 		Node bottomRight = new Node(406, 415, Color.black);
 		
+		Edge top = new Edge(topLeft, topRight);
+		Edge right = new Edge(topRight, bottomRight);
+		Edge bottom = new Edge(bottomRight, bottomLeft);
+		Edge left = new Edge(bottomLeft, topLeft);
+		
+		topLeft.setEdge(top);
+		topLeft.setEdge(left);
+		topRight.setEdge(top);
+		topRight.setEdge(right);
+		bottomLeft.setEdge(left);
+		bottomLeft.setEdge(bottom);
+		bottomRight.setEdge(bottom);
+		bottomRight.setEdge(right);
+		
 		nodes.add(topLeft);
 		nodes.add(topRight);
 		nodes.add(bottomLeft);
 		nodes.add(bottomRight);
 		
+		
+		
+		
 	}
+	
+	private void createRandomNode() {
+		int randomXPosition = (int) Math.random();
+		
+		
+	}
+	
 	
 	
 	private void setTheAnimals() {
@@ -303,10 +326,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		passEntitiesToCanvas();
 	}
 	
-	private void sendSheepToClosestNode() {
-		
-		
-	}
 	
 
 	private void passEntitiesToCanvas() {

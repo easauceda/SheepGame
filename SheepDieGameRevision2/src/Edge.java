@@ -1,8 +1,14 @@
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+
 public class Edge {
 	private Node lead;
 	private Node end;
 	private double weight;
-
+	
 	public Edge(Node lead, Node end) {
 		setLead(lead);
 		setEnd(end);
@@ -25,22 +31,22 @@ public class Edge {
 		int leadY = lead.getY();
 		int endX = end.getX();
 		int endY = end.getY();
-//		System.out.println("Lead X: " + leadX);
-//		System.out.println("Lead Y: " + leadY);
-//		System.out.println("end X: " + endX);
-//		System.out.println("end Y: " + endY);
 		double finalX = Math.pow((leadX - endX),2);
 		double finalY = Math.pow((leadY - endY),2);
 		double addedVal = (finalX + finalY);
 		weight = Math.pow(addedVal, .5);
-		
-		
-
 	}
 @Override
 	public String toString(){
 	System.out.println("Weight: " + weight);
 		return "----END----";
-	
-}
+	}
+
+	public void paint(Graphics pen) {
+		pen.setColor(Color.GRAY);
+		Graphics2D pen2 = (Graphics2D) pen;
+        pen2.setStroke(new BasicStroke(2));
+        pen2.draw(new Line2D.Float(lead.getX() + 5, lead.getY() - 5 , end.getX() + 5, end.getY() - 5 ));
+		
+	}
 }

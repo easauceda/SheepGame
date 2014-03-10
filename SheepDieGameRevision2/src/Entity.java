@@ -13,7 +13,7 @@ public abstract class Entity implements GameSettings {
 
 	protected int ystep = B_HEIGHT/20;
 	protected int xstep = B_WIDTH/20;
-
+	
 	public Entity(int x, int y, Color c) {
 		this.x = x;
 		this.y = y;
