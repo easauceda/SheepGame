@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -39,6 +41,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private boolean gameOver = false;
 	private JButton enterGame = new JButton("Enter the Game!");
 	private String owner;
+	private JCheckBox nodeCheck = new JCheckBox();
 
 	public RancherGame(String userName, String server, int port) {
 
@@ -147,6 +150,9 @@ public class RancherGame extends JFrame implements GameSettings {
 		c.gridx = 1;
 		c.gridy = 1;
 		panel.add(enterGame, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		panel.add(nodeCheck, c);
 		enterGame.setPreferredSize(new Dimension(200, 26));
 		enterGame.addActionListener(new ActionListener() {
 
@@ -239,7 +245,11 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void startMovingSheep() {
 		for (Sheep sheep : sheeps) {
 			sheep.setWolfs(wolfs);
-			sheep.squirm();
+			if (nodeCheck.isSelected() == true){
+				System.out.println("SUCESS");
+			}
+			sheep.squirm();	
+			//sheep.travelNodes(PriorityQueue NodeQueue);
 		}
 	}
 
