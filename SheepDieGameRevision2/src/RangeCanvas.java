@@ -97,7 +97,7 @@ class RangeCanvas extends JPanel implements GameSettings {
 			e.paint(pen);
 		}
 		
-		pen.drawString("N", 22, 42);
+		
 		
 		
 		

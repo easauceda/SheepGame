@@ -8,9 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -34,6 +35,8 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JButton huntButton = new JButton("Hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
+	private ArrayList<Node> nodes = new ArrayList<Node>();
+	
 	private final Timer timer;
 	private final StopWatch timeToLunch = new StopWatch();
 	private boolean gameOver = false;
@@ -164,9 +167,10 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 		add(panel);
-
+		createNodesSetEdgesPassToCanvas();
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
+		
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -258,6 +262,20 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 	}
 
+	
+	private void createNodesSetEdgesPassToCanvas() {
+		Node topLeft = new Node(25, 35, Color.black);
+		Node topRight = new Node(406, 35, Color.black);
+		Node bottomLeft = new Node(25, 415, Color.black);
+		Node bottomRight = new Node(406, 415, Color.black);
+		
+		nodes.add(topLeft);
+		nodes.add(topRight);
+		nodes.add(bottomLeft);
+		nodes.add(bottomRight);
+	}
+	
+	
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
@@ -278,16 +296,19 @@ public class RancherGame extends JFrame implements GameSettings {
 
 			}
 		}
-		giveTheAnimalsToCanvas();
+		passEntitiesToCanvas();
 	}
 
-	private void giveTheAnimalsToCanvas() {
+	private void passEntitiesToCanvas() {
 
 		for (Wolf wolf : wolfs) {
 			rangeCanvas.addEntity(wolf);
 		}
 		for (Sheep sheep : sheeps) {
 			rangeCanvas.addEntity(sheep);
+		}
+		for (Node node: nodes) {
+			rangeCanvas.addEntity(node);
 		}
 
 	}
