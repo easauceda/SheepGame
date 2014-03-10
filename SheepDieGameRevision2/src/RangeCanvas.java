@@ -96,6 +96,11 @@ class RangeCanvas extends JPanel implements GameSettings {
 		for (Entity e : entities) {
 			e.paint(pen);
 		}
+		
+		pen.drawString("N", 22, 42);
+		
+		
+		
 	}
 	public void setGrassNeeded (){
 		this.grassNeeded = true;

@@ -1,16 +1,12 @@
+import java.awt.Color;
+import java.awt.Graphics;
 
-public class Node {
+
+public class Node extends Entity{
 	private int x;
 	private int y;
-	public Node(int x, int y){
-		setXCord(x);
-		setYCord(y);
-	}
-	private void setXCord(int x){
-		this.x = x;
-	}
-	private void setYCord(int y){
-		this.y = y;
+	public Node(int x, int y, Color c){
+		super(x,y,c);
 	}
 	public int getX(){
 		return x;
@@ -18,6 +14,11 @@ public class Node {
 	}
 	public int getY(){
 		return y;
+		
+	}
+	@Override
+	void paint(Graphics pen) {
+		// TODO Auto-generated method stub
 		
 	}
 
