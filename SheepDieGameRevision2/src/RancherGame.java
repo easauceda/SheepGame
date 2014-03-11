@@ -203,9 +203,9 @@ public class RancherGame extends JFrame implements GameSettings {
 					timer.start();
 					timeToLunch.startTiming();
 					startMovingSheep();
-					//wolfsPlayTag();
-					//giveWolfHisSheep();
-					//startMovingWolfs();
+					wolfsPlayTag();
+					giveWolfHisSheep();
+					startMovingWolfs();
 
 					wolfIsPushed = true;
 					panel.requestFocus();
@@ -267,9 +267,9 @@ public class RancherGame extends JFrame implements GameSettings {
 		//Node y:  35 through 415
 		
 		Node topLeft = new Node(0, 0, Color.black);
-		Node topRight = new Node(19, 0, Color.black);
-		Node bottomLeft = new Node(19, 19, Color.black);
-		Node bottomRight = new Node(0, 19, Color.black);
+		Node topRight = new Node(10, 0, Color.black);
+		Node bottomLeft = new Node(19, 5, Color.black);
+		Node bottomRight = new Node(0, 15, Color.black);
 		
 		Edge top = new Edge(topLeft, topRight);
 		Edge right = new Edge(topRight, bottomRight);

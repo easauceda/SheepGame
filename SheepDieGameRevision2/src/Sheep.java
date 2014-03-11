@@ -271,8 +271,8 @@ public class Sheep extends Entity {
 					target = i;
 				}
 			}
-			// System.out.println("Target Node Distance : " +
-			// targetNodeDistance);
+			System.out.println("Target Node Distance : " + targetNodeDistance);
+
 		}
 
 	}
@@ -280,6 +280,9 @@ public class Sheep extends Entity {
 	public void moveToNode() {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y){
+			nodes.remove(target);
+		}
 		System.out.println("Node Location X:" + nodeX);
 		System.out.println("Node Location Y: " + nodeY);
 		if (nodeX < x) {
