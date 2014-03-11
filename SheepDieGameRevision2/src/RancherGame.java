@@ -203,9 +203,9 @@ public class RancherGame extends JFrame implements GameSettings {
 					timer.start();
 					timeToLunch.startTiming();
 					startMovingSheep();
-					wolfsPlayTag();
-					giveWolfHisSheep();
-					startMovingWolfs();
+					//wolfsPlayTag();
+					//giveWolfHisSheep();
+					//startMovingWolfs();
 
 					wolfIsPushed = true;
 					panel.requestFocus();
@@ -266,10 +266,10 @@ public class RancherGame extends JFrame implements GameSettings {
 		//Node x:  25 through 406
 		//Node y:  35 through 415
 		
-		Node topLeft = new Node(25, 35, Color.black);
-		Node topRight = new Node(406, 35, Color.black);
-		Node bottomLeft = new Node(25, 415, Color.black);
-		Node bottomRight = new Node(406, 415, Color.black);
+		Node topLeft = new Node(0, 0, Color.black);
+		Node topRight = new Node(19, 0, Color.black);
+		Node bottomLeft = new Node(19, 19, Color.black);
+		Node bottomRight = new Node(0, 19, Color.black);
 		
 		Edge top = new Edge(topLeft, topRight);
 		Edge right = new Edge(topRight, bottomRight);
@@ -308,6 +308,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		for (int q = 0; q < numberOfSheeps; q++) {
 			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), SHEEP_COLOR));
+			//sheeps.add(new Sheep(0,0,SHEEP_COLOR));
 		}
 		if (input.getPositions().size() == 0) {
 

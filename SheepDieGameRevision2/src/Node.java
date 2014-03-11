@@ -20,9 +20,9 @@ public class Node extends Entity{
 	
 	
 	void paint(Graphics pen) {
-		pen.setColor(c);
-		pen.drawString("N", x, y);
-		
+		pen.setColor(Color.BLUE);
+		pen.drawRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2,
+				16, 16);
 		for (Edge i: edges) {
 			i.paint(pen);
 		}
