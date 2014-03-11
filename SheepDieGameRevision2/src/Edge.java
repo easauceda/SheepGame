@@ -4,15 +4,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
-public class Edge {
+public class Edge implements GameSettings {
 	private Node lead;
 	private Node end;
 	private double weight;
+	protected int ystep = B_HEIGHT / 20;
+	protected int xstep = B_WIDTH / 20;
+	
 	
 	public Edge(Node lead, Node end) {
 		setLead(lead);
 		setEnd(end);
-		calcWeight();
+		//calcWeight();
 
 	}
 
@@ -42,11 +45,11 @@ public class Edge {
 		return "----END----";
 	}
 
-	public void paint(Graphics pen) {
-		pen.setColor(Color.GRAY);
-		Graphics2D pen2 = (Graphics2D) pen;
-        pen2.setStroke(new BasicStroke(2));
-        pen2.draw(new Line2D.Float(lead.getX() + 5, lead.getY() - 5 , end.getX() + 5, end.getY() - 5 ));
+	void paint(Graphics pen) {
 		
-	}
+	pen.setColor(Color.black);
+	pen.drawLine(X_MARGIN + xstep * end.getX() + 10, Y_MARGIN + ystep
+			* end.getY() + 10, X_MARGIN + xstep * lead.getX() + 10,
+			Y_MARGIN + ystep * lead.getY() + 10);
+}
 }

@@ -344,7 +344,7 @@ public class Wolf extends Entity {
 			this.x = x + choseX(move);
 			this.y = y + choseY(move);
 			anySheepHereKillThem(sheeps);
-			RancherGame.pause();
+			RancherGame.pause(20000);
 			return;
 		}
 		this.x = x + choseX(move);

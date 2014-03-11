@@ -12,6 +12,7 @@ class RangeCanvas extends JPanel implements GameSettings {
 	private int columns = 11;
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Edge> edges = new ArrayList<Edge>();
 	private Grass grass[][] = new Grass[rows][columns];
 	private boolean grassNeeded = false;
 	
@@ -93,6 +94,11 @@ class RangeCanvas extends JPanel implements GameSettings {
 			}
 		}
 
+		for(Edge e : edges){
+			e.paint(pen);
+		}
+		
+		
 		for (Entity e : entities) {
 			e.paint(pen);
 		}
@@ -107,6 +113,11 @@ class RangeCanvas extends JPanel implements GameSettings {
 	}
 	public Grass[][] getGrassArray(){
 		return grass;
+	}
+
+	public void addEdges(ArrayList<Edge> edges) {
+		this.edges = edges;
+		
 	}
 
 }

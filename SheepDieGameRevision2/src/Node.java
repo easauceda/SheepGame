@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 public class Node extends Entity{
+	private String name;
 	ArrayList<Edge> edges = new ArrayList<Edge>();
 	
 	
@@ -23,8 +24,15 @@ public class Node extends Entity{
 		pen.setColor(Color.BLUE);
 		pen.drawRect(X_MARGIN + xstep * x + 2, Y_MARGIN + ystep * y + 2,
 				16, 16);
-		for (Edge i: edges) {
-			i.paint(pen);
-		}
+	}
+
+	public void myNodeName(String n){
+		this.name = "N" + n;
+	}
+	public String getName(){
+		return name;
+	}
+	public void addEdge(Edge edge){
+		edges.add(edge);
 	}
 }
