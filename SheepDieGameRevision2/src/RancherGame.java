@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
-
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
@@ -241,6 +240,7 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	private void startMovingSheep() {
 		for (Sheep sheep : sheeps) {
+			sheep.getNodes(nodes);
 			sheep.setWolfs(wolfs);
 			sheep.squirm();
 		}
