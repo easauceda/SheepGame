@@ -16,6 +16,8 @@ public class input {
 	private static int xBoardSize = 20;
 	private static int yBoardSize = 20;
 	private static ArrayList<String> wolfPositions = new ArrayList<String>();
+	private static ArrayList<String> nodes = new ArrayList<String>();
+	private static ArrayList<String> edges = new ArrayList<String>();
 
 	public input() throws FileNotFoundException {
 		Scanner fileReader = new Scanner(new File("input.txt"));
@@ -59,7 +61,11 @@ public class input {
 				}
 
 			}
-
+			if(answer == 0){
+				if(data.contains(".txt")){
+					letsFuckenCreateNodes(data);
+				}
+			}
 		}
 		fileReader.close();
 	}
@@ -77,7 +83,7 @@ public class input {
 		}
 		if (data.equalsIgnoreCase("board")) {
 			return 4;
-		} else {
+		}else {
 			return 0;
 		}
 	}
@@ -114,5 +120,29 @@ public class input {
 
 	public static ArrayList<String> getPositions() {
 		return wolfPositions;
+		
+	}
+	
+	public void letsFuckenCreateNodes(String nodeFile) throws FileNotFoundException{
+		Scanner fileReader = new Scanner(new File(nodeFile));
+		while (fileReader.hasNext()) {
+			String data = fileReader.next();
+			if(data.equalsIgnoreCase("n")){
+				nodes.add(fileReader.next()+","+fileReader.next()+","+fileReader.next());
+			}else{
+				if(data.equalsIgnoreCase("e")){
+					edges.add(fileReader.next()+","+fileReader.next());
+				}
+			}
+			
+		}
+		fileReader.close();
+	}
+
+	public static ArrayList<String> getNodes() {
+		return nodes;
+	}
+	public static ArrayList<String> getEdges(){
+		return edges;
 	}
 }
