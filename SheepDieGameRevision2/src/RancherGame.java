@@ -34,7 +34,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
 	private ArrayList<Node> nodes = new ArrayList<Node>();
-	
+
 	private final Timer timer;
 	private final StopWatch timeToLunch = new StopWatch();
 	private boolean gameOver = false;
@@ -168,7 +168,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		createNodesSetEdgesPassToCanvasFourCorners();
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
-		
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -205,7 +204,7 @@ public class RancherGame extends JFrame implements GameSettings {
 					startMovingSheep();
 					wolfsPlayTag();
 					giveWolfHisSheep();
-					startMovingWolfs();
+					//startMovingWolfs();
 
 					wolfIsPushed = true;
 					panel.requestFocus();
@@ -261,54 +260,33 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 	}
 
-	
 	private void createNodesSetEdgesPassToCanvasFourCorners() {
-		//Node x:  25 through 406
-		//Node y:  35 through 415
-		
+		// Node x: 25 through 406
+		// Node y: 35 through 415
+
 		Node topLeft = new Node(0, 0, Color.black);
 		Node topRight = new Node(10, 0, Color.black);
 		Node bottomLeft = new Node(19, 5, Color.black);
 		Node bottomRight = new Node(0, 15, Color.black);
-		
-		Edge top = new Edge(topLeft, topRight);
-		Edge right = new Edge(topRight, bottomRight);
-		Edge bottom = new Edge(bottomRight, bottomLeft);
-		Edge left = new Edge(bottomLeft, topLeft);
-		
-		topLeft.setEdge(top);
-		topLeft.setEdge(left);
-		topRight.setEdge(top);
-		topRight.setEdge(right);
-		bottomLeft.setEdge(left);
-		bottomLeft.setEdge(bottom);
-		bottomRight.setEdge(bottom);
-		bottomRight.setEdge(right);
-		
+
 		nodes.add(topLeft);
 		nodes.add(topRight);
 		nodes.add(bottomLeft);
 		nodes.add(bottomRight);
-		
-		
-		
-		
+
 	}
-	
+
 	private void createRandomNode() {
 		int randomXPosition = (int) Math.random();
-		
-		
+
 	}
-	
-	
-	
+
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
 			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
 					.nextInt(max_Y - 1), SHEEP_COLOR));
-			//sheeps.add(new Sheep(0,0,SHEEP_COLOR));
+			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
 		}
 		if (input.getPositions().size() == 0) {
 
@@ -326,8 +304,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 		passEntitiesToCanvas();
 	}
-	
-	
 
 	private void passEntitiesToCanvas() {
 
@@ -337,7 +313,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		for (Sheep sheep : sheeps) {
 			rangeCanvas.addEntity(sheep);
 		}
-		for (Node node: nodes) {
+		for (Node node : nodes) {
 			rangeCanvas.addEntity(node);
 		}
 

@@ -7,6 +7,14 @@ import java.awt.geom.Line2D;
 public class Edge {
 	private Node lead;
 	private Node end;
+	public Node getLead() {
+		return lead;
+	}
+
+	public Node getEnd() {
+		return end;
+	}
+
 	private double weight;
 	
 	public Edge(Node lead, Node end) {
@@ -16,12 +24,12 @@ public class Edge {
 
 	}
 
-	private void setLead(Node lead) {
+	void setLead(Node lead) {
 		this.lead = lead;
 
 	}
 
-	private void setEnd(Node end) {
+	void setEnd(Node end) {
 		this.end = end;
 	}
 

@@ -27,4 +27,9 @@ public class Node extends Entity{
 			i.paint(pen);
 		}
 	}
+
+	public ArrayList<Edge> getEdges() {
+		
+		return edges;
+	}
 }

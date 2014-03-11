@@ -246,6 +246,11 @@ public class Sheep extends Entity {
 		System.out.println("X : " + x);
 		System.out.println("Y : " + y);
 		double targetNodeDistance = 4000;
+		if (nodes.isEmpty() == true){
+			System.out.println("GAME OVER MAN!! GAME OVER!!");
+			RancherGame.pause();
+			System.exit(0);
+		}
 		for (Node i : nodes) {
 			double xDistance = Math.abs((x - i.getX()));
 			double yDistance = Math.abs(y - i.getY());
