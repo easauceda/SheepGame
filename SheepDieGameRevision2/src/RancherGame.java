@@ -312,6 +312,7 @@ public class RancherGame extends JFrame implements GameSettings {
 					for (Node node2 : nodes) {
 						if (node2.getName().equalsIgnoreCase(s[1])) {
 							Edge edge = new Edge(node1, node2);
+							edge.setWeight(Double.parseDouble(s[2]));
 							node1.addEdge(edge);
 							node2.addEdge(edge);
 							edges.add(edge);

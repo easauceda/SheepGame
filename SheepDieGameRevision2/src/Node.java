@@ -23,7 +23,7 @@ public class Node extends Entity{
 	}
 
 	public void myNodeName(String n){
-		this.name = "N" + n;
+		this.name = n;
 	}
 	public String getName(){
 		return name;

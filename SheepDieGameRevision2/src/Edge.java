@@ -49,5 +49,16 @@ public class Edge implements GameSettings {
 				Y_MARGIN + ystep * end.getY() + 10,
 				X_MARGIN + xstep * lead.getX() + 10,
 				Y_MARGIN + ystep * lead.getY() + 10);
+	
+		pen.drawString(Double.toString(weight) , (X_MARGIN + xstep * end.getX() + 10 +
+				X_MARGIN + xstep * lead.getX() + 10)/2,
+				(Y_MARGIN + ystep * lead.getY() + 10 + Y_MARGIN + ystep * end.getY() + 10)/2);
+	
+	}
+	public void setWeight(double weight){
+		this.weight = weight;
+	}
+	public double getWeight(){
+		return weight;
 	}
 }

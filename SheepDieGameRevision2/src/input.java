@@ -131,7 +131,7 @@ public class input {
 				nodes.add(fileReader.next()+","+fileReader.next()+","+fileReader.next());
 			}else{
 				if(data.equalsIgnoreCase("e")){
-					edges.add(fileReader.next()+","+fileReader.next());
+					edges.add(fileReader.next()+","+fileReader.next()+","+fileReader.next());
 				}
 			}
 			
@@ -143,6 +143,9 @@ public class input {
 		return nodes;
 	}
 	public static ArrayList<String> getEdges(){
+		for (String d : edges){
+			System.out.println(d);
+		}
 		return edges;
 	}
 }
