@@ -44,7 +44,7 @@ public class Edge implements GameSettings {
 
 	void paint(Graphics pen) {
 
-		pen.setColor(Color.black);
+		pen.setColor(Color.gray);
 		pen.drawLine(X_MARGIN + xstep * end.getX() + 10,
 				Y_MARGIN + ystep * end.getY() + 10,
 				X_MARGIN + xstep * lead.getX() + 10,

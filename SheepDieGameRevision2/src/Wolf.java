@@ -344,7 +344,7 @@ public class Wolf extends Entity {
 			this.x = x + choseX(move);
 			this.y = y + choseY(move);
 			anySheepHereKillThem(sheeps);
-			RancherGame.pause(20000);
+			RancherGame.pause();
 			return;
 		}
 		this.x = x + choseX(move);
@@ -433,7 +433,7 @@ public class Wolf extends Entity {
 
 		class MyThread extends Thread {
 			public void run() {
-				huntAction(sheeps, wolfs);
+					huntAction(sheeps, wolfs);
 			}
 		}
 

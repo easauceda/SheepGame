@@ -78,10 +78,15 @@ class RangeCanvas extends JPanel implements GameSettings {
 
 		final int ystep = B_HEIGHT / 20;
 		final int xstep = B_WIDTH / 20;
+		pen.setColor(new Color(20, 100, 20));
+		pen.fillRect(20,20,400,400);
 
 		for (int i = 1; i <= max_Y+1; i++) {
+			pen.setColor(Color.black);
 			pen.drawLine(X_MARGIN, i * ystep, xstep * (max_X+1), i * ystep);
+			
 		}
+		
 
 		for (int i = 1; i <= max_X+1; i++) {
 			pen.drawLine(i * xstep, Y_MARGIN, i * xstep, ystep * (max_Y+1));

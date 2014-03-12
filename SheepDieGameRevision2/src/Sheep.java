@@ -119,6 +119,7 @@ public class Sheep extends Entity {
 						&& x + choseX(q) < max_X
 						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
 
+					
 					j = q;
 				}
 			}
@@ -267,8 +268,8 @@ public class Sheep extends Entity {
 		if (nodeX == x && nodeY == y) {
 			newTargetFound = false;
 		}
-		System.out.println("Node Location X:" + nodeX);
-		System.out.println("Node Location Y: " + nodeY);
+//		System.out.println("Node Location X:" + nodeX);
+//		System.out.println("Node Location Y: " + nodeY);
 		if (nodeX < x) {
 			x--;
 		}
