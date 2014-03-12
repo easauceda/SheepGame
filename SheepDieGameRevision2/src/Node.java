@@ -12,10 +12,6 @@ public class Node extends Entity{
 		super(x,y,c);
 	}
 	
-	public void setEdge(Edge e) {
-		edges.add(e);
-	}
-	
 	
 	
 	
@@ -34,5 +30,9 @@ public class Node extends Entity{
 	}
 	public void addEdge(Edge edge){
 		edges.add(edge);
+	}
+	public ArrayList<Edge> getEdges(){
+		return edges;
+		
 	}
 }

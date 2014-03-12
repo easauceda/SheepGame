@@ -9,10 +9,13 @@ public class Sheep extends Entity {
 	private String myOwner = null;
 	private boolean sheepStupid = true;
 	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private ArrayList<Edge> edges;
 	private Node target = null;
+	private boolean newTargetFound = false;
 
-	public Sheep(int x, int y, Color c) {
+	public Sheep(int x, int y, Color c, Node target) {
 		super(x, y, c);
+		this.target = target;
 	}
 
 	public void die() {
@@ -177,7 +180,9 @@ public class Sheep extends Entity {
 			public void run() {
 				if (myOwner == null) {
 					while (alive == true) {
-						findClosestNode();
+						if (newTargetFound == false) {
+							findClosestNode();
+						}
 						moveToNode();
 						RancherGame.pause();
 					}
@@ -236,52 +241,32 @@ public class Sheep extends Entity {
 	}
 
 	public void getNodes(ArrayList<Node> n) {
-		for (Node i : n) {
-			nodes.add(i);
+		edges = target.getEdges();
+		for (Edge go : edges) {
+			nodes.add(go.getEnd());
+			nodes.add(go.getLead());
 		}
 
 	}
 
 	public void findClosestNode() {
-		System.out.println("X : " + x);
-		System.out.println("Y : " + y);
-		double targetNodeDistance = 4000;
-		for (Node i : nodes) {
-			double xDistance = Math.abs((x - i.getX()));
-			double yDistance = Math.abs(y - i.getY());
-			// System.out.println("Y distance: " + yDistance);
-			double finalX = Math.pow((xDistance), 2);
-			double finalY = Math.pow((yDistance), 2);
-			double addedVal = (finalX + finalY);
 
-			double distanceFromNodeToSheep = Math.pow(addedVal, .5);
-			// System.out.println("Distance from node: " +
-			// distanceFromNodeToSheep);
-			if (targetNodeDistance > distanceFromNodeToSheep) {
-				targetNodeDistance = distanceFromNodeToSheep;
-				target = i;
-				// System.out.println("Target" + target);
-			} else if (targetNodeDistance == distanceFromNodeToSheep) {
-				int choice = 1 + (int) (Math.random() * ((2 - 1) + 1));
-				if (choice == 1) {
-
-				}
-				if (choice == 2) {
-					targetNodeDistance = distanceFromNodeToSheep;
-					target = i;
-				}
-			}
-			System.out.println("Target Node Distance : " + targetNodeDistance);
-
+		target = nodes.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y) {
+			findClosestNode();
+		} else {
+			newTargetFound = true;
 		}
-
 	}
 
 	public void moveToNode() {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
-		if (nodeX == x && nodeY == y){
+		if (nodeX == x && nodeY == y) {
 			nodes.remove(target);
+			newTargetFound = false;
 		}
 		System.out.println("Node Location X:" + nodeX);
 		System.out.println("Node Location Y: " + nodeY);

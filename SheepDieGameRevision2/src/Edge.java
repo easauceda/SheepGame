@@ -15,7 +15,6 @@ public class Edge implements GameSettings {
 	public Edge(Node lead, Node end) {
 		setLead(lead);
 		setEnd(end);
-		//calcWeight();
 
 	}
 
@@ -27,7 +26,14 @@ public class Edge implements GameSettings {
 	private void setEnd(Node end) {
 		this.end = end;
 	}
-
+	public Node getLead(){
+		return lead;
+		
+	}
+	public Node getEnd(){
+		return end;
+		
+	}
 	private void calcWeight() {
 		//used distance formula to calculate weight
 		int leadX = lead.getX();
@@ -47,7 +53,7 @@ public class Edge implements GameSettings {
 
 	void paint(Graphics pen) {
 		
-	pen.setColor(Color.black);
+	pen.setColor(Color.green);
 	pen.drawLine(X_MARGIN + xstep * end.getX() + 10, Y_MARGIN + ystep
 			* end.getY() + 10, X_MARGIN + xstep * lead.getX() + 10,
 			Y_MARGIN + ystep * lead.getY() + 10);

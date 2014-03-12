@@ -324,15 +324,12 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	}
 
-	private void createRandomNode() {
-		int randomXPosition = (int) Math.random();
-	}
 
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
-			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
-					.nextInt(max_Y - 1), SHEEP_COLOR));
+			Node target = nodes.get((int)(Math.random() * ((nodes.size() - 1) + 1)));
+			sheeps.add(new Sheep(target.getX(),target.getY(), SHEEP_COLOR, target));
 			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
 		}
 		if (input.getPositions().size() == 0) {
@@ -753,20 +750,20 @@ public class RancherGame extends JFrame implements GameSettings {
 		if (random == 10) {
 			playerColor = new Color(155, 255, 255);
 		}
-		Sheep playerSheep = new Sheep(initX, initY, playerColor);
-		playerSheep.setMyOwner(player);
-		this.sheeps.add(playerSheep);
-		rangeCanvas.addEntity(playerSheep);
-		giveWolfOneSheep(playerSheep);
-		rangeCanvas.repaint();
+//		Sheep playerSheep = new Sheep(initX, initY, playerColor);
+//		playerSheep.setMyOwner(player);
+//		this.sheeps.add(playerSheep);
+//		rangeCanvas.addEntity(playerSheep);
+//		giveWolfOneSheep(playerSheep);
+//		rangeCanvas.repaint();
 	}
 
 	private void createSheep(int initX, int initY) {
-		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
-		this.sheeps.add(newSheep);
-		rangeCanvas.addEntity(newSheep);
-		giveWolfOneSheep(newSheep);
-		rangeCanvas.repaint();
+//		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
+//		this.sheeps.add(newSheep);
+//		rangeCanvas.addEntity(newSheep);
+//		giveWolfOneSheep(newSheep);
+//		rangeCanvas.repaint();
 	}
 
 }

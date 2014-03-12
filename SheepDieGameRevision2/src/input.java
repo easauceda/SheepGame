@@ -63,7 +63,7 @@ public class input {
 			}
 			if(answer == 0){
 				if(data.contains(".txt")){
-					letsFuckenCreateNodes(data);
+					CreateNodes(data);
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class input {
 		
 	}
 	
-	public void letsFuckenCreateNodes(String nodeFile) throws FileNotFoundException{
+	public void CreateNodes(String nodeFile) throws FileNotFoundException{
 		Scanner fileReader = new Scanner(new File(nodeFile));
 		while (fileReader.hasNext()) {
 			String data = fileReader.next();
