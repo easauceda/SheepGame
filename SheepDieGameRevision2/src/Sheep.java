@@ -265,7 +265,6 @@ public class Sheep extends Entity {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
 		if (nodeX == x && nodeY == y) {
-			nodes.remove(target);
 			newTargetFound = false;
 		}
 		System.out.println("Node Location X:" + nodeX);
