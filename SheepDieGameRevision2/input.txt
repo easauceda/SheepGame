@@ -9,4 +9,4 @@ wolf 9 10
 wolf 11 10
 wolf 10 9
 wolf 10 11
-nodedge.txt
+graphFile.txt
