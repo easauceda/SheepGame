@@ -27,6 +27,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private Socket socket;
 	private In in;
 	private Out out;
+	private String userName;
 	// ///////////////////this is new/////////////////////////////////////
 	private boolean wolfIsPushed = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
@@ -454,6 +455,16 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+	public void sendIt(String typedText) {
+		String message = typedText;
+		System.out.println(message);
+		String outMessage = userName + ": " + message;
+
+		if (message.startsWith("/"))
+			outMessage = message;
+
+		out.println(outMessage);
+		}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	private void listen() {
