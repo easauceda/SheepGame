@@ -45,6 +45,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	private String owner;
 
 	public RancherGame(String userName, String server, int port, String type) {
+		this.userName = userName;
 		setTypeOfClient(type);
 		System.out.println(type);
 		setLayout(new GridLayout(1, 2));
@@ -175,11 +176,9 @@ public class RancherGame extends JFrame implements GameSettings {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(wolf + " " + sheep);
 				rangeCanvas.repaint();
-				for (Wolf w : wolfs) {
-					System.out.println(w.getX());
-				}
 
-				if (areSheepsAlive() == true && gameOver == false) {
+				if (areSheepsAlive() == true && gameOver == false
+						&& typeOfClient.equalsIgnoreCase("normal")) {
 					JOptionPane.showMessageDialog(null,
 							("Time: " + timeToLunch.stopTiming()) + " Seconds!");
 					gameOver = true;
@@ -202,25 +201,41 @@ public class RancherGame extends JFrame implements GameSettings {
 		huntButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!wolfIsPushed) {
+					if (typeOfClient.equalsIgnoreCase("normal")) {
 
-					timer.start();
-					timeToLunch.startTiming();
-					wolfsPlayTag();
-					giveWolfHisSheep();
-					startMovingWolfs();
-					startMovingSheep();
-					wolfIsPushed = true;
-					panel.requestFocus();
+						timer.start();
+						timeToLunch.startTiming();
+						wolfsPlayTag();
+						giveWolfHisSheep();
+						startMovingWolfs();
+						startMovingSheep();
+						wolfIsPushed = true;
+						panel.requestFocus();
+					} else {
+						if (typeOfClient.equalsIgnoreCase("sheep")) {
+							timer.start();
+							startMovingSheep();
+							wolfIsPushed = true;
+						} else {
+							timer.start();
+							timeToLunch.startTiming();
+							wolfsPlayTag();
+							giveWolfHisSheep();
+							startMovingWolfs();
+							wolfIsPushed = true;
+						}
+					}
+
 				}
-				makeOneSheepAlive();
 			}
 
 		});
 
 	}
-	private void sheepClientMode(){
+
+	private void sheepClientMode() {
 		createNodesSetEdgesPassToCanvasFourCorners();
-		Random random = new Random();
+
 		for (int q = 0; q < numberOfSheeps; q++) {
 			Node target = nodes
 					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
@@ -228,9 +243,11 @@ public class RancherGame extends JFrame implements GameSettings {
 					target));
 			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
 		}
+		addNodesToCanvas();
 		passSheepToCanvas(sheeps);
 	}
-	private void wolfClientMode(){
+
+	private void wolfClientMode() {
 		Random random = new Random();
 		if (input.getPositions().size() == 0) {
 
@@ -246,24 +263,31 @@ public class RancherGame extends JFrame implements GameSettings {
 
 			}
 		}
+
 		passWolfsToCanvas(wolfs);
 	}
+
 	private void whatDoICreate(String type) {
-		if(type.equalsIgnoreCase("normal")){
+		if (type.equalsIgnoreCase("normal")) {
 			normalMode();
-		}else{if(type.equalsIgnoreCase("sheep")){
-			sheepClientMode();
-			}else{wolfClientMode();}
+		} else {
+			if (type.equalsIgnoreCase("sheep")) {
+				sheepClientMode();
+			} else {
+				wolfClientMode();
+			}
 		}
-		
+
 	}
-	private void normalMode(){
+
+	private void normalMode() {
 		createNodesSetEdgesPassToCanvasFourCorners();
 		setTheAnimals();
 		rangeCanvas.addGrassFractal();
 	}
+
 	private void setTypeOfClient(String type) {
-		// TODO Auto-generated method stub
+		typeOfClient = type;
 
 	}
 
@@ -345,6 +369,13 @@ public class RancherGame extends JFrame implements GameSettings {
 			nodec.myNodeName(s[0]);
 			nodes.add(nodec);
 		}
+
+	}
+
+	private void addNodesToCanvas() {
+		for (Node n : nodes) {
+			rangeCanvas.addEntity(n);
+		}
 	}
 
 	private void addEdgesToCanvas() {
@@ -399,19 +430,23 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 		passEntitiesToCanvas();
 	}
-	private void passSheepToCanvas(ArrayList<Sheep> sheeps2){
-		for (Entity x: sheeps2){
-			rangeCanvas.addEntity(x);
+
+	private void passSheepToCanvas(ArrayList<Sheep> sheeps2) {
+		int number = 0;
+		for (Entity x : sheeps2) {
+			x.setName(Integer.toString(number++));
+			rangeCanvas.addEntity(x,this);
 		}
 	}
-	
-	private void passWolfsToCanvas(ArrayList<Wolf> wolfs2){
-		for (Entity x: wolfs2){
-			rangeCanvas.addEntity(x);
+
+	private void passWolfsToCanvas(ArrayList<Wolf> wolfs2) {
+		int number = 0;
+		for (Entity x : wolfs2) {
+			x.setName(Integer.toString(number++));
+			rangeCanvas.addEntity(x,this);
 		}
 	}
-	
-	
+
 	private void passEntitiesToCanvas() {
 
 		for (Wolf wolf : wolfs) {
@@ -451,13 +486,13 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	public static void main(String args[]) throws Exception {
 
-		try {
-			new input();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		if (args.length < 4) {
+			try {
+				input inputdata = new input();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			serverThread();
 			String[] args2 = { "Game", "localhost", "4444", "normal" };
 			RancherGame c = new RancherGame(args2[0], args2[1],
@@ -530,11 +565,54 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void listen() {
 		String buffer;
 
-		// while ((buffer = in.readLine()) != null) {
-		// enteredText.insert(buffer + "\n", enteredText.getText().length());
-		// enteredText.setCaretPosition(enteredText.getText().length());
-		// }
+		if(typeOfClient.equalsIgnoreCase("normal")){
+			runSinglePlayerListener();
+		}else{if(typeOfClient.equalsIgnoreCase("wolf")){
+			wolfListener();
+		}else{
+				sheepListener();
+			}
+		}
+		
+	}
+
+	private void sheepListener() {
+		String buffer;
+		while ((buffer = in.readLine()) != null) {
+			System.out.println("jhi");
+		}
 		// should never gets here unless the server dies...
+		out.close();
+		in.close();
+		try {
+			socket.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("closed client socket");
+		
+	}
+
+	private void wolfListener() {
+		// TODO Auto-generated method stub
+		String buffer;
+		while ((buffer = in.readLine()) != null) {
+			System.out.println("im a wolf");
+		}
+		// should never gets here unless the server dies...
+		out.close();
+		in.close();
+		try {
+			socket.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("closed client socket");
+	}
+
+	private void runSinglePlayerListener() {
+		// TODO Auto-generated method stub
+		String buffer;
 		while ((buffer = in.readLine()) != null) {
 
 			String[] pos = buffer.split(":");
@@ -840,4 +918,18 @@ public class RancherGame extends JFrame implements GameSettings {
 		// rangeCanvas.repaint();
 	}
 
+	public void sendOutThis(String message) {
+		System.out.println(message);
+		String outMessage = userName + ": " + message;
+
+			outMessage = message;
+
+		out.println(outMessage);
+
+	}
+
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return userName;
+	}
 }

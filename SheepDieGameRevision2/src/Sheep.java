@@ -185,6 +185,7 @@ public class Sheep extends Entity {
 							findClosestNode();
 						}
 						moveToNode();
+						broadcast(" sheep "+name+" "+ x +" "+y);
 						RancherGame.pause();
 					}
 

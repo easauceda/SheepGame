@@ -349,6 +349,7 @@ public class Wolf extends Entity {
 		}
 		this.x = x + choseX(move);
 		this.y = y + choseY(move);
+		broadcast(" wolf "+name+" "+x+" "+y);
 		RancherGame.pause(200);
 
 	}
@@ -462,4 +463,5 @@ public class Wolf extends Entity {
 	public boolean imIt() {
 		return imIt;
 	}
+
 }

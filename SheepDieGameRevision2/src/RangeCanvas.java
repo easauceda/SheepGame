@@ -65,10 +65,16 @@ class RangeCanvas extends JPanel implements GameSettings {
 		}
 		fractalGrass(--counter, xMin, xMax, yMin, yMax, range / 2);
 	}
-
+	
 	public void addEntity(Entity e) {
 		entities.add(e);
 	}
+	
+	public void addEntity(Entity e,RancherGame ranch) {
+		entities.add(e);
+		e.iCanTalk(ranch);
+	}
+	
 	public ArrayList<Entity> giveMeEntities(){
 		return entities;
 	}
