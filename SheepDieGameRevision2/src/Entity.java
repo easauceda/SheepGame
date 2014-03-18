@@ -61,7 +61,7 @@ public abstract class Entity implements GameSettings {
 		
 	}
 	protected void broadcast(String type ){
-		ranch.sendOutThis(" " + type + " " );
+		ranch.sendOutThis(type);
 	}
 	public void setName(String number){
 		this.name = number;

@@ -18,6 +18,10 @@ public class Sheep extends Entity {
 		this.target = target;
 	}
 
+	public Sheep(int x, int y, Color c) {
+		super(x, y, c);
+		}
+
 	public void die() {
 		alive = false;
 		c = Color.red;
@@ -185,7 +189,10 @@ public class Sheep extends Entity {
 							findClosestNode();
 						}
 						moveToNode();
+						hasAnyWolfKilledMe();
+						if(alive){
 						broadcast(" sheep "+name+" "+ x +" "+y);
+						}else{}
 						RancherGame.pause();
 					}
 
@@ -198,7 +205,16 @@ public class Sheep extends Entity {
 		SheepThread squirmThread = new SheepThread();
 		squirmThread.start();
 	}
-
+	
+	private void hasAnyWolfKilledMe() {
+		for (Wolf wolf: wolfs){
+			if(wolf.sameCell(this)){
+				this.alive = false;
+				return;
+			}
+		}
+		
+	}
 	void paint(Graphics pen) {
 		if (deadCounter() > 0) {
 			pen.setColor(c);
@@ -262,7 +278,9 @@ public class Sheep extends Entity {
 			newTargetFound = true;
 		}
 	}
-
+	public void wolfsLink(ArrayList<Wolf> wolfs){
+		this.wolfs = wolfs;
+	}
 	public void moveToNode() {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
@@ -284,5 +302,10 @@ public class Sheep extends Entity {
 			y--;
 		}
 
+	}
+
+	public void setWolfOne(Wolf wolf) {
+		// TODO Auto-generated method stub
+		
 	}
 }

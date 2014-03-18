@@ -343,14 +343,15 @@ public class Wolf extends Entity {
 		if (sheepStillAlive(sheeps)) {
 			this.x = x + choseX(move);
 			this.y = y + choseY(move);
-			anySheepHereKillThem(sheeps);
+			//anySheepHereKillThem(sheeps);
+			broadcast(" wolf "+name+" "+x+" "+y);
 			RancherGame.pause();
 			return;
 		}
 		this.x = x + choseX(move);
 		this.y = y + choseY(move);
 		broadcast(" wolf "+name+" "+x+" "+y);
-		RancherGame.pause(200);
+		RancherGame.pause(400);
 
 	}
 
