@@ -21,6 +21,7 @@ import javax.swing.Timer;
 
 public class RancherGame extends JFrame implements GameSettings {
 	// ///////////////////////////////////////////////////////////////////
+	private String typeOfClient;
 	private String dadsName = null;
 	private boolean foundDaddy = false;
 	private static final long serialVersionUID = 1L;
@@ -43,8 +44,9 @@ public class RancherGame extends JFrame implements GameSettings {
 	private JButton enterGame = new JButton("Enter the Game!");
 	private String owner;
 
-	public RancherGame(String userName, String server, int port) {
-
+	public RancherGame(String userName, String server, int port, String type) {
+		setTypeOfClient(type);
+		System.out.println(type);
 		setLayout(new GridLayout(1, 2));
 		try {
 			socket = new Socket(server, port);
@@ -167,15 +169,13 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 
 		add(panel);
-		createNodesSetEdgesPassToCanvasFourCorners();
-		setTheAnimals();
-		rangeCanvas.addGrassFractal();
+		whatDoICreate(type);
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(wolf + " " + sheep);
 				rangeCanvas.repaint();
-				for(Wolf w: wolfs){
+				for (Wolf w : wolfs) {
 					System.out.println(w.getX());
 				}
 
@@ -216,6 +216,54 @@ public class RancherGame extends JFrame implements GameSettings {
 			}
 
 		});
+
+	}
+	private void sheepClientMode(){
+		createNodesSetEdgesPassToCanvasFourCorners();
+		Random random = new Random();
+		for (int q = 0; q < numberOfSheeps; q++) {
+			Node target = nodes
+					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
+			sheeps.add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
+					target));
+			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
+		}
+		passSheepToCanvas(sheeps);
+	}
+	private void wolfClientMode(){
+		Random random = new Random();
+		if (input.getPositions().size() == 0) {
+
+			for (int q = 0; q < numberOfWolfs; q++) {
+				wolfs.add(new Wolf(random.nextInt(max_X - 1), random
+						.nextInt(max_Y - 1), WOLF_COLOR));
+			}
+		} else {
+			for (String s : input.getPositions()) {
+				String xy[] = s.split(",");
+				wolfs.add(new Wolf(Integer.parseInt(xy[0]), Integer
+						.parseInt(xy[1]), WOLF_COLOR));
+
+			}
+		}
+		passWolfsToCanvas(wolfs);
+	}
+	private void whatDoICreate(String type) {
+		if(type.equalsIgnoreCase("normal")){
+			normalMode();
+		}else{if(type.equalsIgnoreCase("sheep")){
+			sheepClientMode();
+			}else{wolfClientMode();}
+		}
+		
+	}
+	private void normalMode(){
+		createNodesSetEdgesPassToCanvasFourCorners();
+		setTheAnimals();
+		rangeCanvas.addGrassFractal();
+	}
+	private void setTypeOfClient(String type) {
+		// TODO Auto-generated method stub
 
 	}
 
@@ -301,7 +349,6 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	private void addEdgesToCanvas() {
 		rangeCanvas.addEdges(edges);
-
 	}
 
 	private void createEdges() {
@@ -352,7 +399,19 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 		passEntitiesToCanvas();
 	}
-
+	private void passSheepToCanvas(ArrayList<Sheep> sheeps2){
+		for (Entity x: sheeps2){
+			rangeCanvas.addEntity(x);
+		}
+	}
+	
+	private void passWolfsToCanvas(ArrayList<Wolf> wolfs2){
+		for (Entity x: wolfs2){
+			rangeCanvas.addEntity(x);
+		}
+	}
+	
+	
 	private void passEntitiesToCanvas() {
 
 		for (Wolf wolf : wolfs) {
@@ -391,29 +450,29 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public static void main(String args[]) throws Exception {
+
 		try {
 			new input();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		/*
-		 * What I did here was add in a dialog to ask the user if he would like
-		 * to edit the settings. The default is just to start the game by
-		 * reading the settings already defined. - E
-		 */
-		serverThread();
-		// starts a thread for chat server you don't have to make it work on its
-		// own anymore
-
-		// chatClientThread();
-		// starts a thread for chat client so it loads it up on its own without
-		// you having to open it.
-		RancherGame.pause(100);
-
-		RancherGame c = new RancherGame("Game", "localhost",
-				Integer.parseInt("4444"));
+		if (args.length < 4) {
+			serverThread();
+			String[] args2 = { "Game", "localhost", "4444", "normal" };
+			RancherGame c = new RancherGame(args2[0], args2[1],
+					Integer.parseInt(args2[2]), args2[3]);
+			c.setLayout(new GridLayout(1, 1));
+			c.setSize(windowSizeY + 400, windowSizeX + 120);
+			c.setVisible(true);
+			c.setLocationRelativeTo(null);
+			c.setLocationRelativeTo(null);
+			c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			c.listen();
+			return;
+		}
+		RancherGame c = new RancherGame(args[0], args[1],
+				Integer.parseInt(args[2]), args[3]);
 		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
@@ -455,6 +514,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+
 	public void sendIt(String typedText) {
 		String message = typedText;
 		System.out.println(message);
@@ -464,7 +524,7 @@ public class RancherGame extends JFrame implements GameSettings {
 			outMessage = message;
 
 		out.println(outMessage);
-		}
+	}
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	private void listen() {
