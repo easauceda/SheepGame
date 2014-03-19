@@ -9,6 +9,10 @@ import java.util.Scanner;
  * for keywords such as wolf or sheep in the compareForNextStep method.
  */
 public class input {
+	private static String port;
+	private static String nick;
+	private static String hostIp;
+	private static boolean itsOn = false;
 	private static int sheepMax = 10;
 	private static int wolfMax = 4;
 	private static int gameSpeed = 500;
@@ -61,6 +65,21 @@ public class input {
 				}
 
 			}
+			if (answer == 5) {//this one is for nickname
+				fileReader.next();
+				this.nick = (fileReader.next());				
+			}
+			if (answer == 6) {//this one is for port
+				fileReader.next();
+				this.port = (fileReader.next());				
+			}
+			if (answer == 7) {//this one is for host
+				fileReader.next();
+				this.hostIp = (fileReader.next());				
+			}
+			if (answer == 8) {//this one is for host
+				this.itsOn = true;
+			}
 			if(answer == 0){
 				if(data.contains(".txt")){
 					CreateNodes(data);
@@ -83,9 +102,20 @@ public class input {
 		}
 		if (data.equalsIgnoreCase("board")) {
 			return 4;
-		}else {
-			return 0;
 		}
+		if (data.equalsIgnoreCase("nickname")) {
+			return 5;
+		}
+		if (data.equalsIgnoreCase("port")) {
+			return 6;
+		}
+		if (data.equalsIgnoreCase("ip")){
+			return 7;
+		}
+		if (data.equalsIgnoreCase("wolfchaton")){
+			return 8;
+		}
+			return 0;
 	}
 
 	/*
@@ -147,5 +177,25 @@ public class input {
 			System.out.println(d);
 		}
 		return edges;
+	}
+
+	public static String getPort() {
+		// TODO Auto-generated method stub
+		return port;
+	}
+
+	public static String getHost() {
+		// TODO Auto-generated method stub
+		return hostIp;
+	}
+
+	public static String getNick() {
+		// TODO Auto-generated method stub
+		return nick;
+	}
+
+	public static boolean getPack() {
+		// TODO Auto-generated method stub
+		return itsOn;
 	}
 }
