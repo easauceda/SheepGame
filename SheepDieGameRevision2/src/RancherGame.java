@@ -129,14 +129,14 @@ public class RancherGame extends JFrame implements GameSettings {
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == 119) {
 					// System.out.println("W");
-					target.setY(target.getY() - 1);
-					target.broadcast(" sheep " + target.getName() + " "
-							+ target.getX() + " " + target.getY());
+					target.moveToNode();
+					// target.broadcast(" sheep " + target.getName() + " "
+					// + target.getX() + " " + target.getY());
 					repaint();
 
 				}
 				if (e.getKeyChar() == 115) {
-					target.setY(target.getY() + 1);
+					target.moveFromNode();
 					repaint();
 
 				}
@@ -157,7 +157,7 @@ public class RancherGame extends JFrame implements GameSettings {
 
 					target.setColor(Color.pink);
 					repaint();
-					System.out.println(currentSheep);
+					//System.out.println(currentSheep);
 					currentSheep--;
 				}
 				if (e.getKeyChar() == 100) {
@@ -272,7 +272,9 @@ public class RancherGame extends JFrame implements GameSettings {
 			}
 
 		});
-
+		target = getSheeps().get(currentSheep);
+		target.setColor(Color.pink);
+		repaint();
 	}
 
 	private void sheepClientMode() {

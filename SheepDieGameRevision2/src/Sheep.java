@@ -12,6 +12,7 @@ public class Sheep extends Entity {
 	private ArrayList<Edge> edges;
 	private Node target = null;
 	private boolean newTargetFound = false;
+	private Edge EdgeChoice;
 
 	public Sheep(int x, int y, Color c, Node target) {
 		super(x, y, c);
@@ -20,7 +21,7 @@ public class Sheep extends Entity {
 
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
-		}
+	}
 
 	public void die() {
 		alive = false;
@@ -123,7 +124,6 @@ public class Sheep extends Entity {
 						&& x + choseX(q) < max_X
 						&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
 
-					
 					j = q;
 				}
 			}
@@ -189,12 +189,13 @@ public class Sheep extends Entity {
 							findClosestNode();
 						}
 						hasAnyWolfKilledMe();
-						if(alive){
-						moveToNode();
-						if(ranch.typeOfGame("sheep")){
-						broadcast(" sheep "+name+" "+ x +" "+y);
+						if (alive) {
+							moveToNode();
+							if (ranch.typeOfGame("sheep")) {
+								broadcast(" sheep " + name + " " + x + " " + y);
+							}
+						} else {
 						}
-						}else{}
 						RancherGame.pause();
 					}
 
@@ -207,20 +208,23 @@ public class Sheep extends Entity {
 		SheepThread squirmThread = new SheepThread();
 		squirmThread.start();
 	}
-	
+
 	private void hasAnyWolfKilledMe() {
-		for (Wolf wolf: wolfs){
-			if(wolf.sameCell(this)){
+		for (Wolf wolf : wolfs) {
+			if (wolf.sameCell(this)) {
 				this.alive = false;
-				if(ranch.typeOfGame("sheep")){
-					//[NickName] wolf [WolfId] killed sheep [SheepId] location [X] [Y]
-					broadcast( " wolf " + wolf + " killed " + "sheep " + name +" location " + x + " " + y);
+				if (ranch.typeOfGame("sheep")) {
+					// [NickName] wolf [WolfId] killed sheep [SheepId] location
+					// [X] [Y]
+					broadcast(" wolf " + wolf + " killed " + "sheep " + name
+							+ " location " + x + " " + y);
 				}
 				return;
 			}
 		}
-		
+
 	}
+
 	void paint(Graphics pen) {
 		if (deadCounter() > 0) {
 			pen.setColor(c);
@@ -265,10 +269,13 @@ public class Sheep extends Entity {
 	}
 
 	public void getNodes(ArrayList<Node> n) {
+
 		edges = target.getEdges();
-		for (Edge go : edges) {
-			nodes.add(go.getEnd());
-			nodes.add(go.getLead());
+		EdgeChoice = edges
+				.get((int) (Math.random() * ((edges.size() - 1) + 1)));
+		target = EdgeChoice.getEnd();
+		if (target.getX() == x && target.getY() == y) {
+			target = EdgeChoice.getLead();
 		}
 
 	}
@@ -279,22 +286,45 @@ public class Sheep extends Entity {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
 		if (nodeX == x && nodeY == y) {
-			findClosestNode();
+			getNodes(nodes);
 		} else {
 			newTargetFound = true;
 		}
 	}
-	public void wolfsLink(ArrayList<Wolf> wolfs){
+
+	public void wolfsLink(ArrayList<Wolf> wolfs) {
 		this.wolfs = wolfs;
 	}
+
 	public void moveToNode() {
 		int nodeX = target.getX();
 		int nodeY = target.getY();
 		if (nodeX == x && nodeY == y) {
-			newTargetFound = false;
+			getNodes(nodes);
+			//findClosestNode();
 		}
-//		System.out.println("Node Location X:" + nodeX);
-//		System.out.println("Node Location Y: " + nodeY);
+		if (nodeX < x) {
+			x--;
+		}
+		if (nodeX > x) {
+			x++;
+		}
+		if (nodeY > y) {
+			y++;
+		}
+		if (nodeY < y) {
+			y--;
+		}
+
+	}
+
+	public void moveFromNode() {
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		target = EdgeChoice.getEnd();
+		if (nodeX == x && nodeY == y) {
+			moveToNode();
+		}
 		if (nodeX < x) {
 			x--;
 		}
@@ -312,15 +342,15 @@ public class Sheep extends Entity {
 
 	public void setWolfOne(Wolf wolf) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
- boolean areYouHit(int mouse_x, int mouse_y) { 
-	 System.out.println(mouse_x);
-	 System.out.println(x);
-	        return ((xstep * x + xstep) - mouse_x >= 0) 
-	                && ((y * ystep + ystep) - mouse_y >= 0) 
-	                && ((xstep * x + xstep) - mouse_x < xstep) 
-	                && ((y * ystep + ystep) - mouse_y < ystep); 
-	    }
+	boolean areYouHit(int mouse_x, int mouse_y) {
+		System.out.println(mouse_x);
+		System.out.println(x);
+		return ((xstep * x + xstep) - mouse_x >= 0)
+				&& ((y * ystep + ystep) - mouse_y >= 0)
+				&& ((xstep * x + xstep) - mouse_x < xstep)
+				&& ((y * ystep + ystep) - mouse_y < ystep);
+	}
 }
