@@ -7,10 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,7 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-public class RancherGame extends JFrame implements GameSettings{
+public class RancherGame extends JFrame implements GameSettings {
+	protected int ystep = B_HEIGHT / 20;
+	protected int xstep = B_WIDTH / 20;
 	// ///////////////////////////////////////////////////////////////////
 	private String typeOfClient;
 	private String dadsName = null;
@@ -44,6 +49,7 @@ public class RancherGame extends JFrame implements GameSettings{
 	private String owner;
 
 	public RancherGame(String userName, String server, int port, String type) {
+		RangeCanvas canvas = getRangeCanvas();
 		this.userName = userName;
 		setTypeOfClient(type);
 		System.out.println(type);
@@ -63,7 +69,44 @@ public class RancherGame extends JFrame implements GameSettings{
 		final JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		add(getRangeCanvas());
+		add(canvas);
+		canvas.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent click) {
+				int x = 0;
+				int y = 0;
+				System.out.println(x - 28);
+				// System.out.println("Y: " + y);
+				// findSheep(x, y);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 		panel.setFocusable(true);
 		panel.addKeyListener(new KeyListener() {
 
@@ -238,8 +281,9 @@ public class RancherGame extends JFrame implements GameSettings{
 		for (int q = 0; q < numberOfSheeps; q++) {
 			Node target = nodes
 					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
-			getSheeps().add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
-					target));
+			getSheeps()
+					.add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
+							target));
 			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
 		}
 		addNodesToCanvas();
@@ -384,8 +428,9 @@ public class RancherGame extends JFrame implements GameSettings{
 		for (int q = 0; q < numberOfSheeps; q++) {
 			Node target = nodes
 					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
-			getSheeps().add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
-					target));
+			getSheeps()
+					.add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
+							target));
 		}
 		if (input.getPositions().size() == 0) {
 
@@ -541,7 +586,7 @@ public class RancherGame extends JFrame implements GameSettings{
 	private void listen() {
 		String buffer;
 		while ((buffer = in.readLine()) != null) {
-				new Data(this, buffer,sheeps,wolfs);
+			new Data(this, buffer, sheeps, wolfs);
 		}
 
 	}
@@ -885,4 +930,12 @@ public class RancherGame extends JFrame implements GameSettings{
 		this.rangeCanvas = rangeCanvas;
 	}
 
+	public void findSheep(int x, int y) {
+		for (Sheep target : sheeps) {
+			if (target.areYouHit(x, y) == true) {
+				System.out.println("WOOOOO");
+			}
+
+		}
+	}
 }

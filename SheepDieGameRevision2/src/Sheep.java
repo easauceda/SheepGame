@@ -314,4 +314,13 @@ public class Sheep extends Entity {
 		// TODO Auto-generated method stub
 		
 	}
+
+ boolean areYouHit(int mouse_x, int mouse_y) { 
+	 System.out.println(mouse_x);
+	 System.out.println(x);
+	        return ((xstep * x + xstep) - mouse_x >= 0) 
+	                && ((y * ystep + ystep) - mouse_y >= 0) 
+	                && ((xstep * x + xstep) - mouse_x < xstep) 
+	                && ((y * ystep + ystep) - mouse_y < ystep); 
+	    }
 }

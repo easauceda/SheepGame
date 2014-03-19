@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 
 public class RancherGameClients implements GameSettings {
+	
 	public static void main(String[] args) {
 		readTheFile();
 
