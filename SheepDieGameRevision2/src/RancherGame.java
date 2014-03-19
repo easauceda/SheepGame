@@ -47,8 +47,11 @@ public class RancherGame extends JFrame implements GameSettings {
 	private boolean gameOver = false;
 	private JButton enterGame = new JButton("Enter the Game!");
 	private String owner;
+	private int currentSheep = 0;
+	private Sheep target;
 
-	public RancherGame(String userName, String server, int port, String type) {
+	public RancherGame(final String userName, String server, int port,
+			String type) {
 		RangeCanvas canvas = getRangeCanvas();
 		this.userName = userName;
 		setTypeOfClient(type);
@@ -125,57 +128,54 @@ public class RancherGame extends JFrame implements GameSettings {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if (e.getKeyChar() == 119) {
-					// System.out.println("CHECK");
-					for (Sheep i : getSheeps()) {
-						String compare = i.getMyOwner();
-						// System.out.println(compare);
-						if (compare != null) {
-							// System.out.println("made it");
-							if (compare.equalsIgnoreCase(owner)) {
-								i.setY(i.getY() - 1);
-								repaint();
-							}
-						}
-					}
+					// System.out.println("W");
+					target.setY(target.getY() - 1);
+					target.broadcast(" sheep " + target.getName() + " "
+							+ target.getX() + " " + target.getY());
+					repaint();
+
 				}
 				if (e.getKeyChar() == 115) {
-					for (Sheep i : getSheeps()) {
-						String compare = i.getMyOwner();
-						// System.out.println(compare);
-						if (compare != null) {
-							// System.out.println("made it");
-							if (compare.equalsIgnoreCase(owner)) {
-								i.setY(i.getY() + 1);
-								repaint();
-							}
-						}
-					}
+					target.setY(target.getY() + 1);
+					repaint();
+
 				}
 				if (e.getKeyChar() == 97) {
-					for (Sheep i : getSheeps()) {
-						String compare = i.getMyOwner();
-						// System.out.println(compare);
-						if (compare != null) {
-							// System.out.println("made it");
-							if (compare.equalsIgnoreCase(owner)) {
-								i.setX(i.getX() - 1);
-								repaint();
-							}
-						}
+					for (Sheep allSheep : getSheeps()) {
+						allSheep.setColor(SHEEP_COLOR);
 					}
+					int numOfSheep = getSheeps().size();
+					if (currentSheep == 0) {
+
+						// System.out.println("Selecting : " + currentSheep);
+						target = getSheeps().get(currentSheep);
+						currentSheep = numOfSheep;
+					} else {
+						// System.out.println("Selecting : " + currentSheep);
+						target = getSheeps().get(currentSheep - 1);
+					}
+
+					target.setColor(Color.pink);
+					repaint();
+					System.out.println(currentSheep);
+					currentSheep--;
 				}
 				if (e.getKeyChar() == 100) {
-					for (Sheep i : getSheeps()) {
-						String compare = i.getMyOwner();
-						// System.out.println(compare);
-						if (compare != null) {
-							// System.out.println("made it");
-							if (compare.equalsIgnoreCase(owner)) {
-								i.setX(i.getX() + 1);
-								repaint();
-							}
-						}
+					for (Sheep allSheep : getSheeps()) {
+						allSheep.setColor(SHEEP_COLOR);
 					}
+
+					int numOfSheep = getSheeps().size();
+					if (currentSheep == numOfSheep - 1) {
+						currentSheep = 0;
+						target = getSheeps().get(currentSheep);
+					} else {
+						target = getSheeps().get(currentSheep + 1);
+					}
+
+					target.setColor(Color.pink);
+					repaint();
+					currentSheep++;
 				}
 
 			}

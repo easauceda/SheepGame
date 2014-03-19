@@ -67,4 +67,7 @@ public abstract class Entity implements GameSettings {
 		this.name = number;
 		
 	}
+	public String getName(){
+		return name;
+	}
 }
