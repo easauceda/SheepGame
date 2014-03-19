@@ -188,10 +188,12 @@ public class Sheep extends Entity {
 						if (newTargetFound == false) {
 							findClosestNode();
 						}
-						moveToNode();
 						hasAnyWolfKilledMe();
 						if(alive){
+						moveToNode();
+						if(ranch.typeOfGame("sheep")){
 						broadcast(" sheep "+name+" "+ x +" "+y);
+						}
 						}else{}
 						RancherGame.pause();
 					}
@@ -210,6 +212,10 @@ public class Sheep extends Entity {
 		for (Wolf wolf: wolfs){
 			if(wolf.sameCell(this)){
 				this.alive = false;
+				if(ranch.typeOfGame("sheep")){
+					//[NickName] wolf [WolfId] killed sheep [SheepId] location [X] [Y]
+					broadcast( " wolf " + wolf + " killed " + "sheep " + name +" location " + x + " " + y);
+				}
 				return;
 			}
 		}

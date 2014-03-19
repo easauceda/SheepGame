@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -451,9 +450,11 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void passEntitiesToCanvas() {
 
 		for (Wolf wolf : wolfs) {
+			wolf.ranch = this;
 			rangeCanvas.addEntity(wolf);
 		}
 		for (Sheep sheep : sheeps) {
+			sheep.ranch = this;
 			rangeCanvas.addEntity(sheep);
 		}
 		for (Node node : nodes) {
@@ -489,7 +490,7 @@ public class RancherGame extends JFrame implements GameSettings {
 
 		if (args.length < 4) {
 			try {
-				input inputdata = new input();
+				new input();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -578,14 +579,36 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	}
 
+	private static void entityThread(final Entity e) {
+		class MyThread extends Thread {
+			public void run() {
+				try {
+					searchFor(e);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		MyThread entityThread = new MyThread();
+		entityThread.start();
+	}
+
+	private static void searchFor(Entity e) {
+		// TODO Auto-generated method stub
+		while (e.alive) {
+
+		}
+	}
+
 	private void sheepListener() {
 		String buffer;
 		while ((buffer = in.readLine()) != null) {
-				String[] q = buffer.split(" ");
-				if (q[0].equalsIgnoreCase("wolfserver")) {
-					whatShouldWeDo(q);
-					rangeCanvas.repaint();
-				}
+			String[] q = buffer.split(" ");
+			if (q[0].equalsIgnoreCase("wolfserver")) {
+				whatShouldWeDo(q);
+				rangeCanvas.repaint();
+			}
 
 		}
 		// should never gets here unless the server dies...
@@ -611,7 +634,7 @@ public class RancherGame extends JFrame implements GameSettings {
 		Wolf g = new Wolf(Integer.parseInt(q[3]), Integer.parseInt(q[4]),
 				WOLF_COLOR);
 		g.setName(q[2]);
-		//addThisToSheep(g);
+		addThisToSheep(g);
 		wolfs.add(g);
 		rangeCanvas.addEntity(g);
 	}
@@ -627,8 +650,8 @@ public class RancherGame extends JFrame implements GameSettings {
 		// TODO Auto-generated method stub
 		String buffer;
 		while ((buffer = in.readLine()) != null) {
-			if (!buffer.contains(userName)) {// hopefully it cuts down the
-												// clutter
+			if (buffer.contains("sheep")) {// hopefully it cuts down the
+											// clutter
 				String[] q = buffer.split(" ");
 				whatSheep(q);
 				rangeCanvas.repaint();
@@ -647,27 +670,38 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void whatSheep(String[] q) {
+		// [NickName] wolf [WolfId] killed sheep [SheepId] location [X] [Y]
 		for (Sheep s : sheeps) {
-			if (s.name.equalsIgnoreCase(q[2])) {
+			if (s.name.equalsIgnoreCase(q[2])
+					&& !q[3].equalsIgnoreCase("killed")) {
 				s.setX(Integer.parseInt(q[3]));
 				s.setY(Integer.parseInt(q[4]));
+				// s.reviveMe();
 				return;
 			}
 		}
-		Sheep g = new Sheep(Integer.parseInt(q[3]), Integer.parseInt(q[4]),
-				SHEEP_COLOR);
-		g.setName(q[2]);
-		addThisToWolfs(g);
-		sheeps.add(g);
-		rangeCanvas.addEntity(g);
-
+		if (q[3].equalsIgnoreCase("killed")) {
+			for (Sheep s : sheeps) {
+				if (q[3].equalsIgnoreCase("killed")
+						&& s.name.equalsIgnoreCase(q[5])) {
+					s.die();
+					return;
+				}
+			}
+		}
+			Sheep g = new Sheep(Integer.parseInt(q[3]), Integer.parseInt(q[4]),
+					SHEEP_COLOR);
+			g.setName(q[2]);
+			addThisToWolfs(g);
+			sheeps.add(g);
+			rangeCanvas.addEntity(g);
 	}
 
 	private void addThisToWolfs(Sheep sheep) {
-		for(Wolf w : wolfs){
+		for (Wolf w : wolfs) {
 			w.addSheep(sheep);
 		}
-		
+
 	}
 
 	private void runSinglePlayerListener() {
@@ -976,6 +1010,10 @@ public class RancherGame extends JFrame implements GameSettings {
 		// rangeCanvas.addEntity(newSheep);
 		// giveWolfOneSheep(newSheep);
 		// rangeCanvas.repaint();
+	}
+
+	public boolean typeOfGame(String c) {
+		return c.equalsIgnoreCase(typeOfClient);
 	}
 
 	public void sendOutThis(String message) {
