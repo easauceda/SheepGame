@@ -190,7 +190,7 @@ public class Sheep extends Entity {
 						}
 						hasAnyWolfKilledMe();
 						if (alive) {
-							moveToNode();
+							moveToNode2();
 							if (ranch.typeOfGame("sheep")) {
 								broadcast(" sheep " + name + " " + x + " " + y);
 							}
@@ -207,6 +207,26 @@ public class Sheep extends Entity {
 
 		SheepThread squirmThread = new SheepThread();
 		squirmThread.start();
+	}
+
+	void squirmManual() {
+
+		class SheepgThread extends Thread {
+			public void run() {
+				while (alive == true) {
+					hasAnyWolfKilledMe();
+					if (alive) {
+						broadcast(" sheep " + name + " " + x + " " + y);
+					}
+					RancherGame.pause(1500);
+				}
+
+			}
+
+		}
+
+		SheepgThread squirmgThread = new SheepgThread();
+		squirmgThread.start();
 	}
 
 	private void hasAnyWolfKilledMe() {
@@ -280,9 +300,22 @@ public class Sheep extends Entity {
 
 	}
 
+	public void getNodes2(ArrayList<Node> n) {
+
+		edges = target.getEdges();
+
+		for (Edge go : edges) {
+
+			nodes.add(go.getEnd());
+
+			nodes.add(go.getLead());
+
+		}
+	}
+
 	public void findClosestNode() {
 
-		target = nodes.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
+		target = nodes.get((int) (Math.random() * ((nodes.size()) + 1)));
 		int nodeX = target.getX();
 		int nodeY = target.getY();
 		if (nodeX == x && nodeY == y) {
@@ -301,7 +334,7 @@ public class Sheep extends Entity {
 		int nodeY = target.getY();
 		if (nodeX == x && nodeY == y) {
 			getNodes(nodes);
-			//findClosestNode();
+			// findClosestNode();
 		}
 		if (nodeX < x) {
 			x--;
@@ -317,7 +350,27 @@ public class Sheep extends Entity {
 		}
 
 	}
+	public void moveToNode2() {
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y) {
+			getNodes(nodes);
+			findClosestNode();
+		}
+		if (nodeX < x) {
+			x--;
+		}
+		if (nodeX > x) {
+			x++;
+		}
+		if (nodeY > y) {
+			y++;
+		}
+		if (nodeY < y) {
+			y--;
+		}
 
+	}
 	public void moveFromNode() {
 		int nodeX = target.getX();
 		int nodeY = target.getY();

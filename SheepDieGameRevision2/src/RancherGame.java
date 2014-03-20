@@ -34,7 +34,9 @@ public class RancherGame extends JFrame implements GameSettings {
 	private Out out;
 	private String userName;
 	// ///////////////////this is new/////////////////////////////////////
+	private boolean runAuto = true;
 	private boolean wolfIsPushed = false;
+	private boolean sheepThreadCreated = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
 	private JButton huntButton = new JButton("Hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
@@ -112,7 +114,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		});
 		panel.setFocusable(true);
 		panel.addKeyListener(new KeyListener() {
-
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
@@ -127,11 +128,11 @@ public class RancherGame extends JFrame implements GameSettings {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
+			
+				if(runAuto){
 				if (e.getKeyChar() == 119) {
-					// System.out.println("W");
 					target.moveToNode();
-					// target.broadcast(" sheep " + target.getName() + " "
-					// + target.getX() + " " + target.getY());
+
 					repaint();
 
 				}
@@ -178,6 +179,19 @@ public class RancherGame extends JFrame implements GameSettings {
 					currentSheep++;
 				}
 
+				}
+				if(!sheepThreadCreated){
+					startTheManuel();
+					startTheSheepBroadcast();
+					setStartOff();
+				}
+			}
+
+			private void startTheSheepBroadcast() {
+				for (Sheep s : sheeps){
+					s.squirmManual();
+				}
+				
 			}
 
 		});
@@ -251,6 +265,7 @@ public class RancherGame extends JFrame implements GameSettings {
 						giveWolfHisSheep();
 						startMovingWolfs();
 						startMovingSheep();
+						setAuto();
 						wolfIsPushed = true;
 						panel.requestFocus();
 					} else {
@@ -258,12 +273,14 @@ public class RancherGame extends JFrame implements GameSettings {
 							timer.start();
 							startMovingSheep();
 							wolfIsPushed = true;
+							setAuto();
 						} else {
 							timer.start();
 							timeToLunch.startTiming();
 							wolfsPlayTag();
 							giveWolfHisSheep();
 							startMovingWolfs();
+							setAuto();
 							wolfIsPushed = true;
 						}
 					}
@@ -272,9 +289,10 @@ public class RancherGame extends JFrame implements GameSettings {
 			}
 
 		});
-		target = getSheeps().get(currentSheep);
-		target.setColor(Color.pink);
-		repaint();
+	}
+
+	private void setAuto() {
+		this.runAuto = false;
 	}
 
 	private void sheepClientMode() {
@@ -354,6 +372,13 @@ public class RancherGame extends JFrame implements GameSettings {
 	private void startMovingWolfs() {
 		for (Wolf wolf : wolfs) {
 			wolf.hunt(wolfs);
+		}
+	}
+
+	private void startTheManuel() {
+		for (Sheep sheep : getSheeps()) {
+			sheep.getNodes(nodes);
+			sheep.setWolfs(wolfs);
 		}
 	}
 
@@ -811,6 +836,11 @@ public class RancherGame extends JFrame implements GameSettings {
 			wolfIsPushed = true;
 		}
 
+	}
+
+	private void setStartOff() {
+		this.sheepThreadCreated = true;
+		this.wolfIsPushed = true;
 	}
 
 	private void moveSomething(String string) {
