@@ -343,13 +343,17 @@ public class Wolf extends Entity {
 		if (sheepStillAlive(sheeps)) {
 			this.x = x + choseX(move);
 			this.y = y + choseY(move);
-			anySheepHereKillThem(sheeps);
+			//anySheepHereKillThem(sheeps);
+			if(ranch.typeOfGame("wolf")){
+			broadcast(" wolf "+name+" "+x+" "+y);
+			}
 			RancherGame.pause();
 			return;
 		}
 		this.x = x + choseX(move);
 		this.y = y + choseY(move);
-		RancherGame.pause(200);
+		broadcast(" wolf "+name+" "+x+" "+y);
+		RancherGame.pause();
 
 	}
 
@@ -433,7 +437,7 @@ public class Wolf extends Entity {
 
 		class MyThread extends Thread {
 			public void run() {
-				huntAction(sheeps, wolfs);
+					huntAction(sheeps, wolfs);
 			}
 		}
 
@@ -462,4 +466,5 @@ public class Wolf extends Entity {
 	public boolean imIt() {
 		return imIt;
 	}
+
 }

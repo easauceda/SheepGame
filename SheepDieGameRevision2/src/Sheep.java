@@ -7,7 +7,17 @@ public class Sheep extends Entity {
 	private ArrayList<Wolf> wolfs;
 	private int deathCount = deathCountValue;
 	private String myOwner = null;
-	private boolean sheepStupid= true;
+	private boolean sheepStupid = true;
+	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private ArrayList<Edge> edges;
+	private Node target = null;
+	private boolean newTargetFound = false;
+	private Edge EdgeChoice;
+
+	public Sheep(int x, int y, Color c, Node target) {
+		super(x, y, c);
+		this.target = target;
+	}
 
 	public Sheep(int x, int y, Color c) {
 		super(x, y, c);
@@ -73,30 +83,28 @@ public class Sheep extends Entity {
 	}
 
 	private void moveAction() {
-Random ran = new Random();
-int q = 0;
-		while(true){
-		if (alive) {
-			if(sheepStupid){
-				q = ran.nextInt(9);
-				if(x + choseX(q) > 0
-						&& x + choseX(q) < max_X
-						&& y + choseY(q) > 0 && y + choseY(q) < max_Y){
-				moveMeThere(q);
+		Random ran = new Random();
+		int q = 0;
+		while (true) {
+			if (alive) {
+				if (sheepStupid) {
+					q = ran.nextInt(9);
+					if (x + choseX(q) > 0 && x + choseX(q) < max_X
+							&& y + choseY(q) > 0 && y + choseY(q) < max_Y) {
+						moveMeThere(q);
+					}
+				} else {
 				}
-			}else{
-			}
-			try {
-				
-				moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
+				try {
 
-			} catch (NullPointerException e) {
-			}
+					moveMeThere(runTagDecisionMaker(runAwayFromWho(wolfs)));
 
-		}
+				} catch (NullPointerException e) {
+				}
+
+			}
 		}
 	}
-
 
 	private double getDistance(int x, int y) {
 		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -175,16 +183,66 @@ int q = 0;
 
 		class SheepThread extends Thread {
 			public void run() {
-				if(myOwner == null){
-					moveAction();
+				if (myOwner == null) {
+					while (alive == true) {
+						if (newTargetFound == false) {
+							findClosestNode();
+						}
+						hasAnyWolfKilledMe();
+						if (alive) {
+							moveToNode2();
+							if (ranch.typeOfGame("sheep")) {
+								broadcast(" sheep " + name + " " + x + " " + y);
+							}
+						} else {
+						}
+						RancherGame.pause();
+					}
+
 				}
-				
+
 			}
 
 		}
 
 		SheepThread squirmThread = new SheepThread();
 		squirmThread.start();
+	}
+
+	void squirmManual() {
+
+		class SheepgThread extends Thread {
+			public void run() {
+				while (alive == true) {
+					hasAnyWolfKilledMe();
+					if (alive) {
+						broadcast(" sheep " + name + " " + x + " " + y);
+					}
+					RancherGame.pause(1500);
+				}
+
+			}
+
+		}
+
+		SheepgThread squirmgThread = new SheepgThread();
+		squirmgThread.start();
+	}
+
+	private void hasAnyWolfKilledMe() {
+		for (Wolf wolf : wolfs) {
+			if (wolf.sameCell(this)) {
+				this.alive = false;
+				if (ranch.typeOfGame("sheep")) {
+					// [NickName] wolf [WolfId] killed sheep [SheepId] location
+					// [X] [Y]
+					broadcast(" wolf " + wolf + " killed " + "sheep " + name
+							+ " location " + x + " " + y);
+				}
+				return;
+			}
+		}
+
 	}
 
 	void paint(Graphics pen) {
@@ -228,5 +286,124 @@ int q = 0;
 
 	public void setMyOwner(String myOwner) {
 		this.myOwner = myOwner;
+	}
+
+	public void getNodes(ArrayList<Node> n) {
+
+		edges = target.getEdges();
+		EdgeChoice = edges
+				.get((int) (Math.random() * ((edges.size() - 1) + 1)));
+		target = EdgeChoice.getEnd();
+		if (target.getX() == x && target.getY() == y) {
+			target = EdgeChoice.getLead();
+		}
+
+	}
+
+	public void getNodes2(ArrayList<Node> n) {
+
+		edges = target.getEdges();
+
+		for (Edge go : edges) {
+
+			nodes.add(go.getEnd());
+
+			nodes.add(go.getLead());
+
+		}
+	}
+
+	public void findClosestNode() {
+
+		target = nodes.get((int) (Math.random() * ((nodes.size()) + 1)));
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y) {
+			getNodes(nodes);
+		} else {
+			newTargetFound = true;
+		}
+	}
+
+	public void wolfsLink(ArrayList<Wolf> wolfs) {
+		this.wolfs = wolfs;
+	}
+
+	public void moveToNode() {
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y) {
+			getNodes(nodes);
+			// findClosestNode();
+		}
+		if (nodeX < x) {
+			x--;
+		}
+		if (nodeX > x) {
+			x++;
+		}
+		if (nodeY > y) {
+			y++;
+		}
+		if (nodeY < y) {
+			y--;
+		}
+
+	}
+	public void moveToNode2() {
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		if (nodeX == x && nodeY == y) {
+			getNodes(nodes);
+			findClosestNode();
+		}
+		if (nodeX < x) {
+			x--;
+		}
+		if (nodeX > x) {
+			x++;
+		}
+		if (nodeY > y) {
+			y++;
+		}
+		if (nodeY < y) {
+			y--;
+		}
+
+	}
+	public void moveFromNode() {
+		int nodeX = target.getX();
+		int nodeY = target.getY();
+		target = EdgeChoice.getEnd();
+		if (nodeX == x && nodeY == y) {
+			moveToNode();
+		}
+		if (nodeX < x) {
+			x--;
+		}
+		if (nodeX > x) {
+			x++;
+		}
+		if (nodeY > y) {
+			y++;
+		}
+		if (nodeY < y) {
+			y--;
+		}
+
+	}
+
+	public void setWolfOne(Wolf wolf) {
+		// TODO Auto-generated method stub
+
+	}
+
+	boolean areYouHit(int mouse_x, int mouse_y) {
+		System.out.println(mouse_x);
+		System.out.println(x);
+		return ((xstep * x + xstep) - mouse_x >= 0)
+				&& ((y * ystep + ystep) - mouse_y >= 0)
+				&& ((xstep * x + xstep) - mouse_x < xstep)
+				&& ((y * ystep + ystep) - mouse_y < ystep);
 	}
 }

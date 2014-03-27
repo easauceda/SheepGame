@@ -1,8 +1,14 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -10,38 +16,49 @@ import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
-@SuppressWarnings("serial")
 public class RancherGame extends JFrame implements GameSettings {
+	protected int ystep = B_HEIGHT / 20;
+	protected int xstep = B_WIDTH / 20;
 	// ///////////////////////////////////////////////////////////////////
+	private String typeOfClient;
 	private String dadsName = null;
 	private boolean foundDaddy = false;
 	private static final long serialVersionUID = 1L;
-	private String userName;
 	private Socket socket;
 	private In in;
 	private Out out;
+	private String userName;
 	// ///////////////////this is new/////////////////////////////////////
+	private boolean runAuto = true;
 	private boolean wolfIsPushed = false;
+	private boolean sheepThreadCreated = false;
 	private RangeCanvas rangeCanvas = new RangeCanvas();
-	private JButton huntButton = new JButton("hunt");
+	private JButton huntButton = new JButton("Hunt");
 	private ArrayList<Wolf> wolfs = new ArrayList<Wolf>();
 	private ArrayList<Sheep> sheeps = new ArrayList<Sheep>();
+	private ArrayList<Node> nodes = new ArrayList<Node>();
+	private ArrayList<Edge> edges = new ArrayList<Edge>();
+
 	private final Timer timer;
 	private final StopWatch timeToLunch = new StopWatch();
 	private boolean gameOver = false;
-	private JTextField currentTime = new JTextField(String.valueOf(timeToLunch
-			.getCurrentTime()));
+	private JButton enterGame = new JButton("Enter the Game!");
+	private String owner;
+	private int currentSheep = 0;
+	private Sheep target;
 
-	public RancherGame(String userName, String server, int port) {
-
-		// ///////////////////////////////////////////////////////////////////
+	public RancherGame(final String userName, String server, int port,
+			String type) {
+		RangeCanvas canvas = getRangeCanvas();
 		this.userName = userName;
+		setTypeOfClient(type);
+		System.out.println(type);
+		setLayout(new GridLayout(1, 2));
 		try {
 			socket = new Socket(server, port);
 			out = new Out(socket);
@@ -55,33 +72,169 @@ public class RancherGame extends JFrame implements GameSettings {
 		// new////////////////////////////////////
 		// layout etc
 		final JPanel panel = new JPanel();
-		add(rangeCanvas);
-		GridLayout layout = new GridLayout(5, 2);
-		layout.setVgap(20);
-		layout.setHgap(20);
-		panel.setLayout(layout);
-		panel.add(new JLabel());
-		panel.add(huntButton);
-		panel.add(new JLabel("Number of Sheep"));
-		panel.add(new JTextField(String.valueOf(input.getNumberOfSheep())));
-		panel.add(new JLabel("Number of Wolves"));
-		panel.add(new JTextField(String.valueOf(input.getNumberOfWolfs())));
-		panel.add(new JLabel("Game Speed"));
-		panel.add(new JTextField(String.valueOf(input.getSpeed())));
-		panel.add(new JLabel("Current Time"));
-		panel.add(currentTime);
-		add(panel, BorderLayout.EAST);
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		add(canvas);
+		canvas.addMouseListener(new MouseListener() {
 
-		setTheAnimals();
-		rangeCanvas.addGrassFractal();
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent click) {
+				int x = 0;
+				int y = 0;
+				System.out.println(x - 28);
+				// System.out.println("Y: " + y);
+				// findSheep(x, y);
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+		panel.setFocusable(true);
+		panel.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			
+				if(runAuto){
+				if (e.getKeyChar() == 119) {
+					target.moveToNode();
+
+					repaint();
+
+				}
+				if (e.getKeyChar() == 115) {
+					target.moveFromNode();
+					repaint();
+
+				}
+				if (e.getKeyChar() == 97) {
+					for (Sheep allSheep : getSheeps()) {
+						allSheep.setColor(SHEEP_COLOR);
+					}
+					int numOfSheep = getSheeps().size();
+					if (currentSheep == 0) {
+
+						// System.out.println("Selecting : " + currentSheep);
+						target = getSheeps().get(currentSheep);
+						currentSheep = numOfSheep;
+					} else {
+						// System.out.println("Selecting : " + currentSheep);
+						target = getSheeps().get(currentSheep - 1);
+					}
+
+					target.setColor(Color.pink);
+					repaint();
+					//System.out.println(currentSheep);
+					currentSheep--;
+				}
+				if (e.getKeyChar() == 100) {
+					for (Sheep allSheep : getSheeps()) {
+						allSheep.setColor(SHEEP_COLOR);
+					}
+
+					int numOfSheep = getSheeps().size();
+					if (currentSheep == numOfSheep - 1) {
+						currentSheep = 0;
+						target = getSheeps().get(currentSheep);
+					} else {
+						target = getSheeps().get(currentSheep + 1);
+					}
+
+					target.setColor(Color.pink);
+					repaint();
+					currentSheep++;
+				}
+
+				}
+				if(!sheepThreadCreated){
+					startTheManuel();
+					startTheSheepBroadcast();
+					setStartOff();
+				}
+			}
+
+			private void startTheSheepBroadcast() {
+				for (Sheep s : sheeps){
+					s.squirmManual();
+				}
+				
+			}
+
+		});
+		final JTextField feed = new JTextField();
+		feed.setPreferredSize(new Dimension(200, 417));
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		panel.add(feed, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 1;
+		huntButton.setPreferredSize(new Dimension(200, 26));
+		panel.add(huntButton, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		panel.add(enterGame, c);
+		enterGame.setPreferredSize(new Dimension(200, 26));
+		enterGame.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String name = (String) JOptionPane.showInputDialog(null,
+						"Enter your UserName", "New Sheep", 1, null, null,
+						"Bob");
+				createSheepForPlayer(name, 10, 10);
+				owner = name;
+				feed.setText(owner + " Added a Sheep!");
+				panel.requestFocus();
+			}
+
+		});
+
+		add(panel);
+		whatDoICreate(type);
 
 		timer = new Timer(BOARD_REFRESH_RATE, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// System.out.println(wolf + " " + sheep);
-				rangeCanvas.repaint();
-				// wolfsPlayTag();
+				getRangeCanvas().repaint();
 
-				if (areSheepsAlive() == true && gameOver == false) {
+				if (areSheepsAlive() == true && gameOver == false
+						&& getTypeOfClient().equalsIgnoreCase("normal")) {
 					JOptionPane.showMessageDialog(null,
 							("Time: " + timeToLunch.stopTiming()) + " Seconds!");
 					gameOver = true;
@@ -90,7 +243,7 @@ public class RancherGame extends JFrame implements GameSettings {
 			}
 
 			private boolean areSheepsAlive() {
-				for (Sheep sheep : sheeps) {
+				for (Sheep sheep : getSheeps()) {
 					if (sheep.isAlive()) {
 						return false;
 					}
@@ -104,25 +257,105 @@ public class RancherGame extends JFrame implements GameSettings {
 		huntButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!wolfIsPushed) {
+					if (getTypeOfClient().equalsIgnoreCase("normal")) {
 
-					timer.start();
-					timeToLunch.startTiming();
-					startMovingSheep();
-					wolfsPlayTag();
-					giveWolfHisSheep();
-					startMovingWolfs();
+						timer.start();
+						timeToLunch.startTiming();
+						wolfsPlayTag();
+						giveWolfHisSheep();
+						startMovingWolfs();
+						startMovingSheep();
+						setAuto();
+						wolfIsPushed = true;
+						panel.requestFocus();
+					} else {
+						if (getTypeOfClient().equalsIgnoreCase("sheep")) {
+							timer.start();
+							startMovingSheep();
+							wolfIsPushed = true;
+							setAuto();
+						} else {
+							timer.start();
+							timeToLunch.startTiming();
+							wolfsPlayTag();
+							giveWolfHisSheep();
+							startMovingWolfs();
+							setAuto();
+							wolfIsPushed = true;
+						}
+					}
 
-					wolfIsPushed = true;
 				}
-				makeOneSheepAlive();
 			}
 
 		});
+	}
+
+	private void setAuto() {
+		this.runAuto = false;
+	}
+
+	private void sheepClientMode() {
+		createNodesSetEdgesPassToCanvasFourCorners();
+
+		for (int q = 0; q < numberOfSheeps; q++) {
+			Node target = nodes
+					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
+			getSheeps()
+					.add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
+							target));
+			// sheeps.add(new Sheep(0,0,SHEEP_COLOR));
+		}
+		addNodesToCanvas();
+		passSheepToCanvas(getSheeps());
+	}
+
+	private void wolfClientMode() {
+		Random random = new Random();
+		if (input.getPositions().size() == 0) {
+
+			for (int q = 0; q < numberOfWolfs; q++) {
+				wolfs.add(new Wolf(random.nextInt(max_X - 1), random
+						.nextInt(max_Y - 1), WOLF_COLOR));
+			}
+		} else {
+			for (String s : input.getPositions()) {
+				String xy[] = s.split(",");
+				wolfs.add(new Wolf(Integer.parseInt(xy[0]), Integer
+						.parseInt(xy[1]), WOLF_COLOR));
+
+			}
+		}
+
+		passWolfsToCanvas(wolfs);
+	}
+
+	private void whatDoICreate(String type) {
+		if (type.equalsIgnoreCase("normal")) {
+			normalMode();
+		} else {
+			if (type.equalsIgnoreCase("sheep")) {
+				sheepClientMode();
+			} else {
+				wolfClientMode();
+			}
+		}
+
+	}
+
+	private void normalMode() {
+		createNodesSetEdgesPassToCanvasFourCorners();
+		setTheAnimals();
+		getRangeCanvas().addGrassFractal();
+	}
+
+	private void setTypeOfClient(String type) {
+		typeOfClient = type;
 
 	}
 
 	private void makeOneSheepAlive() {
-		for (Sheep sheep : sheeps) {
+		for (Sheep sheep : getSheeps()) {
 			if (!sheep.isAlive()) {
 				sheep.reviveMe();
 				return;
@@ -131,7 +364,7 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	private void makeAllSheepsAlive() {
-		for (Sheep sheep : sheeps) {
+		for (Sheep sheep : getSheeps()) {
 			sheep.reviveMe();
 		}
 	}
@@ -142,15 +375,23 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 	}
 
+	private void startTheManuel() {
+		for (Sheep sheep : getSheeps()) {
+			sheep.getNodes(nodes);
+			sheep.setWolfs(wolfs);
+		}
+	}
+
 	private void startMovingSheep() {
-		for (Sheep sheep : sheeps) {
+		for (Sheep sheep : getSheeps()) {
+			sheep.getNodes(nodes);
 			sheep.setWolfs(wolfs);
 			sheep.squirm();
 		}
 	}
 
 	private void giveWolfHisSheep() {
-		for (Sheep sheep : sheeps) {
+		for (Sheep sheep : getSheeps()) {
 			for (Wolf wolf : wolfs) {
 				wolf.addSheep(sheep);
 			}
@@ -158,17 +399,65 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	}
 
-	private void giveWolfOneSheep(Sheep sheep) {
-		for (Wolf wolf : wolfs) {
-			wolf.addSheep(sheep);
+	private void createNodesSetEdgesPassToCanvasFourCorners() {
+		createNodes();
+		createEdges();
+		addEdgesToCanvas();
+	}
+
+	private void createNodes() {
+
+		for (String n : input.getNodes()) {
+			String[] s = n.split(",");
+			Node nodec = new Node(Integer.parseInt(s[1]),
+					Integer.parseInt(s[2]), Color.blue);
+			nodec.myNodeName(s[0]);
+			nodes.add(nodec);
 		}
+
+	}
+
+	private void addNodesToCanvas() {
+		for (Node n : nodes) {
+			getRangeCanvas().addEntity(n);
+		}
+	}
+
+	private void addEdgesToCanvas() {
+		getRangeCanvas().addEdges(edges);
+	}
+
+	private void createEdges() {
+
+		for (String e : input.getEdges()) {
+			String[] s = e.split(",");
+			for (Node node1 : nodes) {
+				if (node1.getName().equalsIgnoreCase(s[0])) {
+
+					for (Node node2 : nodes) {
+						if (node2.getName().equalsIgnoreCase(s[1])) {
+							Edge edge = new Edge(node1, node2);
+							edge.setWeight(Double.parseDouble(s[2]));
+							node1.addEdge(edge);
+							node2.addEdge(edge);
+							edges.add(edge);
+						}
+					}
+				}
+			}
+
+		}
+
 	}
 
 	private void setTheAnimals() {
 		Random random = new Random();
 		for (int q = 0; q < numberOfSheeps; q++) {
-			sheeps.add(new Sheep(random.nextInt(max_X - 1), random
-					.nextInt(max_Y - 1), SHEEP_COLOR));
+			Node target = nodes
+					.get((int) (Math.random() * ((nodes.size() - 1) + 1)));
+			getSheeps()
+					.add(new Sheep(target.getX(), target.getY(), SHEEP_COLOR,
+							target));
 		}
 		if (input.getPositions().size() == 0) {
 
@@ -184,16 +473,38 @@ public class RancherGame extends JFrame implements GameSettings {
 
 			}
 		}
-		giveTheAnimalsToCanvas();
+		passEntitiesToCanvas();
 	}
 
-	private void giveTheAnimalsToCanvas() {
+	private void passSheepToCanvas(ArrayList<Sheep> sheeps2) {
+		int number = 0;
+		for (Sheep x : sheeps2) {
+			x.setName(Integer.toString(number++));
+			x.wolfsLink(wolfs);
+			getRangeCanvas().addEntity(x, this);
+		}
+	}
+
+	private void passWolfsToCanvas(ArrayList<Wolf> wolfs2) {
+		int number = 0;
+		for (Entity x : wolfs2) {
+			x.setName(Integer.toString(number++));
+			getRangeCanvas().addEntity(x, this);
+		}
+	}
+
+	private void passEntitiesToCanvas() {
 
 		for (Wolf wolf : wolfs) {
-			rangeCanvas.addEntity(wolf);
+			wolf.ranch = this;
+			getRangeCanvas().addEntity(wolf);
 		}
-		for (Sheep sheep : sheeps) {
-			rangeCanvas.addEntity(sheep);
+		for (Sheep sheep : getSheeps()) {
+			sheep.ranch = this;
+			getRangeCanvas().addEntity(sheep);
+		}
+		for (Node node : nodes) {
+			getRangeCanvas().addEntity(node);
 		}
 
 	}
@@ -222,27 +533,29 @@ public class RancherGame extends JFrame implements GameSettings {
 	}
 
 	public static void main(String args[]) throws Exception {
-		try {
-			new input();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		if (args.length < 4) {
+			try {
+				new input();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			serverThread();
+			String[] args2 = { "Game", "localhost", "4444", "normal" };
+			RancherGame c = new RancherGame(args2[0], args2[1],
+					Integer.parseInt(args2[2]), args2[3]);
+			c.setLayout(new GridLayout(1, 1));
+			c.setSize(windowSizeY + 400, windowSizeX + 120);
+			c.setVisible(true);
+			c.setLocationRelativeTo(null);
+			c.setLocationRelativeTo(null);
+			c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			c.listen();
+			return;
 		}
-
-		/*
-		 * What I did here was add in a dialog to ask the user if he would like
-		 * to edit the settings. The default is just to start the game by
-		 * reading the settings already defined. - E
-		 */
-		serverThread();
-		// starts a thread for chat server you dont have to make it work on its own anymore
-		
-		chatClientThread();
-		// starts a thread for chat client so it loads it up on its own without you having to open it.
-		RancherGame.pause(100);
-		RancherGame c = new RancherGame("Game", "localhost",
-				Integer.parseInt("4444"));
-
+		RancherGame c = new RancherGame(args[0], args[1],
+				Integer.parseInt(args[2]), args[3]);
 		c.setLayout(new GridLayout(1, 1));
 		c.setSize(windowSizeY + 400, windowSizeX + 120);
 		c.setVisible(true);
@@ -267,11 +580,12 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+
 	private static void chatClientThread() {
 		class MyThread extends Thread {
 			public void run() {
 				try {
-					String args[] = {"Narf","localhost", "4444"};
+					String args[] = { "Narf", "localhost", "4444" };
 					ChatClient.main(args);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -283,15 +597,30 @@ public class RancherGame extends JFrame implements GameSettings {
 		MyThread serverThread = new MyThread();
 		serverThread.start();
 	}
+
+	public void sendIt(String typedText) {
+		String message = typedText;
+		System.out.println(message);
+		String outMessage = userName + ": " + message;
+
+		if (message.startsWith("/"))
+			outMessage = message;
+
+		out.println(outMessage);
+	}
+
 	// ////////////////////////////////////////////////////////////////////////////////////////////////
 	private void listen() {
 		String buffer;
+		while ((buffer = in.readLine()) != null) {
+			new Data(this, buffer, sheeps, wolfs);
+		}
 
-		// while ((buffer = in.readLine()) != null) {
-		// enteredText.insert(buffer + "\n", enteredText.getText().length());
-		// enteredText.setCaretPosition(enteredText.getText().length());
-		// }
-		// should never gets here unless the server dies...
+	}
+
+	private void runSinglePlayerListener() {
+		// TODO Auto-generated method stub
+		String buffer;
 		while ((buffer = in.readLine()) != null) {
 
 			String[] pos = buffer.split(":");
@@ -304,7 +633,7 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println("HELLO");
 				String tester = pos[0];
 				System.out.println(tester);
-				for (Sheep i : sheeps) {
+				for (Sheep i : getSheeps()) {
 					String compare = i.getMyOwner();
 					// System.out.println(compare);
 					if (compare != null) {
@@ -320,7 +649,7 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println("HELLO");
 				String tester = pos[0];
 				System.out.println(tester);
-				for (Sheep i : sheeps) {
+				for (Sheep i : getSheeps()) {
 					String compare = i.getMyOwner();
 					// System.out.println(compare);
 					if (compare != null) {
@@ -336,7 +665,7 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println("HELLO");
 				String tester = pos[0];
 				System.out.println(tester);
-				for (Sheep i : sheeps) {
+				for (Sheep i : getSheeps()) {
 					String compare = i.getMyOwner();
 					// System.out.println(compare);
 					if (compare != null) {
@@ -352,7 +681,7 @@ public class RancherGame extends JFrame implements GameSettings {
 				// System.out.println("HELLO");
 				String tester = pos[0];
 				System.out.println(tester);
-				for (Sheep i : sheeps) {
+				for (Sheep i : getSheeps()) {
 					String compare = i.getMyOwner();
 					// System.out.println(compare);
 					if (compare != null) {
@@ -479,8 +808,8 @@ public class RancherGame extends JFrame implements GameSettings {
 							(Integer.parseInt(addTo[1])), WOLF_COLOR);
 					wolfs.add(creature);
 
-					rangeCanvas.addEntity(creature);
-					rangeCanvas.repaint();
+					getRangeCanvas().addEntity(creature);
+					getRangeCanvas().repaint();
 
 					return;
 
@@ -509,19 +838,24 @@ public class RancherGame extends JFrame implements GameSettings {
 
 	}
 
+	private void setStartOff() {
+		this.sheepThreadCreated = true;
+		this.wolfIsPushed = true;
+	}
+
 	private void moveSomething(String string) {
 		try {
 			String[] breakUp = string.split("=");
 			String[] from = breakUp[0].split(",");
 			String[] mTo = breakUp[1].split(",");
 
-			for (Entity e : rangeCanvas.giveMeEntities()) {
+			for (Entity e : getRangeCanvas().giveMeEntities()) {
 				if (e.getX() == Integer.parseInt(from[0])
 						&& e.getY() == Integer.parseInt(from[1])) {
 					e.setX(Integer.parseInt(mTo[0]));
 					e.setY(Integer.parseInt(mTo[1]));
 					System.out.println("okay he was moved");
-					rangeCanvas.repaint();
+					getRangeCanvas().repaint();
 					return;
 				}
 			}
@@ -533,8 +867,6 @@ public class RancherGame extends JFrame implements GameSettings {
 		}
 
 	}
-
-	// ////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void setUpASheep(String player, int initX, int initY) {
 
@@ -583,29 +915,59 @@ public class RancherGame extends JFrame implements GameSettings {
 		if (random == 10) {
 			playerColor = new Color(155, 255, 255);
 		}
-		Sheep playerSheep = new Sheep(initX, initY, playerColor);
-		playerSheep.setMyOwner(player);
-		this.sheeps.add(playerSheep);
-		rangeCanvas.addEntity(playerSheep);
-		giveWolfOneSheep(playerSheep);
-		rangeCanvas.repaint();
+		// Sheep playerSheep = new Sheep(initX, initY, playerColor);
+		// playerSheep.setMyOwner(player);
+		// this.sheeps.add(playerSheep);
+		// rangeCanvas.addEntity(playerSheep);
+		// giveWolfOneSheep(playerSheep);
+		// rangeCanvas.repaint();
 	}
 
 	private void createSheep(int initX, int initY) {
-		Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
-		this.sheeps.add(newSheep);
-		rangeCanvas.addEntity(newSheep);
-		giveWolfOneSheep(newSheep);
-		rangeCanvas.repaint();
+		// Sheep newSheep = new Sheep(initX, initY, SHEEP_COLOR);
+		// this.sheeps.add(newSheep);
+		// rangeCanvas.addEntity(newSheep);
+		// giveWolfOneSheep(newSheep);
+		// rangeCanvas.repaint();
 	}
-	/*
-	 * @Override public void actionPerformed(ActionEvent e) { String message =
-	 * typedText.getText(); System.out.println(message); String outMessage =
-	 * userName + ": " + message;
-	 * 
-	 * if (message.startsWith("/")) outMessage = message;
-	 * 
-	 * out.println(outMessage); typedText.setText("");
-	 * typedText.requestFocusInWindow(); }
-	 */
+
+	public boolean typeOfGame(String c) {
+		return c.equalsIgnoreCase(getTypeOfClient());
+	}
+
+	public void sendOutThis(String message) {
+		String outMessage = userName + message;
+
+		out.println(outMessage);
+
+	}
+
+	public String getTypeOfClient() {
+		return typeOfClient;
+	}
+
+	public ArrayList<Sheep> getSheeps() {
+		return sheeps;
+	}
+
+	public void setSheeps(ArrayList<Sheep> sheeps) {
+		this.sheeps = sheeps;
+	}
+
+	public RangeCanvas getRangeCanvas() {
+		return rangeCanvas;
+	}
+
+	public void setRangeCanvas(RangeCanvas rangeCanvas) {
+		this.rangeCanvas = rangeCanvas;
+	}
+
+	public void findSheep(int x, int y) {
+		for (Sheep target : sheeps) {
+			if (target.areYouHit(x, y) == true) {
+				System.out.println("WOOOOO");
+			}
+
+		}
+	}
 }

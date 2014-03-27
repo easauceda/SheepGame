@@ -12,6 +12,7 @@ class RangeCanvas extends JPanel implements GameSettings {
 	private int columns = 11;
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Edge> edges = new ArrayList<Edge>();
 	private Grass grass[][] = new Grass[rows][columns];
 	private boolean grassNeeded = false;
 	
@@ -64,10 +65,16 @@ class RangeCanvas extends JPanel implements GameSettings {
 		}
 		fractalGrass(--counter, xMin, xMax, yMin, yMax, range / 2);
 	}
-
+	
 	public void addEntity(Entity e) {
 		entities.add(e);
 	}
+	
+	public void addEntity(Entity e,RancherGame ranch) {
+		entities.add(e);
+		e.iCanTalk(ranch);
+	}
+	
 	public ArrayList<Entity> giveMeEntities(){
 		return entities;
 	}
@@ -77,10 +84,15 @@ class RangeCanvas extends JPanel implements GameSettings {
 
 		final int ystep = B_HEIGHT / 20;
 		final int xstep = B_WIDTH / 20;
+		pen.setColor(new Color(20, 100, 20));
+		pen.fillRect(20,20,400,400);
 
 		for (int i = 1; i <= max_Y+1; i++) {
+			pen.setColor(Color.black);
 			pen.drawLine(X_MARGIN, i * ystep, xstep * (max_X+1), i * ystep);
+			
 		}
+		
 
 		for (int i = 1; i <= max_X+1; i++) {
 			pen.drawLine(i * xstep, Y_MARGIN, i * xstep, ystep * (max_Y+1));
@@ -93,15 +105,30 @@ class RangeCanvas extends JPanel implements GameSettings {
 			}
 		}
 
+		for(Edge e : edges){
+			e.paint(pen);
+		}
+		
+		
 		for (Entity e : entities) {
 			e.paint(pen);
 		}
+		
+		
+		
+		
+		
 	}
 	public void setGrassNeeded (){
 		this.grassNeeded = true;
 	}
 	public Grass[][] getGrassArray(){
 		return grass;
+	}
+
+	public void addEdges(ArrayList<Edge> edges) {
+		this.edges = edges;
+		
 	}
 
 }

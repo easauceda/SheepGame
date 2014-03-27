@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public abstract class Entity implements GameSettings {
+	protected RancherGame ranch;
+	protected String name;
 	protected int iWantX;
 	protected int iWantY;
 	protected int x;
@@ -13,7 +15,7 @@ public abstract class Entity implements GameSettings {
 
 	protected int ystep = B_HEIGHT/20;
 	protected int xstep = B_WIDTH/20;
-
+	
 	public Entity(int x, int y, Color c) {
 		this.x = x;
 		this.y = y;
@@ -52,5 +54,20 @@ public abstract class Entity implements GameSettings {
 		return c;
 	}
 	
-	abstract void paint(Graphics pen); 
+	abstract void paint(Graphics pen);
+
+	public void iCanTalk(RancherGame ranch) {
+		this.ranch = ranch;
+		
+	}
+	protected void broadcast(String type ){
+		ranch.sendOutThis(type);
+	}
+	public void setName(String number){
+		this.name = number;
+		
+	}
+	public String getName(){
+		return name;
+	}
 }

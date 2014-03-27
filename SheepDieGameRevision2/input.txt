@@ -1,11 +1,11 @@
 # input file -- comments are ignored
 board width = 20
 board height = 20
-clock = 300
-sheep count = 20
-wolf count = 5
-wolf 10 10
-wolf 9 10
-wolf 11 10
-wolf 10 9
-wolf 10 11
+clock = 400
+sheep count = 10
+wolf count = 0
+ip = localhost
+port = 4444
+nickname = heyloooo
+graphFile.txt
+WolfChatOn
